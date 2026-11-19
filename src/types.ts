@@ -6,7 +6,17 @@ export interface LocalizedText {
   ja: string;
 }
 
+/** Original VayItsHere map line style */
 export type RelationType = "children" | "friendship" | "employment" | "specific";
+
+/** Rich semantic relation category (FandomGraph / Otaku Data Viz inspired) */
+export type RelationCategory =
+  | "family"
+  | "friendship"
+  | "romance"
+  | "work"
+  | "conflict"
+  | "admiration";
 
 export type FactionId =
   | "the-mob"
@@ -25,35 +35,31 @@ export interface Faction {
   subtitle: LocalizedText;
   description: LocalizedText;
   location: LocalizedText;
-  /** Soft pastel fill for the zone on the map */
   fill: string;
-  /** Stronger comic border/accent color */
   accent: string;
-  /** Deep readable text color on the pastel fill */
   ink: string;
-  /** SVG path string describing the zone shape (supports L-shapes!) */
   svgPath: string;
-  /** Label anchor on the canvas */
   labelPos: { x: number; y: number; align?: "start" | "middle" | "end" };
-  /** Camera bounding box for flying to this faction */
   bounds: { x: number; y: number; width: number; height: number };
   wikiUrl?: string;
 }
 
 export interface Character {
   id: string;
-  /** Display name on the map pill (compact) */
+  /** Compact display name on map nodes */
   mapName: LocalizedText;
-  /** Full canonical name for the dossier drawer */
+  /** Full authoritative canonical name */
   fullName: LocalizedText;
-  /** Japanese furigana / reading */
+  /** Japanese reading (kana) */
   reading?: string;
+  /** Local optimized portrait avatar path (`/avatars/<id>.webp`) */
+  avatar: string;
   /** Factions this character belongs to (Tatewaku belongs to two!) */
   factions: FactionId[];
-  /** Logical canvas coordinates (center of pill) */
+  /** Classic Social Map coordinates (center of node) */
   x: number;
   y: number;
-  /** Optional custom minimum pill width override on the map */
+  /** Pill width on the Classic Social Map */
   width?: number;
   /** Voice actor in CITY THE ANIMATION (2025) */
   cv?: LocalizedText;
@@ -63,12 +69,16 @@ export interface Character {
   tagline?: LocalizedText;
   /** Rich character bio */
   bio: LocalizedText;
-  /** Short comic badge (e.g. "#28", "11F", "CV", "猫") */
+  /** Optional spoiler-free alternate bio & title for Spoiler-Free Mode */
+  spoilerSafeName?: LocalizedText;
+  spoilerSafeBio?: LocalizedText;
+  hasSpoiler?: boolean;
+  /** Short comic badge (e.g. "#28", "11F", "CAT") */
   badge?: string;
-  /** Whether featured on city-the-animation.com official character page */
+  /** Featured on city-the-animation.com official character page */
   officialSite?: boolean;
   wikiUrl?: string;
-  /** Extra search aliases (romaji, nicknames, Nichijou cameo name, etc.) */
+  /** Extra search aliases (romaji, alternate translations, Nichijou cameo, etc.) */
   aliases?: string[];
 }
 
@@ -76,19 +86,16 @@ export interface RelationEdge {
   id: string;
   from: string;
   to: string;
+  /** Visual line style on Classic Map */
   type: RelationType;
+  /** Semantic category for Ego/Network Radar & grouped Dossier */
+  category: RelationCategory;
   bidirectional?: boolean;
-  /** Label displayed on the map (for Specific & Agent) */
   label?: LocalizedText;
-  /** Position of the floating pill label on the map */
   labelPos?: { x: number; y: number };
-  /** Hand-crafted orthogonal waypoints [x, y][] from source edge to target edge */
   points: [number, number][];
-  /** Optional smooth arc jump markers or notes */
   story: LocalizedText;
-  /** If true, renders arrowhead at `to` end; default true for directed types */
   arrowEnd?: boolean;
-  /** If true, renders arrowhead at `from` end */
   arrowStart?: boolean;
 }
 

@@ -2,13 +2,14 @@ import type { RelationEdge } from "../types";
 
 export const EDGES: RelationEdge[] = [
   // =========================================================================
-  // 1. THE MOB -> Beat up -> Honkan (All 6 members merge at spine x=264 -> y=186 -> Honkan)
+  // 1. THE MOB -> Beat up -> Honkan
   // =========================================================================
   {
     id: "mob-new-honkan",
     from: "new-mob",
     to: "honkan",
     type: "specific",
+    category: "conflict",
     label: { zh: "暴打", en: "Beat up", ja: "ボコボコに" },
     labelPos: { x: 374, y: 186 },
     points: [
@@ -30,6 +31,8 @@ export const EDGES: RelationEdge[] = [
     from: "good-person",
     to: "honkan",
     type: "specific",
+    category: "conflict",
+    label: { zh: "群殴", en: "Beat up", ja: "ボコった" },
     points: [
       [308, 138],
       [264, 138],
@@ -49,6 +52,8 @@ export const EDGES: RelationEdge[] = [
     from: "polka-dot-guy",
     to: "honkan",
     type: "specific",
+    category: "conflict",
+    label: { zh: "群殴", en: "Beat up", ja: "ボコった" },
     points: [
       [225, 186],
       [502, 186],
@@ -66,6 +71,8 @@ export const EDGES: RelationEdge[] = [
     from: "t-shirt-guy",
     to: "honkan",
     type: "specific",
+    category: "conflict",
+    label: { zh: "群殴", en: "Beat up", ja: "ボコった" },
     points: [
       [225, 234],
       [264, 234],
@@ -75,9 +82,9 @@ export const EDGES: RelationEdge[] = [
       [553, 146],
     ],
     story: {
-      zh: "T恤男（蓼科神威）在路人团拿下本官后，一本正经地主持了现场「审讯」。",
+      zh: "蓼科神威（T恤男）在路人团拿下本官后，一本正经地主持了现场「审讯」。",
       en: "T-Shirt Guy (Kamui Tateshina) took charge and interrogated Honkan after THE MOB beat him up.",
-      ja: "Tシャツの男（蓼科神威）は本官さんを取り押さえた後、リーダー格として尋問を仕切った。",
+      ja: "蓼科神威（Tシャツの男）は本官さんを取り押さえた後、リーダー格として尋問を仕切った。",
     },
   },
   {
@@ -85,6 +92,8 @@ export const EDGES: RelationEdge[] = [
     from: "sweater-girl",
     to: "honkan",
     type: "specific",
+    category: "conflict",
+    label: { zh: "群殴", en: "Beat up", ja: "ボコった" },
     points: [
       [308, 234],
       [264, 234],
@@ -104,6 +113,8 @@ export const EDGES: RelationEdge[] = [
     from: "dress-girl",
     to: "honkan",
     type: "specific",
+    category: "conflict",
+    label: { zh: "群殴", en: "Beat up", ja: "ボコった" },
     points: [
       [225, 280],
       [264, 280],
@@ -113,9 +124,9 @@ export const EDGES: RelationEdge[] = [
       [553, 146],
     ],
     story: {
-      zh: "连衣裙女与其余五位路人共同制造了痛扁本官的名场面。",
-      en: "Dress Girl completed the six-person MOB takedown of poor Officer Honkan.",
-      ja: "ワンピースの女も他のモブたちと共に本官さんを追い詰めた。",
+      zh: "鬼瓦（连衣裙女）与其余五位路人共同制造了痛扁本官的名场面。",
+      en: "Dress Girl (Onigawara) completed the six-person MOB takedown of poor Officer Honkan.",
+      ja: "鬼瓦（ワンピースの女）も他のモブたちと共に本官さんを追い詰めた。",
     },
   },
 
@@ -127,6 +138,7 @@ export const EDGES: RelationEdge[] = [
     from: "kuratake",
     to: "toudou",
     type: "specific",
+    category: "work",
     label: { zh: "供货", en: "Supplies", ja: "卸し・供給" },
     labelPos: { x: 64, y: 404 },
     points: [
@@ -144,16 +156,17 @@ export const EDGES: RelationEdge[] = [
     from: "toudou",
     to: "mimineko",
     type: "specific",
+    category: "work",
     label: { zh: "饲养", en: "Owns", ja: "飼い主" },
     labelPos: { x: 234, y: 378 },
     points: [
       [174, 360],
-      [297, 360],
+      [294, 360],
     ],
     story: {
-      zh: "耳猫是东堂饲养的宠物，在东堂商店里拥有专属小窝，不过平时总爱满城乱跑。",
+      zh: "大耳猫是东堂饲养的宠物，在东堂商店里拥有专属小窝，不过平时总爱满城乱跑。",
       en: "Toudou owns Mimineko and keeps a cozy bed for it in his shop—though the ear-cat prefers roaming all over CITY.",
-      ja: "東堂はミミネコの飼い主で店内に寝床を用意しているが、ミミネコ自身は街じゅうを気ままに散歩している。",
+      ja: "東堂はみみねこの飼い主で店内に寝床を用意しているが、みみねこ自身は街じゅうを気ままに散歩している。",
     },
   },
 
@@ -165,29 +178,31 @@ export const EDGES: RelationEdge[] = [
     from: "honkan",
     to: "wako",
     type: "specific",
+    category: "romance",
     label: { zh: "暗恋", en: "Crush", ja: "片思い" },
     labelPos: { x: 734, y: 164 },
     points: [
       [671, 146],
       [796, 146],
       [796, 214],
-      [860, 214],
+      [858, 214],
     ],
     story: {
-      zh: "总是吃瘪的认真警官本官，心里纯情地暗恋着总是笑声爽朗、脑洞奇特的泉环子。",
+      zh: "总是吃瘪的认真警官本官，心里纯情地暗恋着总是笑声爽朗、脑洞奇特的泉和子。",
       en: "Beneath his stiff, dutiful exterior, Officer Honkan harbors a sweet, hopeless crush on the quirky Wako Izumi.",
       ja: "いつも真面目な本官さんは、天真爛漫で不思議な魅力を持つ泉わこに密かな恋心を抱いている。",
     },
   },
 
   // =========================================================================
-  // 4. ADATARA FAMILY (Children + Dr. Adatara Trolls Tatewaku + Three Crows)
+  // 4. ADATARA FAMILY
   // =========================================================================
   {
     id: "dr-adatara-mr-adatara",
     from: "dr-adatara",
     to: "mr-adatara",
     type: "children",
+    category: "family",
     points: [
       [726, 247],
       [726, 276],
@@ -195,19 +210,19 @@ export const EDGES: RelationEdge[] = [
       [656, 306],
     ],
     story: {
-      zh: "安达太良博士是安达太良家父亲的亲生父亲、五个孩子的祖父。",
+      zh: "安达太良博士是安达太良家爸爸的亲生父亲、五个孩子的祖父。",
       en: "Dr. Adatara is the father of Mr. Adatara and grandfather to all five Adatara siblings.",
       ja: "安達太良博士は安達太良の父の実父であり、5人きょうだいのおじいちゃん。",
     },
   },
-  // Mr. & Mrs. Adatara -> 5 children (shared family-tree bus from couple bridge at x=656, y=318)
   {
     id: "mr-adatara-tatsuta",
     from: "mr-adatara",
     to: "tatsuta",
     type: "children",
+    category: "family",
     points: [
-      [630, 318],
+      [631, 318],
       [656, 318],
       [656, 356],
       [542, 356],
@@ -224,15 +239,16 @@ export const EDGES: RelationEdge[] = [
     from: "mrs-adatara",
     to: "tatsuta",
     type: "children",
+    category: "family",
     points: [
-      [682, 318],
+      [681, 318],
       [656, 318],
       [656, 356],
       [542, 356],
       [542, 389],
     ],
     story: {
-      zh: "安达太良母与长男达太。",
+      zh: "安达太良家的妈妈与长男达太。",
       en: "Mrs. Adatara is Tatsuta's mother.",
       ja: "安達太良の母と長男・達太。",
     },
@@ -242,8 +258,9 @@ export const EDGES: RelationEdge[] = [
     from: "mr-adatara",
     to: "umi",
     type: "children",
+    category: "family",
     points: [
-      [630, 318],
+      [631, 318],
       [656, 318],
       [656, 356],
       [598, 356],
@@ -260,15 +277,16 @@ export const EDGES: RelationEdge[] = [
     from: "mrs-adatara",
     to: "umi",
     type: "children",
+    category: "family",
     points: [
-      [682, 318],
+      [681, 318],
       [656, 318],
       [656, 356],
       [598, 356],
       [598, 469],
     ],
     story: {
-      zh: "安达太良母与次女海。",
+      zh: "安达太良家的妈妈与次女海。",
       en: "Mrs. Adatara is Umi's mother.",
       ja: "安達太良の母と次女・うみ。",
     },
@@ -278,8 +296,9 @@ export const EDGES: RelationEdge[] = [
     from: "mr-adatara",
     to: "sora",
     type: "children",
+    category: "family",
     points: [
-      [630, 318],
+      [631, 318],
       [656, 318],
       [656, 389],
     ],
@@ -294,13 +313,14 @@ export const EDGES: RelationEdge[] = [
     from: "mrs-adatara",
     to: "sora",
     type: "children",
+    category: "family",
     points: [
-      [682, 318],
+      [681, 318],
       [656, 318],
       [656, 389],
     ],
     story: {
-      zh: "安达太良母与三女空。",
+      zh: "安达太良家的妈妈与三女空。",
       en: "Mrs. Adatara is Sora's mother.",
       ja: "安達太良の母と三女・そら。",
     },
@@ -310,8 +330,9 @@ export const EDGES: RelationEdge[] = [
     from: "mr-adatara",
     to: "ryouta",
     type: "children",
+    category: "family",
     points: [
-      [630, 318],
+      [631, 318],
       [656, 318],
       [656, 356],
       [710, 356],
@@ -328,15 +349,16 @@ export const EDGES: RelationEdge[] = [
     from: "mrs-adatara",
     to: "ryouta",
     type: "children",
+    category: "family",
     points: [
-      [682, 318],
+      [681, 318],
       [656, 318],
       [656, 356],
       [710, 356],
       [710, 469],
     ],
     story: {
-      zh: "安达太良母与次男良太。",
+      zh: "安达太良家的妈妈与次男良太。",
       en: "Mrs. Adatara is Ryouta's mother.",
       ja: "安達太良の母と次男・良太。",
     },
@@ -346,8 +368,9 @@ export const EDGES: RelationEdge[] = [
     from: "mr-adatara",
     to: "kamome",
     type: "children",
+    category: "family",
     points: [
-      [630, 318],
+      [631, 318],
       [656, 318],
       [656, 356],
       [762, 356],
@@ -364,15 +387,16 @@ export const EDGES: RelationEdge[] = [
     from: "mrs-adatara",
     to: "kamome",
     type: "children",
+    category: "family",
     points: [
-      [682, 318],
+      [681, 318],
       [656, 318],
       [656, 356],
       [762, 356],
       [762, 389],
     ],
     story: {
-      zh: "安达太良母与长女鸥。",
+      zh: "安达太良家的妈妈与长女鸥。",
       en: "Mrs. Adatara is Kamome's mother.",
       ja: "安達太良の母と長女・かもめ。",
     },
@@ -382,15 +406,16 @@ export const EDGES: RelationEdge[] = [
     from: "dr-adatara",
     to: "tatewaku",
     type: "specific",
+    category: "conflict",
     label: { zh: "整蛊捉弄", en: "Trolls", ja: "からかう" },
     labelPos: { x: 1068, y: 274 },
     points: [
-      [792, 230],
+      [795, 230],
       [822, 230],
       [822, 274],
       [1308, 274],
       [1308, 486],
-      [1363, 486],
+      [1360, 486],
     ],
     story: {
       zh: "安达太良博士把隔壁真壁家视为竞争对手，动辄用各种奇葩发明整蛊捉弄纯情少年真壁立涌！",
@@ -400,20 +425,21 @@ export const EDGES: RelationEdge[] = [
   },
 
   // =========================================================================
-  // 5. MONT BLANC TRIO (Friendship triangle + Nagumo <-> Obaba)
+  // 5. MONT BLANC TRIO & OBABA
   // =========================================================================
   {
     id: "wako-niikura",
     from: "wako",
     to: "niikura",
     type: "friendship",
+    category: "friendship",
     points: [
-      [972, 206],
+      [974, 206],
       [994, 206],
       [994, 179],
     ],
     story: {
-      zh: "同住木目生庄的好友！泉环子甚至自来熟地住进了新仓房间的壁橱里，两人经常一起研究摄影。",
+      zh: "同住木目生庄的好友！泉和子甚至自来熟地住进了新仓房间的壁橱里，两人经常一起研究摄影。",
       en: "Close friends and Woodgrain Manor neighbors—Wako casually moved herself right into Niikura's closet!",
       ja: "モクメセイ荘の仲良し同士。わこは勝手ににーくらの部屋の押し入れに住み着くほどの距離感。",
     },
@@ -423,10 +449,11 @@ export const EDGES: RelationEdge[] = [
     from: "niikura",
     to: "nagumo",
     type: "friendship",
+    category: "friendship",
     points: [
       [1074, 179],
       [1074, 206],
-      [1111, 206],
+      [1109, 206],
     ],
     story: {
       zh: "从时定东高中延续到蒙布朗大学的前后辈挚友！新仓嘴上要和南云平起平坐，实际上永远心软借钱给她。",
@@ -439,6 +466,7 @@ export const EDGES: RelationEdge[] = [
     from: "wako",
     to: "nagumo",
     type: "friendship",
+    category: "friendship",
     points: [
       [948, 231],
       [948, 246],
@@ -456,6 +484,7 @@ export const EDGES: RelationEdge[] = [
     from: "nagumo",
     to: "obaba",
     type: "specific",
+    category: "conflict",
     label: { zh: "拖欠房租", en: "Unpaid Debt", ja: "家賃滞納" },
     labelPos: { x: 1296, y: 144 },
     points: [
@@ -465,7 +494,7 @@ export const EDGES: RelationEdge[] = [
       [1391, 197],
     ],
     story: {
-      zh: "沉迷赛马常年吃土的南云长期拖欠木目生庄房租，成了房东老婆婆全城追杀的头号目标！",
+      zh: "沉迷赛马常年吃土的南云长期拖欠木目生庄房租，成了房东老太婆全城追杀的头号目标！",
       en: "Perpetually broke from horse racing, Nagumo owes Obaba months of unpaid rent at Woodgrain Manor.",
       ja: "競馬好きでいつも一文無しの南雲は、モクメセイ荘の家賃を滞納し続けてオババから追い回されている。",
     },
@@ -475,17 +504,18 @@ export const EDGES: RelationEdge[] = [
     from: "nagumo",
     to: "obaba",
     type: "specific",
+    category: "conflict",
     bidirectional: true,
     arrowStart: true,
     arrowEnd: true,
     label: { zh: "宿敌", en: "Rivals", ja: "宿敵" },
     labelPos: { x: 1281, y: 234 },
     points: [
-      [1225, 214],
-      [1337, 214],
+      [1227, 214],
+      [1335, 214],
     ],
     story: {
-      zh: "体育全能欠租房客 × 战力天花板房东老婆婆！二人围绕房租展开了无数次超越人类极限的爆笑死斗。",
+      zh: "体育全能欠租房客 × 战力天花板房东老太婆！二人围绕房租展开了无数次超越人类极限的爆笑死斗。",
       en: "Athletic deadbeat tenant vs. invincible martial-arts landlady—locked in an eternal, high-octane slapstick rivalry.",
       ja: "運動万能な滞納住人 vs 戦闘力最強の大家！家賃をめぐる壮絶かつ爆笑のライバル対決は本作の華。",
     },
@@ -499,6 +529,7 @@ export const EDGES: RelationEdge[] = [
     from: "wako",
     to: "riko-izumi",
     type: "specific",
+    category: "family",
     label: { zh: "姐姐", en: "Older Sister", ja: "姉" },
     labelPos: { x: 856, y: 476 },
     points: [
@@ -510,7 +541,7 @@ export const EDGES: RelationEdge[] = [
       [886, 639],
     ],
     story: {
-      zh: "泉环子是泉莉子的亲姐姐——一个在大学里住朋友壁橱，一个在高中上课睡大觉坐拥后援会，姐妹俩都深藏不露！",
+      zh: "泉和子是泉莉子的亲姐姐——一个在大学里住朋友壁橱，一个在高中上课睡大觉坐拥后援会，姐妹俩都深藏不露！",
       en: "Wako is Riko Izumi's older sister—one an eccentric college genius, the other a sleepy high-school idol with secret hacking chops.",
       ja: "泉わこは泉りこの実姉。変人天才の姉とファンクラブ持ちの妹、どちらも只者ではない最強姉妹。",
     },
@@ -520,12 +551,13 @@ export const EDGES: RelationEdge[] = [
     from: "wako",
     to: "shia",
     type: "friendship",
+    category: "friendship",
     points: [
       [908, 231],
       [908, 339],
     ],
     story: {
-      zh: "泉环子与艺人诗亚是高中同学兼挚友，诗亚的代表作角色「爆炸先生」其实正是环子画的！",
+      zh: "泉和子与艺人诗亚是高中同学兼挚友，诗亚的代表作角色「爆炸先生」其实正是泉和子画的！",
       en: "High-school classmates and close friends—Wako is actually the one who originally drew Shia's signature character, Mr. Explosion!",
       ja: "高校時代からの親友同士。しあの代名詞「ミスターエクスプロージョン」を描いたのは実はわこ！",
     },
@@ -535,12 +567,13 @@ export const EDGES: RelationEdge[] = [
     from: "shia",
     to: "kamome",
     type: "employment",
+    category: "work",
     label: { zh: "经纪人", en: "Agent", ja: "マネージャー" },
     labelPos: { x: 846, y: 424 },
     points: [
       [866, 373],
       [866, 406],
-      [806, 406],
+      [808, 406],
     ],
     story: {
       zh: "安达太良鸥受雇担任艺人诗亚的经纪人，悉心打理她的通告日程，哪怕常被任性的诗亚坑到受伤也总是笑脸相迎。",
@@ -553,6 +586,7 @@ export const EDGES: RelationEdge[] = [
     from: "shia",
     to: "sora",
     type: "friendship",
+    category: "friendship",
     points: [
       [908, 373],
       [908, 544],
@@ -570,6 +604,7 @@ export const EDGES: RelationEdge[] = [
     from: "shia",
     to: "umi",
     type: "friendship",
+    category: "friendship",
     points: [
       [908, 373],
       [908, 544],
@@ -587,6 +622,7 @@ export const EDGES: RelationEdge[] = [
     from: "amagi",
     to: "riko-izumi",
     type: "specific",
+    category: "admiration",
     label: { zh: "执教", en: "Teaches", ja: "担当教諭" },
     labelPos: { x: 928, y: 716 },
     points: [
@@ -601,13 +637,14 @@ export const EDGES: RelationEdge[] = [
   },
 
   // =========================================================================
-  // 7. CITY THREE CROWS (Mr. Adatara — Editor in Chief — Chef Makabe)
+  // 7. CITY THREE CROWS
   // =========================================================================
   {
     id: "mr-adatara-editor",
     from: "mr-adatara",
     to: "editor-in-chief",
     type: "friendship",
+    category: "friendship",
     points: [
       [568, 301],
       [568, 288],
@@ -616,7 +653,7 @@ export const EDGES: RelationEdge[] = [
       [1042, 356],
     ],
     story: {
-      zh: "「CITY 三羽乌（CITY 三羽ガラス）」铁三角成员！安达太良父与《周刊CITY》主编是多年好友。",
+      zh: "「CITY 三羽乌（CITY 三羽ガラス）」铁三角成员！安达太良父与《周刊CITY》编辑长是多年好友。",
       en: "Members of the legendary 'CITY Three Crows'—Mr. Adatara and the Editor in Chief are longtime best buddies.",
       ja: "親友トリオ「CITY三羽ガラス」の仲間！安達太良の父と編集長は気の置けない間柄。",
     },
@@ -626,12 +663,13 @@ export const EDGES: RelationEdge[] = [
     from: "editor-in-chief",
     to: "chef-makabe",
     type: "friendship",
+    category: "friendship",
     points: [
       [1180, 356],
       [1340, 356],
     ],
     story: {
-      zh: "编辑部就在真壁西餐厅正对面！主编与真壁鹤菱既是邻居更是「CITY 三羽乌」挚友。",
+      zh: "编辑部就在真壁西餐厅正对面！编辑长与真壁鹤菱既是邻居更是「CITY 三羽乌」挚友。",
       en: "With CITY Weekly right across the street from Makabe's Bistro, the Editor in Chief and Chef Makabe are best pals in the 'CITY Three Crows'.",
       ja: "編集部は洋食マカベの向かい！編集長と真壁鶴菱は「CITY三羽ガラス」の固い友情で結ばれている。",
     },
@@ -641,8 +679,9 @@ export const EDGES: RelationEdge[] = [
     from: "mr-adatara",
     to: "chef-makabe",
     type: "friendship",
+    category: "friendship",
     points: [
-      [506, 318],
+      [505, 318],
       [476, 318],
       [476, 562],
       [1292, 562],
@@ -657,13 +696,14 @@ export const EDGES: RelationEdge[] = [
   },
 
   // =========================================================================
-  // 8. CITY WEEKLY MAGAZINE (Employment + Todoroki/Naganohara/Kamaboko + Fan)
+  // 8. CITY WEEKLY MAGAZINE
   // =========================================================================
   {
     id: "editor-employs-arama",
     from: "editor-in-chief",
     to: "arama-san",
     type: "employment",
+    category: "work",
     points: [
       [1111, 373],
       [1111, 390],
@@ -671,7 +711,7 @@ export const EDGES: RelationEdge[] = [
       [1018, 407],
     ],
     story: {
-      zh: "荒真作为《周刊CITY》的资深编辑，长期在严厉主编手下负责特别采访专栏。",
+      zh: "荒真作为《周刊CITY》的资深编辑，长期在严厉编辑长手下负责特别采访专栏。",
       en: "Senior editor Arama-san works directly under the strict Editor in Chief at CITY Weekly Magazine.",
       ja: "先輩社員のあらまさんは編集長のもとで『週刊CITY誌』の特設コラムを担当。",
     },
@@ -681,6 +721,7 @@ export const EDGES: RelationEdge[] = [
     from: "editor-in-chief",
     to: "todoroki",
     type: "employment",
+    category: "work",
     points: [
       [1111, 373],
       [1111, 390],
@@ -688,7 +729,7 @@ export const EDGES: RelationEdge[] = [
       [1204, 407],
     ],
     story: {
-      zh: "轰是《周刊CITY》编辑部的新人编辑，奉主编之命担任漫画家鬼蒲鉾的责编。",
+      zh: "轰是《周刊CITY》编辑部的新人编辑，奉编辑长之命担任漫画家鬼鱼板的责编。",
       en: "Rookie editor Todoroki is employed by the Editor in Chief to handle CITY Weekly's comic section.",
       ja: "新人編集者の轟は編集長のもとで鬼カマボコの担当編集を務めている。",
     },
@@ -698,6 +739,7 @@ export const EDGES: RelationEdge[] = [
     from: "editor-in-chief",
     to: "naganohara",
     type: "employment",
+    category: "work",
     points: [
       [1111, 373],
       [1111, 464],
@@ -705,9 +747,9 @@ export const EDGES: RelationEdge[] = [
       [1018, 483],
     ],
     story: {
-      zh: "《周刊CITY》重金聘请的当红大漫画家长野原大介（即《日常》长野原美绪），原本要接替周刊漫画连载。",
-      en: "CITY Weekly hired superstar mangaka Daisuke Naganohara (grown-up Mio from Nichijou!) to serialize in the magazine.",
-      ja: "『週刊CITY誌』が新たに招いた人気漫画家・長野原大介（『日常』のみお）。",
+      zh: "《周刊CITY》重金聘请的当红大漫画家长野原大介，原本要接替周刊漫画连载。",
+      en: "CITY Weekly hired superstar mangaka Daisuke Naganohara to serialize in the magazine.",
+      ja: "『週刊CITY誌』が新たに招いた人気漫画家・長野原大介。",
     },
   },
   {
@@ -715,6 +757,7 @@ export const EDGES: RelationEdge[] = [
     from: "editor-in-chief",
     to: "kamaboko",
     type: "employment",
+    category: "work",
     points: [
       [1111, 373],
       [1111, 464],
@@ -722,7 +765,7 @@ export const EDGES: RelationEdge[] = [
       [1204, 483],
     ],
     story: {
-      zh: "鬼蒲鉾受雇在《周刊CITY》连载每周漫画《失望先生（落胆君）》。",
+      zh: "鬼鱼板受雇在《周刊CITY》连载每周漫画《失望先生（落胆君）》。",
       en: "Kamaboko Oni draws the weekly comic strip 'Rakutan-kun' for CITY Weekly Magazine.",
       ja: "鬼カマボコは『週刊CITY誌』で代表作『落胆くん』を連載している漫画家。",
     },
@@ -732,13 +775,14 @@ export const EDGES: RelationEdge[] = [
     from: "todoroki",
     to: "naganohara",
     type: "specific",
+    category: "admiration",
     label: { zh: "崇拜", en: "Idolizes", ja: "憧れ・心酔" },
     labelPos: { x: 1111, y: 520 },
     points: [
       [1150, 424],
       [1132, 424],
       [1132, 500],
-      [1077, 500],
+      [1080, 500],
     ],
     story: {
       zh: "轰是人气大漫画家长野原大介的头号迷弟，见到偶像时激动不已！",
@@ -751,6 +795,7 @@ export const EDGES: RelationEdge[] = [
     from: "todoroki",
     to: "kamaboko",
     type: "friendship",
+    category: "friendship",
     points: [
       [1258, 424],
       [1272, 424],
@@ -758,7 +803,7 @@ export const EDGES: RelationEdge[] = [
       [1260, 500],
     ],
     story: {
-      zh: "责编轰与漫画家鬼蒲鉾虽然天天一起焦虑截稿日和创意瓶颈，却早已成为彼此信赖的挚友。",
+      zh: "责编轰与漫画家鬼鱼板虽然天天一起焦虑截稿日和创意瓶颈，却早已成为彼此信赖的挚友。",
       en: "Editor and mangaka turned genuine buddies—bonding through endless creative crises and deadlines.",
       ja: "担当編集と漫画家という立場を超え、苦楽を共にする良き相棒・親友同士。",
     },
@@ -768,6 +813,7 @@ export const EDGES: RelationEdge[] = [
     from: "kamaboko",
     to: "tekaridake",
     type: "specific",
+    category: "admiration",
     label: { zh: "铁杆粉丝", en: "Fan", ja: "ファン" },
     labelPos: { x: 1228, y: 576 },
     points: [
@@ -777,26 +823,27 @@ export const EDGES: RelationEdge[] = [
       [1138, 705],
     ],
     story: {
-      zh: "鬼蒲鉾是光岳剧团的忠实粉丝，日常生活中经常穿着剧团《MONOEYE》等演出的官方周边 T 恤！",
+      zh: "鬼鱼板是光岳剧团的忠实粉丝，日常生活中经常穿着剧团《MONOEYE》等演出的官方周边 T 恤！",
       en: "Kamaboko Oni is a devoted fan of Theater Troupe Tekaridake—often spotted wearing their 'MONOEYE' play merch!",
       ja: "鬼カマボコは劇団テカリダケの熱心なファンで、普段から劇団の公演グッズTシャツを愛用している。",
     },
   },
 
   // =========================================================================
-  // 9. MAKABE FAMILY (Children + Matsuri—Ecchan + Tatewaku Crush Riko)
+  // 9. MAKABE FAMILY
   // =========================================================================
   {
     id: "obaba-chef-makabe",
     from: "obaba",
     to: "chef-makabe",
     type: "children",
+    category: "family",
     points: [
       [1391, 231],
       [1391, 339],
     ],
     story: {
-      zh: "原图以血缘箭头标示老婆婆与真壁鹤菱的家族代际关系（原作设定中，老婆婆实际上是真壁母的生母、真壁鹤菱的岳母，立涌与茉莉的外婆）。",
+      zh: "原图以血缘箭头标示老太婆与真壁鹤菱的家族代际关系（原作设定中，老太婆实际上是真壁母的生母、真壁鹤菱的岳母，立涌与茉莉的外婆）。",
       en: "Shown as a direct generational link on VayItsHere's Social Map (in manga/anime canon, Obaba is Mrs. Makabe's mother and Chef Makabe's mother-in-law!).",
       ja: "元マップではオババから鶴菱への世代矢印で表現（原作設定上は真壁の母の実母・鶴菱の義母、立涌とまつりの祖母）。",
     },
@@ -806,6 +853,7 @@ export const EDGES: RelationEdge[] = [
     from: "chef-makabe",
     to: "tatewaku",
     type: "children",
+    category: "family",
     points: [
       [1468, 356],
       [1487, 356],
@@ -824,6 +872,7 @@ export const EDGES: RelationEdge[] = [
     from: "mrs-makabe",
     to: "tatewaku",
     type: "children",
+    category: "family",
     points: [
       [1506, 356],
       [1487, 356],
@@ -842,6 +891,7 @@ export const EDGES: RelationEdge[] = [
     from: "chef-makabe",
     to: "matsuri",
     type: "children",
+    category: "family",
     points: [
       [1468, 356],
       [1487, 356],
@@ -860,6 +910,7 @@ export const EDGES: RelationEdge[] = [
     from: "mrs-makabe",
     to: "matsuri",
     type: "children",
+    category: "family",
     points: [
       [1506, 356],
       [1487, 356],
@@ -878,9 +929,10 @@ export const EDGES: RelationEdge[] = [
     from: "matsuri",
     to: "ecchan",
     type: "friendship",
+    category: "friendship",
     points: [
-      [1622, 496],
-      [1662, 496],
+      [1625, 496],
+      [1659, 496],
     ],
     story: {
       zh: "全作最治愈催泪的挚友组合！真壁茉莉与雨饰悦理（小英）形影不离，离别前共同度过的夏日时光感人至深。",
@@ -893,10 +945,11 @@ export const EDGES: RelationEdge[] = [
     from: "tatewaku",
     to: "riko-izumi",
     type: "specific",
+    category: "romance",
     label: { zh: "暗恋", en: "Crush", ja: "片思い" },
     labelPos: { x: 1260, y: 636 },
     points: [
-      [1363, 504],
+      [1360, 504],
       [1308, 504],
       [1308, 656],
       [947, 656],
@@ -909,13 +962,14 @@ export const EDGES: RelationEdge[] = [
   },
 
   // =========================================================================
-  // 10. TANABE MANSION (Kidnapped perimeter highway + 8 Employment edges)
+  // 10. TANABE MANSION
   // =========================================================================
   {
     id: "tanabe-kidnapped-good-person",
     from: "tanabe",
     to: "good-person",
     type: "specific",
+    category: "conflict",
     label: { zh: "强行绑架表彰", en: "Kidnapped", ja: "強引に拉致表彰" },
     labelPos: { x: 512, y: 576 },
     points: [
@@ -927,7 +981,7 @@ export const EDGES: RelationEdge[] = [
       [374, 121],
     ],
     story: {
-      zh: "富婆田边一心想要隆重表彰行善无数的「好人」，不惜派出管家与重兵满城追捕、强行请回豪宅，成了好人的头号宿敌！",
+      zh: "富婆田边一心想要隆重表彰行善无数的「好人」，不惜派出执事与重兵满城追捕、强行请回豪宅，成了好人的头号宿敌！",
       en: "Obsessed with throwing Good Person a lavish thank-you banquet, Tanabe repeatedly 'kidnaps' him—making her his comedic archnemesis.",
       ja: "善行を重ねる「いい人」を盛大に表彰しようと、タナベは執事の穂高らを動員して何度も拉致を試みる。",
     },
@@ -937,6 +991,8 @@ export const EDGES: RelationEdge[] = [
     from: "tanabe",
     to: "nagumo",
     type: "specific",
+    category: "conflict",
+    label: { zh: "强行绑架表彰", en: "Kidnapped", ja: "拉致(表彰)" },
     points: [
       [616, 615],
       [616, 576],
@@ -956,10 +1012,11 @@ export const EDGES: RelationEdge[] = [
     from: "tanabe",
     to: "hotaka",
     type: "employment",
+    category: "work",
     points: [
       [616, 649],
       [616, 686],
-      [676, 686],
+      [674, 686],
     ],
     story: {
       zh: "穗高是田边大小姐最忠心的贴身执事，全程配合大小姐执行各种疯狂的「表彰计划」。",
@@ -972,6 +1029,7 @@ export const EDGES: RelationEdge[] = [
     from: "tanabe",
     to: "unnamed-servants",
     type: "employment",
+    category: "work",
     points: [
       [616, 649],
       [616, 760],
@@ -988,6 +1046,7 @@ export const EDGES: RelationEdge[] = [
     from: "tanabe",
     to: "magician",
     type: "employment",
+    category: "work",
     points: [
       [616, 649],
       [616, 686],
@@ -1004,6 +1063,7 @@ export const EDGES: RelationEdge[] = [
     from: "tanabe",
     to: "abacus",
     type: "employment",
+    category: "work",
     points: [
       [616, 649],
       [616, 734],
@@ -1020,6 +1080,7 @@ export const EDGES: RelationEdge[] = [
     from: "tanabe",
     to: "mitsuami",
     type: "employment",
+    category: "work",
     points: [
       [616, 649],
       [616, 782],
@@ -1036,6 +1097,7 @@ export const EDGES: RelationEdge[] = [
     from: "tanabe",
     to: "oni",
     type: "employment",
+    category: "work",
     points: [
       [616, 649],
       [616, 830],
@@ -1052,6 +1114,7 @@ export const EDGES: RelationEdge[] = [
     from: "tanabe",
     to: "memory-master",
     type: "employment",
+    category: "work",
     points: [
       [616, 649],
       [616, 878],
@@ -1068,35 +1131,37 @@ export const EDGES: RelationEdge[] = [
     from: "tanabe",
     to: "gawsc",
     type: "employment",
+    category: "work",
     points: [
       [616, 649],
       [616, 924],
-      [561, 924],
+      [566, 924],
     ],
     story: {
-      zh: "受雇镇守田边塔 5 层「空手之间」的巨型白化西洋寿司师傅（虽然胳膊折了）。",
+      zh: "受雇镇守田边塔 5 层「KARATENOMA（空手之间）」的巨型白化西洋寿司师傅（虽然胳膊折了）。",
       en: "Hired by Tanabe for the 5th floor's 'KARATE NO MA' trial—broken arm and all.",
-      ja: "タナベタワー5階「空手の間」を任されている謎の巨大西洋寿司職人。",
+      ja: "タナベタワー5階「KARATENOMA」を任されている謎の巨大西洋寿司職人。",
     },
   },
 
   // =========================================================================
-  // 11. THE THEATER TROUPE TEKARIDAKE (6 Friendship links from Tekaridake)
+  // 11. THE THEATER TROUPE TEKARIDAKE
   // =========================================================================
   {
     id: "tekaridake-quaksky",
     from: "tekaridake",
     to: "quaksky",
     type: "friendship",
+    category: "friendship",
     points: [
       [1138, 739],
       [1138, 778],
       [1095, 778],
     ],
     story: {
-      zh: "光岳剧团的挚友（？）搭档——嘎嘎斯基平时爱咬团长，但演起戏来默契十足。",
+      zh: "光岳剧团的挚友（？）搭档——呱介平时爱咬团长，但演起戏来默契十足。",
       en: "Troupe mates—Quaksky bites Tekaridake during rehearsals, yet sticks with the troupe.",
-      ja: "稽古中に光岳へ噛みつくクワックスキーだが、れっきとした劇団の仲間。",
+      ja: "稽古中に光岳へ噛みつくガー介だが、れっきとした劇団の仲間。",
     },
   },
   {
@@ -1104,6 +1169,7 @@ export const EDGES: RelationEdge[] = [
     from: "tekaridake",
     to: "fighting-monkey",
     type: "friendship",
+    category: "friendship",
     points: [
       [1138, 739],
       [1138, 778],
@@ -1120,15 +1186,16 @@ export const EDGES: RelationEdge[] = [
     from: "tekaridake",
     to: "mr-x",
     type: "friendship",
+    category: "friendship",
     points: [
       [1138, 739],
       [1138, 830],
       [1095, 830],
     ],
     story: {
-      zh: "神秘莫测的 X 先生是光岳的剧团好友兼赛跑搭档。",
+      zh: "神秘莫测的 X 先生（？）是光岳的剧团好友兼赛跑搭档。",
       en: "The enigmatic Mr. X is Tekaridake's trusty troupe buddy and race partner.",
-      ja: "正体不明のミスターXは、光岳の頼れる（？）劇団仲間＆レース相棒。",
+      ja: "正体不明の「？」（ミスターX）は、光岳の頼れる（？）劇団仲間＆レース相棒。",
     },
   },
   {
@@ -1136,13 +1203,14 @@ export const EDGES: RelationEdge[] = [
     from: "tekaridake",
     to: "mr-squeek",
     type: "friendship",
+    category: "friendship",
     points: [
       [1138, 739],
       [1138, 830],
       [1177, 830],
     ],
     story: {
-      zh: "吱吱先生有时会出手拉架，保护可怜的光岳团长不被其他动物团员打太狠。",
+      zh: "啾啾先生有时会出手拉架，保护可怜的光岳团长不被其他动物团员打太狠。",
       en: "Mr. Squeek is the gentle friend who occasionally stops the rest of the troupe from pounding Tekaridake.",
       ja: "他の団員から光岳を守ろうと仲裁に入ってくれる優しい劇団仲間。",
     },
@@ -1152,6 +1220,7 @@ export const EDGES: RelationEdge[] = [
     from: "tekaridake",
     to: "hell-bird",
     type: "friendship",
+    category: "friendship",
     points: [
       [1138, 739],
       [1138, 882],
@@ -1168,13 +1237,14 @@ export const EDGES: RelationEdge[] = [
     from: "tekaridake",
     to: "hedgester",
     type: "friendship",
+    category: "friendship",
     points: [
       [1138, 739],
       [1138, 882],
       [1177, 882],
     ],
     story: {
-      zh: "蓝色尖刺的刺猬仔常扎光岳团长，也是光岳笔下经典角色「闷闷不乐的针鼹」的灵魂演绎者！",
+      zh: "蓝色尖刺的阿针常扎光岳团长，也是光岳笔下经典角色「闷闷不乐的针鼹」的灵魂演绎者！",
       en: "Blue-spiked Hedgester pokes Tekaridake backstage and brings 'the Sulky Echidna' to life onstage.",
       ja: "青いトゲで光岳を刺しつつも、当たり役「すねたハリモグラ」で観客を魅了する名優。",
     },

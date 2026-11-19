@@ -146,7 +146,7 @@ export const FACTIONS: Faction[] = [
       ja: "モンブラン大学＆モクメセイ荘の仲良し3人組",
     },
     description: {
-      zh: "故事的绝对中心！由整天欠租却赤诚爽快的南云美鸟、憧憬前辈的摄影少女新仓、以及脑洞清奇的天才怪人泉环子组成。三人同住木目生庄，就读于蒙布朗大学，是 CITY 欢闹日常的发动机。",
+      zh: "故事的绝对中心！由整天欠租却赤诚爽快的南云美鸟、憧憬前辈的摄影少女新仓、以及脑洞清奇的天才怪人泉和子组成。三人同住木目生庄，就读于蒙布朗大学，是 CITY 欢闹日常的发动机。",
       en: "The beating heart of CITY! Midori Nagumo (broke, bold, pure-hearted), Niikura (aspiring photographer & loyal underclassman), and Wako Izumi (joyful eccentric genius), all living at Woodgrain Manor.",
       ja: "物語の中心となる3人組！家賃滞納常習犯だが心ピュアな南雲美鳥、カメラを愛する後輩・にーくら、天真爛漫な天才変人・泉わこ。モンブラン大学に通い、モクメセイ荘で暮らしている。",
     },
@@ -192,9 +192,9 @@ export const FACTIONS: Faction[] = [
       ja: "バナナ社の個性派ローカル週刊誌編集部",
     },
     description: {
-      zh: "坐落在真壁西餐厅对面大楼的香蕉公司《周刊CITY》编辑部，实际上由富婆田边暗中全额出资。这里有严厉的主编、元气前辈荒真、热血新人编辑轰，以及两位截然不同的连载漫画家——鬼蒲鉾与长野原大介（来自《日常》的彩蛋联动！）。",
+      zh: "坐落在真壁西餐厅对面大楼的香蕉公司《周刊CITY》编辑部，实际上由富婆田边暗中全额出资。这里有严厉的编辑长、元气前辈荒真、热血新人编辑轰，以及两位截然不同的连载漫画家——鬼鱼板与长野原大介。",
       en: "Located across from Makabe's Western Bistro, this quirky local magazine (secretly funded by Tanabe) employs the strict Editor in Chief, cheerful Arama-san, ambitious Todoroki, struggling mangaka Kamaboko Oni, and superstar Daisuke Naganohara.",
-      ja: "洋食マカベ向かいのビルにあるバナナ社『週刊CITY誌』編集部。編集長・あらまさん・轟の編集トリオに加え、漫画家・鬼カマボコと人気作家・長野原大介（『日常』からの豪華クロスオーバー！）が連載陣に名を連ねる。",
+      ja: "洋食マカベ向かいのビルにあるバナナ社『週刊CITY誌』編集部。編集長・あらま・轟の編集トリオに加え、漫画家・鬼カマボコと人気作家・長野原大介が連載陣に名を連ねる。",
     },
     location: {
       zh: "香蕉公司大楼（真壁西餐厅对面）",
@@ -227,7 +227,7 @@ export const FACTIONS: Faction[] = [
       ja: "商店街の人気洋食店＆最強大家オババの一家",
     },
     description: {
-      zh: "CITY 商店街的地标「洋食马卡贝（真壁西餐厅）」一家。包括无敌的木目生庄房东老婆婆、帅气冷面大厨真壁鹤菱、常年海外考古的妈妈、青春满溢的高中生哥哥立涌（同时也是足球部替补），以及元气满满的初中生妹妹茉莉。",
+      zh: "CITY 商店街的地标「洋食马卡贝（真壁西餐厅）」一家。包括无敌的木目生庄房东老太婆、帅气冷面大厨真壁鹤菱、常年海外考古的妈妈、青春满溢的高中生哥哥立涌（同时也是足球部替补），以及元气满满的初中生妹妹茉莉。",
       en: "The warmhearted family behind Makabe's Western Bistro: invincible landlady Obaba, dandy Chef Tsurubishi Makabe, globetrotting archaeologist Mrs. Makabe, lovestruck high schooler Tatewaku (also on the Soccer Team!), and lively middle schooler Matsuri.",
       ja: "商店街の名店「洋食マカベ」の一家。最強の大家オババ、ダンディーな店主・鶴菱、海外調査中の母、青春ど真ん中の兄・立涌（サッカー部にも所属！）、元気な妹・まつりで構成される。",
     },
@@ -343,9 +343,9 @@ export const FACTIONS: Faction[] = [
       ja: "個性派ぞろいのCITY南高校サッカー部（全14名）",
     },
     description: {
-      zh: "CITY 南高中的王牌（？）社团！在完全不懂足球规则却情感充沛的雁腹教练带领下，汇集了热血队长带那、原百万年一遇棒球天才门将黑金、超级王牌却爱受伤的笹子、间谍权现山、泉莉子应援团团长火之玉，以及来自真壁家的替补中场真壁立涌！",
+      zh: "CITY 南高中的王牌（？）社团！在完全不懂足球规则却情感充沛的雁腹教练带领下，汇集了热血队长带那林道、原百万年一遇棒球天才门将黑金大和、超级王牌却爱受伤的笹子源次郎、间谍权现山岩男、泉莉子应援团团长火野玉暴威之助，以及来自真壁家的替补中场真壁立涌！",
       en: "Minami High School's unforgettable soccer club! Coached by Mr. Gangahara (who knows zero soccer rules), the roster spans passionate Captain Obina, baseball-prodigy goalie Yamato, injury-prone ace Masago, undercover spy Gondenyama, Riko fan-club president Hinotama, and Makabe Family's own #28 sub Tatewaku.",
-      ja: "サッカーのルールを一切知らない雁ヶ腹監督のもと、熱血キャプテン帯那、元野球の天才GK黒金、超高校級エース笹子、実はスパイの権現山、泉りこ親衛隊長の火之玉、そして真壁家の立涌（背番号28）ら14名が集う部活。",
+      ja: "サッカーのルールを一切知らない雁ヶ腹監督のもと、熱血キャプテン帯那、元野球の天才GK黒金、超高校級エース笹子、実はスパイの権現山、泉りこ親衛隊長の火野玉、そして真壁家の立涌（背番号28）ら14名が集う部活。",
     },
     location: {
       zh: "CITY 南高中操场",

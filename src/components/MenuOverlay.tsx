@@ -1,5 +1,15 @@
 import React from "react";
-import { BookOpen, ExternalLink, Keyboard, Map, Route, Sparkles } from "lucide-react";
+import {
+  BookOpen,
+  Compass,
+  Eye,
+  EyeOff,
+  ExternalLink,
+  Keyboard,
+  Map,
+  Route,
+  Sparkles,
+} from "lucide-react";
 import type { Locale } from "../types";
 import { RESOURCE_CATEGORIES } from "../data/resources";
 import { UI_TEXT, pickText } from "../data/i18n";
@@ -8,8 +18,11 @@ import { CityLogo, MiminekoMascot } from "./CityLogo";
 interface MenuOverlayProps {
   open: boolean;
   locale: Locale;
+  spoilerFree: boolean;
+  onToggleSpoilerFree: () => void;
   onClose: () => void;
   onOpenMap: () => void;
+  onOpenNetwork: () => void;
   onOpenDirectory: () => void;
   onOpenPathFinder: () => void;
 }
@@ -17,8 +30,11 @@ interface MenuOverlayProps {
 export const MenuOverlay: React.FC<MenuOverlayProps> = ({
   open,
   locale,
+  spoilerFree,
+  onToggleSpoilerFree,
   onClose,
   onOpenMap,
+  onOpenNetwork,
   onOpenDirectory,
   onOpenPathFinder,
 }) => {
@@ -48,9 +64,27 @@ export const MenuOverlay: React.FC<MenuOverlayProps> = ({
             <p className="text-xs sm:text-sm font-bold text-[#444455] leading-relaxed">
               “{t.tagline}”
             </p>
+
+            {/* Spoiler-Free Toggle Switch (handy on mobile too!) */}
+            <button
+              type="button"
+              onClick={onToggleSpoilerFree}
+              className={`mt-1 px-3.5 py-2 rounded-full border-2 border-[#141419] text-xs font-extrabold flex items-center gap-2 cursor-pointer transition-colors shadow-[2.5px_2.5px_0_#141419] ${
+                spoilerFree
+                  ? "bg-[#33333F] text-[#99CB77]"
+                  : "bg-white text-[#141419] hover:bg-[#FFF6E0]"
+              }`}
+            >
+              {spoilerFree ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
+              <span>{spoilerFree ? t.spoilerFreeOn : t.spoilerFreeOff}</span>
+            </button>
           </div>
 
-          {/* 4-Color Official-Style Navigation Tiles (.menu-list) */}
+          {/* Official-Style Vibrant Navigation Tiles (.menu-list) */}
           <div className="grid grid-cols-2 gap-3.5 sm:gap-4">
             <button
               type="button"
@@ -66,6 +100,23 @@ export const MenuOverlay: React.FC<MenuOverlayProps> = ({
                 <div className="text-[11px] font-bold text-[#141419]/75">
                   65 {t.characterCount} · 8 {t.factionCount}
                 </div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                onOpenNetwork();
+                onClose();
+              }}
+              className="city-menu-tile bg-[#C4E4F5] px-4 py-4 sm:py-5 text-left flex items-center gap-3 cursor-pointer"
+            >
+              <Compass className="w-6 h-6 text-[#141419] shrink-0" strokeWidth={2.5} />
+              <div>
+                <div className="text-sm sm:text-base font-black text-[#141419]">
+                  {t.networkTab}
+                </div>
+                <div className="text-[11px] font-bold text-[#141419]/75">EGO RADAR</div>
               </div>
             </button>
 
@@ -100,21 +151,6 @@ export const MenuOverlay: React.FC<MenuOverlayProps> = ({
                 <div className="text-[11px] font-bold text-[#141419]/75">SIX DEGREES</div>
               </div>
             </button>
-
-            <a
-              href="https://city-the-animation.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="city-menu-tile bg-[#EE847D] px-4 py-4 sm:py-5 text-left flex items-center gap-3 no-underline"
-            >
-              <ExternalLink className="w-6 h-6 text-[#141419] shrink-0" strokeWidth={2.5} />
-              <div>
-                <div className="text-sm sm:text-base font-black text-[#141419]">OFFICIAL</div>
-                <div className="text-[11px] font-bold text-[#141419]/80">
-                  city-the-animation.com
-                </div>
-              </div>
-            </a>
           </div>
         </div>
 
@@ -221,6 +257,14 @@ export const MenuOverlay: React.FC<MenuOverlayProps> = ({
                 className="px-3 py-1.5 rounded-full bg-[#99CB77] text-[#141419] text-[11px] font-extrabold no-underline hover:opacity-90"
               >
                 {t.awesomeRepoLink} ↗
+              </a>
+              <a
+                href="https://city-the-animation.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 rounded-full bg-[#EE847D] text-[#141419] text-[11px] font-extrabold no-underline hover:opacity-90"
+              >
+                {t.officialSiteLink} ↗
               </a>
             </div>
           </div>

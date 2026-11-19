@@ -4,16 +4,43 @@ import { CHARACTER_MAP } from "./data/characters";
 import { FACTION_MAP } from "./data/factions";
 import { findSocialPath } from "./utils/pathfinding";
 import { LoadingCurtain } from "./components/LoadingCurtain";
-import { TopBar } from "./components/TopBar";
+import { TopBar, type ViewMode } from "./components/TopBar";
 import { SocialMapCanvas, type MapCameraHandle } from "./components/SocialMapCanvas";
+import {
+  CharacterNetworkCanvas,
+  type NetworkSubMode,
+} from "./components/CharacterNetworkCanvas";
 import { BottomControls } from "./components/BottomControls";
 import { DetailDrawer } from "./components/DetailDrawer";
 import { PathFinderBar } from "./components/PathFinderBar";
 import { DirectoryModal } from "./components/DirectoryModal";
 import { MenuOverlay } from "./components/MenuOverlay";
 
+function parseInitialHash(): {
+  viewMode: ViewMode;
+  subMode: NetworkSubMode;
+  charId: string | null;
+} {
+  const hash = window.location.hash;
+  const modeMatch = hash.match(/mode=(map|network)/i);
+  const subMatch = hash.match(/sub=(ego|full)/i);
+  const charMatch = hash.match(/char=([a-z0-9-]+)/i);
+  const charId = charMatch && CHARACTER_MAP[charMatch[1]] ? charMatch[1] : null;
+  return {
+    viewMode: modeMatch && modeMatch[1].toLowerCase() === "network" ? "network" : "map",
+    subMode: subMatch && subMatch[1].toLowerCase() === "full" ? "full" : "ego",
+    charId,
+  };
+}
+
 export default function App() {
+  const initialHash = useMemo(() => parseInitialHash(), []);
+
   const [locale, setLocale] = useState<Locale>("zh");
+  const [viewMode, setViewMode] = useState<ViewMode>(initialHash.viewMode);
+  const [egoCenterId, setEgoCenterId] = useState<string>(initialHash.charId ?? "nagumo");
+  const [spoilerFree, setSpoilerFree] = useState<boolean>(false);
+
   const [visibleRelationTypes, setVisibleRelationTypes] = useState<Record<RelationType, boolean>>({
     children: true,
     friendship: true,
@@ -21,7 +48,9 @@ export default function App() {
     specific: true,
   });
 
-  const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
+  const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(
+    initialHash.charId
+  );
   const [selectedFactionId, setSelectedFactionId] = useState<FactionId | null>(null);
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
 
@@ -35,16 +64,26 @@ export default function App() {
   const cameraRef = useRef<MapCameraHandle | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Sync initial character from URL hash (#char=nagumo)
+  // If initialized with #char=... in classic map mode, smoothly fly to that character
   useEffect(() => {
-    const hash = window.location.hash;
-    const match = hash.match(/char=([a-z0-9-]+)/i);
-    if (match && CHARACTER_MAP[match[1]]) {
-      const char = CHARACTER_MAP[match[1]];
-      setSelectedCharacterId(char.id);
-      window.setTimeout(() => {
-        cameraRef.current?.flyToPoint(char.x, char.y, 1.35);
-      }, 650);
+    if (initialHash.charId && initialHash.viewMode === "map") {
+      const char = CHARACTER_MAP[initialHash.charId];
+      if (char) {
+        window.setTimeout(() => {
+          cameraRef.current?.flyToPoint(char.x, char.y, 1.35);
+        }, 650);
+      }
+    }
+  }, [initialHash]);
+
+  const syncHash = useCallback((mode: ViewMode, charId: string | null) => {
+    const parts: string[] = [];
+    if (mode === "network") parts.push("mode=network");
+    if (charId) parts.push(`char=${charId}`);
+    if (parts.length > 0) {
+      window.history.replaceState(null, "", `#${parts.join("&")}`);
+    } else if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
   }, []);
 
@@ -60,6 +99,17 @@ export default function App() {
     setVisibleRelationTypes((prev) => ({ ...prev, [type]: !prev[type] }));
   }, []);
 
+  const handleChangeViewMode = useCallback(
+    (nextMode: ViewMode) => {
+      setViewMode(nextMode);
+      if (nextMode === "network" && selectedCharacterId) {
+        setEgoCenterId(selectedCharacterId);
+      }
+      syncHash(nextMode, selectedCharacterId);
+    },
+    [selectedCharacterId, syncHash]
+  );
+
   const handleSelectCharacter = useCallback(
     (char: Character) => {
       if (pathMode) {
@@ -72,20 +122,42 @@ export default function App() {
         return;
       }
       setSelectedCharacterId(char.id);
+      setEgoCenterId(char.id);
       setSelectedFactionId(null);
       setSelectedEdgeId(null);
-      window.history.replaceState(null, "", `#char=${char.id}`);
+      syncHash(viewMode, char.id);
     },
-    [pathEndId, pathMode, pathStartId]
+    [pathEndId, pathMode, pathStartId, syncHash, viewMode]
   );
 
-  const handleLocateCharacter = useCallback((char: Character) => {
-    setSelectedCharacterId(char.id);
-    setSelectedFactionId(null);
-    setSelectedEdgeId(null);
-    window.history.replaceState(null, "", `#char=${char.id}`);
-    cameraRef.current?.flyToPoint(char.x, char.y, 1.35);
-  }, []);
+  const handleLocateCharacter = useCallback(
+    (char: Character) => {
+      setSelectedCharacterId(char.id);
+      setEgoCenterId(char.id);
+      setSelectedFactionId(null);
+      setSelectedEdgeId(null);
+      syncHash(viewMode, char.id);
+      if (viewMode === "map") {
+        cameraRef.current?.flyToPoint(char.x, char.y, 1.35);
+      }
+    },
+    [syncHash, viewMode]
+  );
+
+  const handleOpenEgoRadar = useCallback(
+    (char: Character) => {
+      setPathMode(false);
+      setDirectoryOpen(false);
+      setMenuOpen(false);
+      setEgoCenterId(char.id);
+      setSelectedCharacterId(char.id);
+      setSelectedFactionId(null);
+      setSelectedEdgeId(null);
+      setViewMode("network");
+      syncHash("network", char.id);
+    },
+    [syncHash]
+  );
 
   const handleSelectFaction = useCallback((faction: Faction) => {
     setSelectedFactionId(faction.id);
@@ -119,23 +191,26 @@ export default function App() {
     setSelectedCharacterId(null);
     setSelectedFactionId(null);
     setSelectedEdgeId(null);
-    if (window.location.hash) {
-      window.history.replaceState(null, "", window.location.pathname + window.location.search);
-    }
-  }, []);
+    syncHash(viewMode, null);
+  }, [syncHash, viewMode]);
 
-  const handleSetPathEndpoint = useCallback((charId: string, which: "start" | "end") => {
-    setPathMode(true);
-    setSelectedCharacterId(null);
-    setSelectedFactionId(null);
-    setSelectedEdgeId(null);
-    if (which === "start") {
-      setPathStartId(charId);
-    } else {
-      setPathEndId(charId);
-    }
-    cameraRef.current?.resetView();
-  }, []);
+  const handleSetPathEndpoint = useCallback(
+    (charId: string, which: "start" | "end") => {
+      setViewMode("map");
+      setPathMode(true);
+      setSelectedCharacterId(null);
+      setSelectedFactionId(null);
+      setSelectedEdgeId(null);
+      if (which === "start") {
+        setPathStartId(charId);
+      } else {
+        setPathEndId(charId);
+      }
+      syncHash("map", null);
+      window.setTimeout(() => cameraRef.current?.resetView(), 60);
+    },
+    [syncHash]
+  );
 
   // Keyboard shortcuts (+ / - / 0 / / / Escape)
   useEffect(() => {
@@ -182,6 +257,10 @@ export default function App() {
       <TopBar
         locale={locale}
         onChangeLocale={setLocale}
+        viewMode={viewMode}
+        onChangeViewMode={handleChangeViewMode}
+        spoilerFree={spoilerFree}
+        onToggleSpoilerFree={() => setSpoilerFree((v) => !v)}
         directoryOpen={directoryOpen}
         onToggleDirectory={() => {
           setMenuOpen(false);
@@ -194,9 +273,10 @@ export default function App() {
           setPathMode((v) => {
             const next = !v;
             if (next) {
+              setViewMode("map");
               setSelectedCharacterId(null);
               setSelectedFactionId(null);
-              cameraRef.current?.resetView();
+              window.setTimeout(() => cameraRef.current?.resetView(), 60);
             }
             return next;
           });
@@ -212,29 +292,56 @@ export default function App() {
         }}
       />
 
-      {/* Interactive Pan & Zoom CITY Social Map */}
-      <SocialMapCanvas
-        locale={locale}
-        visibleRelationTypes={visibleRelationTypes}
-        onToggleRelationType={handleToggleRelationType}
-        selectedCharacterId={selectedCharacterId}
-        selectedFactionId={selectedFactionId}
-        selectedEdgeId={selectedEdgeId}
-        activePath={activePath}
-        pathMode={pathMode}
-        pathStartId={pathStartId}
-        pathEndId={pathEndId}
-        onSelectCharacter={handleSelectCharacter}
-        onSelectFaction={handleSelectFaction}
-        onSelectEdge={handleSelectEdge}
-        onClearSelection={handleClearSelection}
-        cameraRef={cameraRef}
-      />
+      {/* Primary Interactive View: Classic Social Map OR Character-Centric Ego Radar / Full Network */}
+      {viewMode === "map" ? (
+        <SocialMapCanvas
+          locale={locale}
+          spoilerFree={spoilerFree}
+          visibleRelationTypes={visibleRelationTypes}
+          onToggleRelationType={handleToggleRelationType}
+          selectedCharacterId={selectedCharacterId}
+          selectedFactionId={selectedFactionId}
+          selectedEdgeId={selectedEdgeId}
+          activePath={activePath}
+          pathMode={pathMode}
+          pathStartId={pathStartId}
+          pathEndId={pathEndId}
+          onSelectCharacter={handleSelectCharacter}
+          onSelectFaction={handleSelectFaction}
+          onSelectEdge={handleSelectEdge}
+          onClearSelection={handleClearSelection}
+          cameraRef={cameraRef}
+        />
+      ) : (
+        <CharacterNetworkCanvas
+          locale={locale}
+          spoilerFree={spoilerFree}
+          initialSubMode={initialHash.subMode}
+          egoCenterId={egoCenterId}
+          onChangeEgoCenter={(cid) => {
+            setEgoCenterId(cid);
+            syncHash("network", cid);
+          }}
+          selectedCharacterId={selectedCharacterId}
+          selectedFactionId={selectedFactionId}
+          selectedEdgeId={selectedEdgeId}
+          activePath={activePath}
+          pathMode={pathMode}
+          pathStartId={pathStartId}
+          pathEndId={pathEndId}
+          onSelectCharacter={handleSelectCharacter}
+          onSelectFaction={handleSelectFaction}
+          onSelectEdge={handleSelectEdge}
+          onClearSelection={handleClearSelection}
+          cameraRef={cameraRef}
+        />
+      )}
 
       {/* Path Finder Overlay Bar */}
       {pathMode && !menuOpen && !directoryOpen && (
         <PathFinderBar
           locale={locale}
+          spoilerFree={spoilerFree}
           startId={pathStartId}
           endId={pathEndId}
           result={activePath}
@@ -253,12 +360,14 @@ export default function App() {
       {!menuOpen && !directoryOpen && (
         <DetailDrawer
           locale={locale}
+          spoilerFree={spoilerFree}
           character={selectedCharacter}
           faction={selectedFaction}
           onClose={handleClearSelection}
           onSelectCharacter={handleSelectCharacter}
           onSelectFaction={handleSelectFaction}
           onLocateCharacter={handleLocateCharacter}
+          onOpenEgoRadar={handleOpenEgoRadar}
           onSetPathEndpoint={handleSetPathEndpoint}
         />
       )}
@@ -267,6 +376,8 @@ export default function App() {
       {!menuOpen && !directoryOpen && (
         <BottomControls
           locale={locale}
+          spoilerFree={spoilerFree}
+          viewMode={viewMode}
           visibleRelationTypes={visibleRelationTypes}
           onToggleRelationType={handleToggleRelationType}
           selectedFactionId={selectedFactionId}
@@ -284,6 +395,7 @@ export default function App() {
       <DirectoryModal
         open={directoryOpen}
         locale={locale}
+        spoilerFree={spoilerFree}
         onClose={() => setDirectoryOpen(false)}
         onPickCharacter={handleLocateCharacter}
       />
@@ -292,10 +404,18 @@ export default function App() {
       <MenuOverlay
         open={menuOpen}
         locale={locale}
+        spoilerFree={spoilerFree}
+        onToggleSpoilerFree={() => setSpoilerFree((v) => !v)}
         onClose={() => setMenuOpen(false)}
         onOpenMap={() => {
           setDirectoryOpen(false);
           setPathMode(false);
+          handleChangeViewMode("map");
+        }}
+        onOpenNetwork={() => {
+          setDirectoryOpen(false);
+          setPathMode(false);
+          handleChangeViewMode("network");
         }}
         onOpenDirectory={() => {
           setPathMode(false);
@@ -303,8 +423,9 @@ export default function App() {
         }}
         onOpenPathFinder={() => {
           setDirectoryOpen(false);
+          setViewMode("map");
           setPathMode(true);
-          cameraRef.current?.resetView();
+          window.setTimeout(() => cameraRef.current?.resetView(), 60);
         }}
       />
     </main>

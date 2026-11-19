@@ -4,6 +4,7 @@ import { CHARACTERS, CHARACTER_MAP } from "../data/characters";
 import { FACTIONS, FACTION_MAP } from "../data/factions";
 import { EDGES } from "../data/edges";
 import { UI_TEXT, pickText } from "../data/i18n";
+import { getDisplayBadge, getDisplayMapName } from "../utils/display";
 import type { PathResult } from "../utils/pathfinding";
 
 export const MAP_WIDTH = 1776;
@@ -21,6 +22,7 @@ export interface MapCameraHandle {
 
 interface SocialMapCanvasProps {
   locale: Locale;
+  spoilerFree: boolean;
   visibleRelationTypes: Record<RelationType, boolean>;
   onToggleRelationType: (t: RelationType) => void;
   selectedCharacterId: string | null;
@@ -103,6 +105,7 @@ function getEdgeHighlightColor(type: RelationType): string {
 
 export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
   locale,
+  spoilerFree,
   visibleRelationTypes,
   onToggleRelationType,
   selectedCharacterId,
@@ -489,6 +492,11 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
           className="block overflow-visible"
         >
           <defs>
+            {/* Universal circular clipPath for crisp character portrait avatars */}
+            <clipPath id="map-avatar-circle" clipPathUnits="objectBoundingBox">
+              <circle cx="0.5" cy="0.5" r="0.5" />
+            </clipPath>
+
             {/* Children: solid filled triangle arrowhead */}
             <marker
               id="arrow-children"
@@ -1128,14 +1136,17 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
           </g>
 
           {/* ============================================================== */}
-          {/* LAYER 4: CHARACTER PILL NODES (All 65 Residents!)              */}
+          {/* LAYER 4: CHARACTER PILL NODES WITH PORTRAIT AVATARS (All 65!)  */}
           {/* ============================================================== */}
           <g className="characters-layer">
             {CHARACTERS.map((char) => {
-              const name = pickText(char.mapName, locale);
+              const name = getDisplayMapName(char, locale, spoilerFree);
+              const badge = getDisplayBadge(char, spoilerFree);
               const w = char.width ?? Math.max(94, name.length * 14 + 34);
               const halfW = w / 2;
               const halfH = PILL_HEIGHT / 2;
+              const avatarR = 14.2;
+              const avatarCx = -halfW + 10;
 
               const isSelected = selectedCharacterId === char.id;
               const isHovered = hoveredCharId === char.id;
@@ -1182,9 +1193,9 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
                   {/* Pulsing ring for selected / path endpoint */}
                   {(isSelected || isPathStart || isPathEnd) && (
                     <rect
-                      x={-halfW - 5}
+                      x={-halfW - 9}
                       y={-halfH - 5}
-                      width={w + 10}
+                      width={w + 14}
                       height={PILL_HEIGHT + 10}
                       rx={halfH + 5}
                       fill="none"
@@ -1216,48 +1227,57 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
                     strokeWidth={isHovered || isSelected || isPathMember ? 2.8 : 2.1}
                   />
 
-                  {/* Left faction indicator dot (dual dot for Tatewaku!) */}
-                  {secondaryFaction ? (
-                    <>
-                      <circle
-                        cx={-halfW + 13}
-                        cy={-3.5}
-                        r="4.2"
-                        fill={dotColor}
-                        stroke="#141419"
-                        strokeWidth="1.2"
-                      />
-                      <circle
-                        cx={-halfW + 13}
-                        cy={4.5}
-                        r="4.2"
-                        fill={secondaryFaction.accent}
-                        stroke="#141419"
-                        strokeWidth="1.2"
-                      />
-                    </>
-                  ) : (
+                  {/* Circular Character Portrait Avatar Medallion with Faction Color Ring */}
+                  <g transform={`translate(${avatarCx}, 0)`}>
                     <circle
-                      cx={-halfW + 13}
+                      cx="0"
                       cy="0"
-                      r="4.5"
-                      fill={dotColor}
-                      stroke="#141419"
-                      strokeWidth="1.2"
+                      r={avatarR + 2.2}
+                      fill="#FFFDF9"
+                      stroke={dotColor}
+                      strokeWidth="2.4"
                     />
-                  )}
+                    {secondaryFaction && (
+                      <path
+                        d={`M 0 ${-(avatarR + 2.2)} A ${avatarR + 2.2} ${avatarR + 2.2} 0 0 1 0 ${avatarR + 2.2}`}
+                        fill="none"
+                        stroke={secondaryFaction.accent}
+                        strokeWidth="2.4"
+                      />
+                    )}
+                    <circle
+                      cx="0"
+                      cy="0"
+                      r={avatarR + 3.4}
+                      fill="none"
+                      stroke="#141419"
+                      strokeWidth="1.5"
+                    />
+                    <image
+                      href={char.avatar}
+                      x={-avatarR}
+                      y={-avatarR}
+                      width={avatarR * 2}
+                      height={avatarR * 2}
+                      preserveAspectRatio="xMidYMid slice"
+                      clipPath="url(#map-avatar-circle)"
+                    />
+                  </g>
 
-                  {/* Character Display Name — auto-scales smoothly for long EN/JA names */}
+                  {/* Character Display Name — cleanly centered between avatar & right badge */}
                   {(() => {
                     const approxUnits = Array.from(name).reduce(
                       (acc, ch) => acc + (ch.charCodeAt(0) > 255 ? 1.05 : 0.62),
                       0
                     );
-                    const availPx = w - (char.badge ? 48 : char.cv ? 36 : 28);
-                    const fontSize = Math.max(9.2, Math.min(13, availPx / Math.max(1, approxUnits)));
+                    const leftBound = -halfW + 29;
+                    const rightBound = badge ? halfW - 31 : char.cv ? halfW - 14 : halfW - 8;
+                    const availPx = Math.max(24, rightBound - leftBound);
+                    const textX = (leftBound + rightBound) / 2;
+                    const fontSize = Math.max(8.8, Math.min(12.8, availPx / Math.max(1, approxUnits)));
                     return (
                       <text
-                        x={char.badge ? -8 : 4}
+                        x={textX}
                         y={fontSize * 0.36}
                         textAnchor="middle"
                         fontSize={fontSize.toFixed(1)}
@@ -1270,35 +1290,35 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
                   })()}
 
                   {/* Optional compact right badge (Jersey #, Tower Floor, Cat, Star) */}
-                  {char.badge && (
-                    <g transform={`translate(${halfW - 18}, 0)`}>
+                  {badge && (
+                    <g transform={`translate(${halfW - 16.5}, 0)`}>
                       <rect
-                        x="-14"
-                        y="-9.5"
-                        width="28"
-                        height="19"
-                        rx="9.5"
+                        x="-13"
+                        y="-9"
+                        width="26"
+                        height="18"
+                        rx="9"
                         fill={isSelected ? "#F7B647" : "#141419"}
                       />
                       <text
                         x="0"
-                        y="3.8"
+                        y="3.6"
                         textAnchor="middle"
-                        fontSize="9.5"
+                        fontSize="9"
                         fontWeight="800"
                         fill={isSelected ? "#141419" : "#FFFFFF"}
                       >
-                        {char.badge}
+                        {badge}
                       </text>
                     </g>
                   )}
 
-                  {/* Tiny golden CV indicator dot at top-right if voiced in 2025 anime */}
-                  {char.cv && !char.badge && (
+                  {/* Tiny golden CV indicator dot at right if voiced in 2025 anime */}
+                  {char.cv && !badge && (
                     <circle
-                      cx={halfW - 10}
+                      cx={halfW - 9}
                       cy="0"
-                      r="3.2"
+                      r="3"
                       fill="#F7B647"
                       stroke="#141419"
                       strokeWidth="1"
@@ -1320,8 +1340,17 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
           <div className="bg-[#33333F] text-white rounded-2xl px-4 py-3 city-ink-card-sm">
             <div className="flex items-center justify-between gap-2 mb-1">
               <div className="flex items-center gap-1.5 text-xs font-extrabold flex-wrap">
+                <img
+                  src={CHARACTER_MAP[activeEdgeObject.from].avatar}
+                  alt=""
+                  className="w-5 h-5 rounded-full border border-white/60 object-cover"
+                />
                 <span className="px-2 py-0.5 rounded-full bg-[#F7B647] text-[#141419]">
-                  {pickText(CHARACTER_MAP[activeEdgeObject.from].mapName, locale)}
+                  {getDisplayMapName(
+                    CHARACTER_MAP[activeEdgeObject.from],
+                    locale,
+                    spoilerFree
+                  )}
                 </span>
                 <span className="text-[#F09CB4]">
                   {activeEdgeObject.bidirectional
@@ -1330,8 +1359,17 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
                     ? "—"
                     : t.edgeDirectionTo}
                 </span>
+                <img
+                  src={CHARACTER_MAP[activeEdgeObject.to].avatar}
+                  alt=""
+                  className="w-5 h-5 rounded-full border border-white/60 object-cover"
+                />
                 <span className="px-2 py-0.5 rounded-full bg-[#99CB77] text-[#141419]">
-                  {pickText(CHARACTER_MAP[activeEdgeObject.to].mapName, locale)}
+                  {getDisplayMapName(
+                    CHARACTER_MAP[activeEdgeObject.to],
+                    locale,
+                    spoilerFree
+                  )}
                 </span>
                 <span className="text-[#C4E4F5] ml-1">
                   ·{" "}

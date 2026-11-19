@@ -4,10 +4,17 @@ import type { Character, FactionId, Locale } from "../types";
 import { CHARACTERS } from "../data/characters";
 import { FACTIONS, FACTION_MAP } from "../data/factions";
 import { UI_TEXT, pickText } from "../data/i18n";
+import {
+  getDisplayBadge,
+  getDisplayBio,
+  getDisplayFullName,
+  getDisplayTagline,
+} from "../utils/display";
 
 interface DirectoryModalProps {
   open: boolean;
   locale: Locale;
+  spoilerFree: boolean;
   onClose: () => void;
   onPickCharacter: (char: Character) => void;
 }
@@ -15,6 +22,7 @@ interface DirectoryModalProps {
 export const DirectoryModal: React.FC<DirectoryModalProps> = ({
   open,
   locale,
+  spoilerFree,
   onClose,
   onPickCharacter,
 }) => {
@@ -43,6 +51,9 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
         c.fullName.zh,
         c.fullName.en,
         c.fullName.ja,
+        c.spoilerSafeName?.zh ?? "",
+        c.spoilerSafeName?.en ?? "",
+        c.spoilerSafeName?.ja ?? "",
         c.reading ?? "",
         c.cv?.zh ?? "",
         c.cv?.en ?? "",
@@ -162,7 +173,7 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
         </div>
       </div>
 
-      {/* Cards Grid */}
+      {/* Cards Grid with Character Portrait Avatars */}
       <div className="flex-1 overflow-y-auto city-scroll px-4 sm:px-8 py-6">
         {filtered.length === 0 ? (
           <div className="max-w-md mx-auto text-center py-16 bg-white rounded-3xl city-ink-card p-6">
@@ -172,6 +183,11 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
           <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filtered.map((char) => {
               const primary = char.factions[0] ? FACTION_MAP[char.factions[0]] : null;
+              const displayName = getDisplayFullName(char, locale, spoilerFree);
+              const displayBio = getDisplayBio(char, locale, spoilerFree);
+              const displayTagline = getDisplayTagline(char, locale, spoilerFree);
+              const displayBadge = getDisplayBadge(char, spoilerFree);
+
               return (
                 <button
                   key={char.id}
@@ -183,22 +199,33 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
                   className="text-left bg-white rounded-2xl overflow-hidden city-ink-card-sm hover:-translate-y-1 hover:shadow-[5px_5px_0_#141419] transition-all cursor-pointer flex flex-col"
                 >
                   <div
-                    className="px-4 py-3 border-b-2 border-[#141419] flex items-center justify-between gap-2"
+                    className="px-3.5 py-3 border-b-2 border-[#141419] flex items-center gap-3"
                     style={{ backgroundColor: primary?.fill ?? "#E6F4FD" }}
                   >
-                    <div className="min-w-0">
-                      {char.reading && (
-                        <div className="text-[10px] font-bold text-[#141419]/65">
+                    <div
+                      className="w-13 h-13 rounded-full p-[2px] border-2 border-[#141419] shadow-[2px_2px_0_#141419] shrink-0"
+                      style={{ backgroundColor: primary?.accent ?? "#1395EA" }}
+                    >
+                      <img
+                        src={char.avatar}
+                        alt={displayName}
+                        className="w-full h-full rounded-full object-cover bg-white"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      {char.reading && !(spoilerFree && char.hasSpoiler) && (
+                        <div className="text-[10px] font-bold text-[#141419]/65 truncate">
                           {char.reading}
                         </div>
                       )}
                       <div className="text-base font-black text-[#141419] truncate">
-                        {pickText(char.fullName, locale)}
+                        {displayName}
                       </div>
                     </div>
-                    {char.badge && (
+                    {displayBadge && (
                       <span className="px-2 py-0.5 rounded-full bg-[#141419] text-[#F7B647] text-[10.5px] font-extrabold shrink-0">
-                        {char.badge}
+                        {displayBadge}
                       </span>
                     )}
                   </div>
@@ -232,14 +259,14 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
                       <span className="truncate">{pickText(char.role, locale)}</span>
                     </div>
 
-                    {char.tagline && (
+                    {displayTagline && (
                       <div className="text-xs font-extrabold text-[#DD5549]">
-                        “{pickText(char.tagline, locale)}”
+                        “{displayTagline}”
                       </div>
                     )}
 
                     <p className="text-xs text-[#444455] leading-relaxed line-clamp-3 mt-auto">
-                      {pickText(char.bio, locale)}
+                      {displayBio}
                     </p>
                   </div>
                 </button>

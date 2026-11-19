@@ -12,12 +12,15 @@ An interactive, trilingual (**中文 / EN / 日本語**) social relationship map
 
 ## Features
 
-- **Faithful Full-Cast Social Map**: Covers all **65 residents**, **8 factions** (including the authentic **Makabe Family ∩ CITY South Soccer Team** overlap at Tatewaku Makabe), and every relationship line (**Children**, **Friendship**, **Employment**, and **Specific** relations) from VayItsHere's community Social Map.
-- **Official Site Aesthetic**: Inspired by [`city-the-animation.com`](https://city-the-animation.com/) — featuring the 4-color C-I-T-Y palette (`#F7B647` / `#F09CB4` / `#99CB77` / `#EE847D`), scrolling pastel confetti background, rotating 4-color conic frames, morphing 4-stripe menu icon, rounded comic ink borders, and bottom-right resident finder + stacked pill zoom controls.
-- **Smooth Pan, Zoom & Spotlight**: Drag to pan, wheel/pinch to zoom toward cursor, hover any resident or relationship line to spotlight connections and read humorous canon context, or click to open a complete character/faction dossier drawer with voice actors (CV), official catchphrases, and Wiki links.
-- **Six Degrees of CITY (Path Finder)**: Discover the shortest relationship chain between any two residents (complete with the *John Lennon* isolation Easter egg!).
-- **Resident Directory & Instant Search**: Search by Chinese, Japanese, English, Romaji, voice actor (CV), faction, or soccer jersey number (`#1`–`#28`), and fly directly to any resident on the map.
-- **Shareable Deep Links**: Link directly to any character via URL hash (e.g. `#char=nagumo`, `#char=tatewaku`).
+- **All 65 Residents with Portrait Avatars**: Every resident across the Classic Social Map, Ego Radar, Full Network, Character Dossier (with clickable portrait lightbox), Directory, Search, and Path Finder features a face-cropped WebP portrait avatar, authoritative Chinese/Japanese/English names, and verified 2025 anime voice cast (58 voiced CVs).
+- **Dual Interactive Views — Classic Map + Ego Radar & Full Network**:
+  - **全景图谱 / Classic Map**: Faithfully preserves VayItsHere's full 65-resident / 8-faction topology (including the **Makabe Family ∩ CITY South Soccer Team** overlap at Tatewaku and isolated John Lennon) with circular portrait medallions on every node.
+  - **人物星图 / Ego Radar**: Character-centric radial star network placing any selected resident at the center with a 4-color C-I-T-Y aura ring, curved semantic category-colored links, directional arrowheads, optional 2nd-hop & same-faction outer ring (`+N`), free node dragging with layout reset, and 1-click re-centering on any neighbor.
+  - **全城网络 / Full Network**: All 65 residents in a deterministic faction-clustered network where node size scales with connection degree, featuring 6-category relation filters (`Family`, `Friendship`, `Crush/Romance`, `Work`, `Rivalry`, `Mentor/Fans`), faction clouds, free node dragging, and **Isolate Subgraph** mode.
+- **Categorized Comic Dossier Drawer**: Inspired by `city-the-animation.com`'s rotating 4-color conic frames and `#33333F` commentary bubbles — displays clickable portraits, authoritative names & CVs, one-click **"Open in Ego Radar"**, and relationships grouped by semantic category with connected avatars.
+- **Spoiler-Free Mode (无剧透模式)**: One-click toggle that masks late-series identity reveals (e.g., *Nichijou* crossover, Quiz King, Kamui Tateshina, Onigawara, Gondenyama) across maps, dossiers, search, and directory.
+- **Six Degrees of CITY (Path Finder)**: Discover the shortest relationship chain between any two residents with avatar breadcrumb trails (complete with the *John Lennon* isolation Easter egg!).
+- **Shareable Deep Links**: Link directly to any character or view mode via URL hash (e.g. `#char=wako`, `#mode=network&char=nagumo`, `#mode=network&sub=full`).
 
 ## Development
 

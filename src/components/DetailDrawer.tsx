@@ -1,6 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
+  Compass,
   Crosshair,
+  EyeOff,
   ExternalLink,
   Flag,
   MapPin,
@@ -10,34 +12,55 @@ import {
   Users,
   X,
 } from "lucide-react";
-import type { Character, Faction, Locale, RelationEdge } from "../types";
+import type { Character, Faction, Locale, RelationCategory, RelationEdge } from "../types";
 import { CHARACTERS, CHARACTER_MAP } from "../data/characters";
 import { FACTION_MAP } from "../data/factions";
 import { EDGES } from "../data/edges";
-import { UI_TEXT, pickText } from "../data/i18n";
+import { RELATION_CATEGORY_META, UI_TEXT, pickText } from "../data/i18n";
+import {
+  getDisplayBadge,
+  getDisplayBio,
+  getDisplayFullName,
+  getDisplayMapName,
+  getDisplayTagline,
+} from "../utils/display";
+
+const CATEGORY_ORDER: RelationCategory[] = [
+  "family",
+  "friendship",
+  "romance",
+  "work",
+  "conflict",
+  "admiration",
+];
 
 interface DetailDrawerProps {
   locale: Locale;
+  spoilerFree: boolean;
   character: Character | null;
   faction: Faction | null;
   onClose: () => void;
   onSelectCharacter: (char: Character) => void;
   onSelectFaction: (faction: Faction) => void;
   onLocateCharacter: (char: Character) => void;
+  onOpenEgoRadar: (char: Character) => void;
   onSetPathEndpoint: (charId: string, which: "start" | "end") => void;
 }
 
 export const DetailDrawer: React.FC<DetailDrawerProps> = ({
   locale,
+  spoilerFree,
   character,
   faction,
   onClose,
   onSelectCharacter,
   onSelectFaction,
   onLocateCharacter,
+  onOpenEgoRadar,
   onSetPathEndpoint,
 }) => {
   const t = UI_TEXT[locale];
+  const [portraitLightboxOpen, setPortraitLightboxOpen] = useState(false);
 
   const connections = useMemo(() => {
     if (!character) return [];
@@ -80,43 +103,93 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
   if (!character && !faction) return null;
 
   return (
-    <aside
-      className="fixed top-[70px] right-3 sm:right-4 bottom-24 sm:bottom-[118px] z-40 w-[calc(100vw-1.5rem)] sm:w-[376px] pointer-events-auto flex flex-col"
-      aria-label="Details"
-    >
-      {/* Official rotating 4-color conic-gradient border frame (.page-frame) */}
-      <div className="city-conic-frame rounded-[24px] h-full flex flex-col shadow-[6px_6px_0_#141419] border-[2.5px] border-[#141419]">
-        <div className="bg-[#FFFDF9] rounded-[20px] h-full flex flex-col overflow-hidden">
-          {character ? (
-            <CharacterPanel
-              locale={locale}
-              t={t}
-              character={character}
-              connections={connections}
-              onClose={onClose}
-              onSelectCharacter={onSelectCharacter}
-              onSelectFaction={onSelectFaction}
-              onLocateCharacter={onLocateCharacter}
-              onSetPathEndpoint={onSetPathEndpoint}
-            />
-          ) : faction ? (
-            <FactionPanel
-              locale={locale}
-              t={t}
-              faction={faction}
-              members={factionMembers}
-              onClose={onClose}
-              onSelectCharacter={onSelectCharacter}
-            />
-          ) : null}
+    <>
+      <aside
+        className="fixed top-[70px] right-3 sm:right-4 bottom-24 sm:bottom-[166px] z-40 w-[calc(100vw-1.5rem)] sm:w-[392px] pointer-events-auto flex flex-col"
+        aria-label="Details"
+      >
+        {/* Official rotating 4-color conic-gradient border frame (.page-frame) */}
+        <div className="city-conic-frame rounded-[24px] h-full flex flex-col shadow-[6px_6px_0_#141419] border-[2.5px] border-[#141419]">
+          <div className="bg-[#FFFDF9] rounded-[20px] h-full flex flex-col overflow-hidden">
+            {character ? (
+              <CharacterPanel
+                locale={locale}
+                spoilerFree={spoilerFree}
+                t={t}
+                character={character}
+                connections={connections}
+                onClose={onClose}
+                onSelectCharacter={onSelectCharacter}
+                onSelectFaction={onSelectFaction}
+                onLocateCharacter={onLocateCharacter}
+                onOpenEgoRadar={onOpenEgoRadar}
+                onSetPathEndpoint={onSetPathEndpoint}
+                onOpenLightbox={() => setPortraitLightboxOpen(true)}
+              />
+            ) : faction ? (
+              <FactionPanel
+                locale={locale}
+                spoilerFree={spoilerFree}
+                t={t}
+                faction={faction}
+                members={factionMembers}
+                onClose={onClose}
+                onSelectCharacter={onSelectCharacter}
+              />
+            ) : null}
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+
+      {/* Portrait Lightbox Overlay (click character avatar to inspect closely) */}
+      {portraitLightboxOpen && character && (
+        <div
+          className="fixed inset-0 z-[70] bg-[#141419]/70 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setPortraitLightboxOpen(false)}
+        >
+          <div
+            className="city-conic-frame rounded-[28px] max-w-xs w-full shadow-[8px_8px_0_#141419] border-[3px] border-[#141419]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-[#FFFDF9] rounded-[23px] p-5 flex flex-col items-center text-center gap-3 relative">
+              <button
+                type="button"
+                onClick={() => setPortraitLightboxOpen(false)}
+                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#141419] text-white hover:bg-[#DD5549] flex items-center justify-center cursor-pointer"
+                aria-label={t.close}
+              >
+                <X className="w-4 h-4" strokeWidth={2.8} />
+              </button>
+              <img
+                src={character.avatar}
+                alt={getDisplayFullName(character, locale, spoilerFree)}
+                className="w-44 h-44 rounded-full object-cover border-[3.5px] border-[#141419] shadow-[4px_4px_0_#141419] bg-white"
+              />
+              <div>
+                {character.reading && !(spoilerFree && character.hasSpoiler) && (
+                  <div className="text-xs font-bold text-[#666678]">{character.reading}</div>
+                )}
+                <div className="text-xl font-black text-[#141419]">
+                  {getDisplayFullName(character, locale, spoilerFree)}
+                </div>
+                {character.cv && (
+                  <div className="mt-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FFF4D6] border border-[#F7B647] text-xs font-extrabold text-[#141419]">
+                    <Mic className="w-3 h-3 text-[#DD5549]" />
+                    <span>CV: {pickText(character.cv, locale)}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
 interface CharacterPanelProps {
   locale: Locale;
+  spoilerFree: boolean;
   t: (typeof UI_TEXT)[Locale];
   character: Character;
   connections: {
@@ -128,11 +201,14 @@ interface CharacterPanelProps {
   onSelectCharacter: (char: Character) => void;
   onSelectFaction: (faction: Faction) => void;
   onLocateCharacter: (char: Character) => void;
+  onOpenEgoRadar: (char: Character) => void;
   onSetPathEndpoint: (charId: string, which: "start" | "end") => void;
+  onOpenLightbox: () => void;
 }
 
 const CharacterPanel: React.FC<CharacterPanelProps> = ({
   locale,
+  spoilerFree,
   t,
   character,
   connections,
@@ -140,16 +216,39 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
   onSelectCharacter,
   onSelectFaction,
   onLocateCharacter,
+  onOpenEgoRadar,
   onSetPathEndpoint,
+  onOpenLightbox,
 }) => {
   const primaryFaction = character.factions[0] ? FACTION_MAP[character.factions[0]] : null;
   const headerBg = primaryFaction ? primaryFaction.fill : "#E6F4FD";
   const accentColor = primaryFaction ? primaryFaction.accent : "#1395EA";
   const isJohnLennon = character.id === "john-lennon";
 
+  const displayFullName = getDisplayFullName(character, locale, spoilerFree);
+  const displayBio = getDisplayBio(character, locale, spoilerFree);
+  const displayTagline = getDisplayTagline(character, locale, spoilerFree);
+  const displayBadge = getDisplayBadge(character, spoilerFree);
+
+  // Group connections by semantic RelationCategory (FandomGraph style!)
+  const groupedConnections = useMemo(() => {
+    const groups = new Map<
+      RelationCategory,
+      { edge: RelationEdge; other: Character; direction: "out" | "in" | "mutual" }[]
+    >();
+    for (const cat of CATEGORY_ORDER) groups.set(cat, []);
+    for (const item of connections) {
+      groups.get(item.edge.category)?.push(item);
+    }
+    return CATEGORY_ORDER.map((cat) => ({
+      category: cat,
+      items: groups.get(cat) ?? [],
+    })).filter((g) => g.items.length > 0);
+  }, [connections]);
+
   return (
     <>
-      {/* Header Banner */}
+      {/* Header Banner with Crisp Character Portrait Avatar */}
       <div
         className="relative px-5 pt-4 pb-4 border-b-[2.5px] border-[#141419]"
         style={{ backgroundColor: headerBg }}
@@ -164,7 +263,7 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
         </button>
 
         {/* Faction badges */}
-        <div className="flex flex-wrap items-center gap-1.5 pr-9 mb-2">
+        <div className="flex flex-wrap items-center gap-1.5 pr-9 mb-2.5">
           {character.factions.length > 0 ? (
             character.factions.map((fid) => {
               const f = FACTION_MAP[fid];
@@ -185,32 +284,56 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
               {t.soloResident}
             </span>
           )}
-          {character.badge && (
+          {displayBadge && (
             <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#141419] text-[#F7B647]">
-              {character.badge}
+              {displayBadge}
+            </span>
+          )}
+          {spoilerFree && character.hasSpoiler && (
+            <span className="px-2 py-0.5 rounded-full text-[10.5px] font-extrabold bg-[#33333F] text-[#99CB77] inline-flex items-center gap-1">
+              <EyeOff className="w-3 h-3" />
+              <span>{t.spoilerBadge}</span>
             </span>
           )}
         </div>
 
-        {/* Name + Avatar Emblem */}
-        <div className="flex items-center gap-3">
-          <div
-            className="w-13 h-13 rounded-2xl border-[2.5px] border-[#141419] flex items-center justify-center text-xl font-black text-white shrink-0 shadow-[2px_2px_0_#141419]"
-            style={{ backgroundColor: accentColor }}
+        {/* Portrait Avatar + Name Block */}
+        <div className="flex items-center gap-3.5">
+          <button
+            type="button"
+            onClick={onOpenLightbox}
+            className="relative shrink-0 group cursor-zoom-in focus:outline-none"
+            title={displayFullName}
           >
-            {pickText(character.mapName, locale).slice(0, 2)}
-          </div>
-          <div className="min-w-0">
-            {character.reading && (
+            <div
+              className="w-[74px] h-[74px] rounded-full p-[3px] border-[2.5px] border-[#141419] shadow-[3px_3px_0_#141419] transition-transform group-hover:scale-105 bg-white"
+              style={{ borderColor: "#141419", backgroundColor: accentColor }}
+            >
+              <img
+                src={character.avatar}
+                alt={displayFullName}
+                className="w-full h-full rounded-full object-cover bg-white border border-[#141419]/30"
+              />
+            </div>
+          </button>
+
+          <div className="min-w-0 flex-1">
+            {character.reading && !(spoilerFree && character.hasSpoiler) && (
               <div className="text-[11px] font-bold text-[#141419]/65 tracking-wider">
                 {character.reading}
               </div>
             )}
             <h2 className="text-xl font-black text-[#141419] leading-tight">
-              {pickText(character.fullName, locale)}
+              {displayFullName}
             </h2>
             <div className="text-xs font-bold text-[#141419]/70 mt-0.5 truncate">
-              {locale === "zh"
+              {spoilerFree && character.spoilerSafeName
+                ? locale === "zh"
+                  ? `${character.spoilerSafeName.ja} · ${character.spoilerSafeName.en}`
+                  : locale === "ja"
+                  ? `${character.spoilerSafeName.en} · ${character.spoilerSafeName.zh}`
+                  : `${character.spoilerSafeName.ja} · ${character.spoilerSafeName.zh}`
+                : locale === "zh"
                 ? `${character.fullName.ja} · ${character.fullName.en}`
                 : locale === "ja"
                 ? `${character.fullName.en} · ${character.fullName.zh}`
@@ -220,7 +343,7 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
         </div>
 
         {character.factions.length > 1 && (
-          <div className="mt-2 text-[11px] font-extrabold text-[#141419]/80 bg-white/75 rounded-lg px-2.5 py-1 inline-flex items-center gap-1 border border-[#141419]/25">
+          <div className="mt-2.5 text-[11px] font-extrabold text-[#141419]/80 bg-white/80 rounded-lg px-2.5 py-1 inline-flex items-center gap-1 border border-[#141419]/25">
             <Sparkles className="w-3 h-3 text-[#DD5549]" />
             <span>{t.overlapNote}</span>
           </div>
@@ -260,46 +383,57 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
 
         {/* Official / Iconic Catchphrase & Bio in Official #33333F Commentary Bubble */}
         <div className="bg-[#33333F] text-white rounded-2xl p-4 border-2 border-[#141419] relative">
-          {character.tagline && (
+          {displayTagline && (
             <div className="text-xs font-extrabold text-[#F7B647] mb-1.5 flex items-center gap-1.5">
               <span>★</span>
-              <span>{pickText(character.tagline, locale)}</span>
+              <span>{displayTagline}</span>
             </div>
           )}
           <p className="text-xs sm:text-[13px] leading-relaxed text-white/95">
-            {pickText(character.bio, locale)}
+            {displayBio}
           </p>
         </div>
 
-        {/* Quick Actions: Locate + Path Finder Endpoints */}
-        <div className="grid grid-cols-3 gap-1.5">
+        {/* Primary CTA: Open in Ego Radar + Quick Actions */}
+        <div className="space-y-1.5">
           <button
             type="button"
-            onClick={() => onLocateCharacter(character)}
-            className="px-2 py-2 rounded-xl border-2 border-[#141419] bg-[#C4E4F5] hover:bg-[#1395EA] hover:text-white text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer transition-colors"
+            onClick={() => onOpenEgoRadar(character)}
+            className="w-full px-3 py-2.5 rounded-xl border-2 border-[#141419] bg-[#141419] hover:bg-[#F7B647] text-[#F7B647] hover:text-[#141419] text-xs font-black flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-[2.5px_2.5px_0_#DD5549]"
           >
-            <Crosshair className="w-3.5 h-3.5" />
-            <span>{t.flyToCharacter}</span>
+            <Compass className="w-4 h-4" />
+            <span>{t.networkFocusCenter}</span>
           </button>
-          <button
-            type="button"
-            onClick={() => onSetPathEndpoint(character.id, "start")}
-            className="px-2 py-2 rounded-xl border-2 border-[#141419] bg-[#F7B647]/35 hover:bg-[#F7B647] text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer transition-colors"
-          >
-            <Flag className="w-3.5 h-3.5" />
-            <span>{t.setPathStart}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => onSetPathEndpoint(character.id, "end")}
-            className="px-2 py-2 rounded-xl border-2 border-[#141419] bg-[#F09CB4]/35 hover:bg-[#F09CB4] text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer transition-colors"
-          >
-            <Navigation className="w-3.5 h-3.5" />
-            <span>{t.setPathEnd}</span>
-          </button>
+
+          <div className="grid grid-cols-3 gap-1.5">
+            <button
+              type="button"
+              onClick={() => onLocateCharacter(character)}
+              className="px-2 py-2 rounded-xl border-2 border-[#141419] bg-[#C4E4F5] hover:bg-[#1395EA] hover:text-white text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer transition-colors"
+            >
+              <Crosshair className="w-3.5 h-3.5" />
+              <span>{t.flyToCharacter}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onSetPathEndpoint(character.id, "start")}
+              className="px-2 py-2 rounded-xl border-2 border-[#141419] bg-[#F7B647]/35 hover:bg-[#F7B647] text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer transition-colors"
+            >
+              <Flag className="w-3.5 h-3.5" />
+              <span>{t.setPathStart}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onSetPathEndpoint(character.id, "end")}
+              className="px-2 py-2 rounded-xl border-2 border-[#141419] bg-[#F09CB4]/35 hover:bg-[#F09CB4] text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer transition-colors"
+            >
+              <Navigation className="w-3.5 h-3.5" />
+              <span>{t.setPathEnd}</span>
+            </button>
+          </div>
         </div>
 
-        {/* Relationships List */}
+        {/* Grouped Relationships by Semantic Category (FandomGraph + Otaku Data Viz inspired!) */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-xs font-black uppercase tracking-wide flex items-center gap-1.5">
@@ -318,64 +452,123 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
 
           {connections.length === 0 ? (
             <div className="rounded-xl border-2 border-dashed border-[#141419]/35 p-3.5 bg-white text-xs font-bold text-[#5A5A6A] leading-relaxed">
-              {isJohnLennon ? t.johnLennonEasterEgg : t.noConnections}
+              {isJohnLennon && !spoilerFree ? t.johnLennonEasterEgg : t.noConnections}
             </div>
           ) : (
-            <ul className="space-y-2">
-              {connections.map(({ edge, other, direction }) => {
-                const otherFaction = other.factions[0] ? FACTION_MAP[other.factions[0]] : null;
-                const badgeColor =
-                  edge.type === "children"
-                    ? "bg-[#252430] text-white"
-                    : edge.type === "friendship"
-                    ? "bg-[#C4E4F5] text-[#141419]"
-                    : edge.type === "employment"
-                    ? "bg-[#FDF0B5] text-[#4A3604]"
-                    : "bg-[#FAD4DF] text-[#4A1828]";
-                const arrow =
-                  direction === "mutual"
-                    ? t.edgeDirectionBoth
-                    : direction === "out"
-                    ? t.edgeDirectionTo
-                    : t.edgeDirectionFrom;
-
-                return (
-                  <li key={edge.id}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onSelectCharacter(other);
-                        onLocateCharacter(other);
-                      }}
-                      className="w-full text-left bg-white hover:bg-[#FFF8EA] rounded-xl p-2.5 border-2 border-[#141419]/20 hover:border-[#141419] transition-all cursor-pointer group"
-                    >
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-xs font-black text-[#DD5549]">{arrow}</span>
-                          <span
-                            className="w-2.5 h-2.5 rounded-full border border-[#141419] shrink-0"
-                            style={{ backgroundColor: otherFaction?.accent ?? "#1395EA" }}
-                          />
-                          <span className="text-xs font-extrabold text-[#141419] truncate group-hover:underline">
-                            {pickText(other.fullName, locale)}
-                          </span>
-                        </div>
+            <div className="space-y-3.5">
+              {/* Compact relation breakdown pills */}
+              {groupedConnections.length > 1 && (
+                <div className="flex flex-wrap gap-1">
+                  {groupedConnections.map(({ category, items }) => {
+                    const meta = RELATION_CATEGORY_META[category];
+                    return (
+                      <span
+                        key={`sum-${category}`}
+                        className="px-2 py-0.5 rounded-full text-[10px] font-extrabold border border-[#141419]/25 inline-flex items-center gap-1 text-[#141419]"
+                        style={{ backgroundColor: meta.bg }}
+                      >
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 border border-[#141419]/30 ${badgeColor}`}
-                        >
-                          {edge.label
-                            ? pickText(edge.label, locale)
-                            : t.relationTypes[edge.type]}
-                        </span>
-                      </div>
-                      <p className="text-[11px] leading-snug text-[#5A5A6A] line-clamp-2">
-                        {pickText(edge.story, locale)}
-                      </p>
-                    </button>
-                  </li>
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: meta.color }}
+                        />
+                        <span>{pickText(meta.label, locale)}</span>
+                        <span className="font-black">×{items.length}</span>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Grouped lists */}
+              {groupedConnections.map(({ category, items }) => {
+                const meta = RELATION_CATEGORY_META[category];
+                return (
+                  <div key={category} className="space-y-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className="w-2.5 h-2.5 rounded-full border border-[#141419]"
+                        style={{ backgroundColor: meta.color }}
+                      />
+                      <span className="text-[11px] font-black text-[#141419]">
+                        {pickText(meta.label, locale)}
+                      </span>
+                      <span className="text-[10px] font-bold text-[#7A7A8C]">
+                        ({items.length})
+                      </span>
+                    </div>
+
+                    <ul className="space-y-1.5">
+                      {items.map(({ edge, other, direction }) => {
+                        const otherFaction = other.factions[0]
+                          ? FACTION_MAP[other.factions[0]]
+                          : null;
+                        const arrow =
+                          direction === "mutual"
+                            ? t.edgeDirectionBoth
+                            : direction === "out"
+                            ? t.edgeDirectionTo
+                            : t.edgeDirectionFrom;
+
+                        return (
+                          <li key={edge.id}>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                onSelectCharacter(other);
+                                onLocateCharacter(other);
+                              }}
+                              className="w-full text-left bg-white hover:bg-[#FFF8EA] rounded-xl p-2.5 border-2 border-[#141419]/18 hover:border-[#141419] transition-all cursor-pointer group flex items-start gap-2.5"
+                            >
+                              {/* Connected character circular avatar */}
+                              <div
+                                className="w-9 h-9 rounded-full p-[2px] border-[1.8px] border-[#141419] shrink-0 mt-0.5"
+                                style={{
+                                  backgroundColor: otherFaction?.accent ?? "#1395EA",
+                                }}
+                              >
+                                <img
+                                  src={other.avatar}
+                                  alt={getDisplayFullName(other, locale, spoilerFree)}
+                                  className="w-full h-full rounded-full object-cover bg-white"
+                                  loading="lazy"
+                                />
+                              </div>
+
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center justify-between gap-1.5 mb-0.5">
+                                  <div className="flex items-center gap-1 min-w-0">
+                                    <span
+                                      className="text-xs font-black shrink-0"
+                                      style={{ color: meta.color }}
+                                    >
+                                      {arrow}
+                                    </span>
+                                    <span className="text-xs font-extrabold text-[#141419] truncate group-hover:underline">
+                                      {getDisplayFullName(other, locale, spoilerFree)}
+                                    </span>
+                                  </div>
+                                  <span
+                                    className="px-2 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 border border-[#141419]/25 text-[#141419]"
+                                    style={{ backgroundColor: meta.bg }}
+                                  >
+                                    {edge.label
+                                      ? pickText(edge.label, locale)
+                                      : pickText(meta.label, locale)}
+                                  </span>
+                                </div>
+                                <p className="text-[11px] leading-snug text-[#5A5A6A] line-clamp-2">
+                                  {pickText(edge.story, locale)}
+                                </p>
+                              </div>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
                 );
               })}
-            </ul>
+            </div>
           )}
         </div>
 
@@ -411,6 +604,7 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
 
 interface FactionPanelProps {
   locale: Locale;
+  spoilerFree: boolean;
   t: (typeof UI_TEXT)[Locale];
   faction: Faction;
   members: Character[];
@@ -420,6 +614,7 @@ interface FactionPanelProps {
 
 const FactionPanel: React.FC<FactionPanelProps> = ({
   locale,
+  spoilerFree,
   t,
   faction,
   members,
@@ -479,26 +674,39 @@ const FactionPanel: React.FC<FactionPanelProps> = ({
             </span>
           </h3>
           <div className="grid grid-cols-2 gap-2">
-            {members.map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                onClick={() => onSelectCharacter(m)}
-                className="px-3 py-2 rounded-xl border-2 border-[#141419] bg-white hover:bg-[#FFF6E0] text-left transition-all hover:-translate-y-0.5 cursor-pointer"
-              >
-                <div className="text-xs font-extrabold text-[#141419] truncate flex items-center justify-between gap-1">
-                  <span className="truncate">{pickText(m.mapName, locale)}</span>
-                  {m.badge && (
-                    <span className="px-1.5 py-0.2 rounded-full bg-[#141419] text-[#F7B647] text-[9.5px] shrink-0">
-                      {m.badge}
-                    </span>
-                  )}
-                </div>
-                <div className="text-[10px] font-bold text-[#666678] truncate mt-0.5">
-                  {m.cv ? `CV: ${pickText(m.cv, locale)}` : pickText(m.role, locale)}
-                </div>
-              </button>
-            ))}
+            {members.map((m) => {
+              const badge = getDisplayBadge(m, spoilerFree);
+              return (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => onSelectCharacter(m)}
+                  className="px-2.5 py-2 rounded-xl border-2 border-[#141419] bg-white hover:bg-[#FFF6E0] text-left transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+                >
+                  <img
+                    src={m.avatar}
+                    alt={getDisplayMapName(m, locale, spoilerFree)}
+                    className="w-8 h-8 rounded-full object-cover border-[1.8px] border-[#141419] shrink-0 bg-white"
+                    loading="lazy"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-xs font-extrabold text-[#141419] truncate flex items-center justify-between gap-1">
+                      <span className="truncate">
+                        {getDisplayMapName(m, locale, spoilerFree)}
+                      </span>
+                      {badge && (
+                        <span className="px-1.5 py-0.2 rounded-full bg-[#141419] text-[#F7B647] text-[9px] shrink-0">
+                          {badge}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[10px] font-bold text-[#666678] truncate mt-0.5">
+                      {m.cv ? `CV: ${pickText(m.cv, locale)}` : pickText(m.role, locale)}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 

@@ -1,12 +1,18 @@
 import React from "react";
-import { BookOpen, Map, Route } from "lucide-react";
+import { BookOpen, Compass, Eye, EyeOff, Map, Route } from "lucide-react";
 import type { Locale } from "../types";
 import { UI_TEXT } from "../data/i18n";
 import { CityLogo } from "./CityLogo";
 
+export type ViewMode = "map" | "network";
+
 interface TopBarProps {
   locale: Locale;
   onChangeLocale: (l: Locale) => void;
+  viewMode: ViewMode;
+  onChangeViewMode: (m: ViewMode) => void;
+  spoilerFree: boolean;
+  onToggleSpoilerFree: () => void;
   directoryOpen: boolean;
   onToggleDirectory: () => void;
   pathMode: boolean;
@@ -19,6 +25,10 @@ interface TopBarProps {
 export const TopBar: React.FC<TopBarProps> = ({
   locale,
   onChangeLocale,
+  viewMode,
+  onChangeViewMode,
+  spoilerFree,
+  onToggleSpoilerFree,
   directoryOpen,
   onToggleDirectory,
   pathMode,
@@ -28,6 +38,9 @@ export const TopBar: React.FC<TopBarProps> = ({
   onResetView,
 }) => {
   const t = UI_TEXT[locale];
+
+  const isMapActive = viewMode === "map" && !directoryOpen && !pathMode;
+  const isNetworkActive = viewMode === "network" && !directoryOpen && !pathMode;
 
   return (
     <>
@@ -44,17 +57,18 @@ export const TopBar: React.FC<TopBarProps> = ({
       </header>
 
       {/* Top-Right Official-Site-Inspired Rounded-Bottom-Left Shelf */}
-      <div className="fixed top-0 right-0 z-50 flex items-center gap-1.5 sm:gap-3 pl-3 sm:pl-6 pr-2.5 sm:pr-5 py-2 sm:py-3 city-top-shelf pointer-events-auto">
-        {/* Mode Switcher Pills */}
-        <nav className="hidden md:flex items-center gap-1.5 bg-[#F4F3EE] p-1 rounded-full border-2 border-[#141419]">
+      <div className="fixed top-0 right-0 z-50 flex items-center gap-1.5 sm:gap-2.5 pl-3 sm:pl-5 pr-2.5 sm:pr-4 py-2 sm:py-2.5 city-top-shelf pointer-events-auto">
+        {/* Desktop Mode Switcher Pills */}
+        <nav className="hidden lg:flex items-center gap-1 bg-[#F4F3EE] p-1 rounded-full border-2 border-[#141419]">
           <button
             type="button"
             onClick={() => {
               if (directoryOpen) onToggleDirectory();
               if (pathMode) onTogglePathMode();
+              onChangeViewMode("map");
             }}
-            className={`px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer ${
-              !directoryOpen && !pathMode
+            className={`px-2.5 py-1 rounded-full text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer ${
+              isMapActive
                 ? "bg-[#141419] text-white"
                 : "text-[#141419] hover:bg-white"
             }`}
@@ -64,8 +78,24 @@ export const TopBar: React.FC<TopBarProps> = ({
           </button>
           <button
             type="button"
+            onClick={() => {
+              if (directoryOpen) onToggleDirectory();
+              if (pathMode) onTogglePathMode();
+              onChangeViewMode("network");
+            }}
+            className={`px-2.5 py-1 rounded-full text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer ${
+              isNetworkActive
+                ? "bg-[#141419] text-[#F7B647]"
+                : "text-[#141419] hover:bg-white"
+            }`}
+          >
+            <Compass className="w-3.5 h-3.5" />
+            <span>{t.networkTab}</span>
+          </button>
+          <button
+            type="button"
             onClick={onToggleDirectory}
-            className={`px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer ${
+            className={`px-2.5 py-1 rounded-full text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer ${
               directoryOpen
                 ? "bg-[#99CB77] text-[#141419] border border-[#141419]"
                 : "text-[#141419] hover:bg-white"
@@ -77,7 +107,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           <button
             type="button"
             onClick={onTogglePathMode}
-            className={`px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer ${
+            className={`px-2.5 py-1 rounded-full text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer ${
               pathMode
                 ? "bg-[#F7B647] text-[#141419] border border-[#141419]"
                 : "text-[#141419] hover:bg-white"
@@ -88,14 +118,43 @@ export const TopBar: React.FC<TopBarProps> = ({
           </button>
         </nav>
 
-        {/* Tablet-only compact Path & Directory icons (on mobile they live cleanly inside the Menu!) */}
-        <div className="hidden sm:flex md:hidden items-center gap-1.5">
+        {/* Compact Mobile / Tablet Quick View Toggle (Map <-> Ego Radar) */}
+        <div className="flex lg:hidden items-center gap-1">
+          <button
+            type="button"
+            onClick={() => {
+              if (directoryOpen) onToggleDirectory();
+              if (pathMode) onTogglePathMode();
+              onChangeViewMode(viewMode === "map" ? "network" : "map");
+            }}
+            aria-label={viewMode === "map" ? t.networkTab : t.mapTab}
+            title={viewMode === "map" ? t.networkTab : t.mapTab}
+            className={`h-8 sm:h-9 px-2 sm:px-2.5 rounded-full border-2 border-[#141419] flex items-center gap-1 text-[11px] font-extrabold cursor-pointer transition-colors ${
+              viewMode === "network"
+                ? "bg-[#141419] text-[#F7B647]"
+                : "bg-[#C4E4F5] text-[#141419]"
+            }`}
+          >
+            {viewMode === "map" ? (
+              <>
+                <Compass className="w-3.5 h-3.5" />
+                <span className="hidden xs:inline sm:inline">{t.networkTab}</span>
+              </>
+            ) : (
+              <>
+                <Map className="w-3.5 h-3.5" />
+                <span className="hidden xs:inline sm:inline">{t.mapTab}</span>
+              </>
+            )}
+          </button>
+
+          {/* Tablet-only Directory & Path icons */}
           <button
             type="button"
             onClick={onToggleDirectory}
             aria-label={t.directoryTab}
             title={t.directoryTab}
-            className={`w-9 h-9 rounded-full border-2 border-[#141419] flex items-center justify-center cursor-pointer ${
+            className={`hidden sm:flex w-9 h-9 rounded-full border-2 border-[#141419] items-center justify-center cursor-pointer ${
               directoryOpen ? "bg-[#99CB77]" : "bg-white"
             }`}
           >
@@ -106,13 +165,31 @@ export const TopBar: React.FC<TopBarProps> = ({
             onClick={onTogglePathMode}
             aria-label={t.pathTab}
             title={t.pathTab}
-            className={`w-9 h-9 rounded-full border-2 border-[#141419] flex items-center justify-center cursor-pointer ${
+            className={`hidden sm:flex w-9 h-9 rounded-full border-2 border-[#141419] items-center justify-center cursor-pointer ${
               pathMode ? "bg-[#F7B647]" : "bg-white"
             }`}
           >
             <Route className="w-4 h-4" />
           </button>
         </div>
+
+        {/* Spoiler-Free Mode Toggle (Desktop pill / Tablet icon) */}
+        <button
+          type="button"
+          onClick={onToggleSpoilerFree}
+          title={spoilerFree ? t.spoilerFreeOn : t.spoilerFreeOff}
+          aria-pressed={spoilerFree}
+          className={`hidden md:flex items-center gap-1 px-2.5 py-1.5 rounded-full border-2 border-[#141419] text-[11px] font-extrabold cursor-pointer transition-colors ${
+            spoilerFree
+              ? "bg-[#33333F] text-[#99CB77]"
+              : "bg-white text-[#141419] hover:bg-[#FFF6E0]"
+          }`}
+        >
+          {spoilerFree ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+          <span className="hidden xl:inline">
+            {spoilerFree ? t.spoilerFreeOn : t.spoilerFreeOff}
+          </span>
+        </button>
 
         {/* Trilingual Switcher (中文 / EN / 日本語) */}
         <div
@@ -146,7 +223,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         <button
           type="button"
           onClick={onToggleMenu}
-          className={`city-menu-btn !w-10 !h-10 sm:!w-12 sm:!h-12 ${menuOpen ? "is-open" : ""}`}
+          className={`city-menu-btn !w-10 !h-10 sm:!w-11 sm:!h-11 ${menuOpen ? "is-open" : ""}`}
           aria-label={t.menu}
           title={t.menu}
           aria-expanded={menuOpen}

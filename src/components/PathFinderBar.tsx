@@ -4,10 +4,12 @@ import type { Character, Locale } from "../types";
 import { CHARACTERS, CHARACTER_MAP } from "../data/characters";
 import { FACTION_MAP } from "../data/factions";
 import { UI_TEXT, pickText } from "../data/i18n";
+import { getDisplayFullName, getDisplayMapName } from "../utils/display";
 import type { PathResult } from "../utils/pathfinding";
 
 interface PathFinderBarProps {
   locale: Locale;
+  spoilerFree: boolean;
   startId: string | null;
   endId: string | null;
   result: PathResult | null;
@@ -20,6 +22,7 @@ interface PathFinderBarProps {
 
 export const PathFinderBar: React.FC<PathFinderBarProps> = ({
   locale,
+  spoilerFree,
   startId,
   endId,
   result,
@@ -34,9 +37,11 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
   const sortedChars = React.useMemo(
     () =>
       [...CHARACTERS].sort((a, b) =>
-        pickText(a.mapName, locale).localeCompare(pickText(b.mapName, locale))
+        getDisplayMapName(a, locale, spoilerFree).localeCompare(
+          getDisplayMapName(b, locale, spoilerFree)
+        )
       ),
-    [locale]
+    [locale, spoilerFree]
   );
 
   return (
@@ -76,7 +81,7 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
             <option value="">{t.pathFrom}…</option>
             {sortedChars.map((c) => (
               <option key={c.id} value={c.id}>
-                {pickText(c.fullName, locale)}
+                {getDisplayFullName(c, locale, spoilerFree)}
               </option>
             ))}
           </select>
@@ -100,7 +105,7 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
             <option value="">{t.pathTo}…</option>
             {sortedChars.map((c) => (
               <option key={c.id} value={c.id}>
-                {pickText(c.fullName, locale)}
+                {getDisplayFullName(c, locale, spoilerFree)}
               </option>
             ))}
           </select>
@@ -139,7 +144,7 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
           ))}
         </div>
 
-        {/* Path Result */}
+        {/* Path Result with Circular Character Avatars */}
         {result && (
           <div className="mt-3 pt-2.5 border-t-2 border-dashed border-[#141419]/20">
             {result.isJohnLennon ? (
@@ -175,7 +180,7 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
                         <button
                           type="button"
                           onClick={() => onLocateCharacter(char)}
-                          className={`px-2.5 py-1 rounded-full border-2 border-[#141419] text-xs font-extrabold cursor-pointer hover:scale-105 transition-transform ${
+                          className={`pl-1 pr-2.5 py-0.5 rounded-full border-2 border-[#141419] text-xs font-extrabold cursor-pointer hover:scale-105 transition-transform inline-flex items-center gap-1.5 ${
                             idx === 0
                               ? "bg-[#F7B647]"
                               : idx === result.nodes.length - 1
@@ -183,7 +188,12 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
                               : "bg-white"
                           }`}
                         >
-                          {pickText(char.mapName, locale)}
+                          <img
+                            src={char.avatar}
+                            alt=""
+                            className="w-5 h-5 rounded-full object-cover border border-[#141419] bg-white"
+                          />
+                          <span>{getDisplayMapName(char, locale, spoilerFree)}</span>
                         </button>
                         {stepLabel && (
                           <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#5A5A6A]">
