@@ -4,6 +4,8 @@
 
 An interactive, trilingual (**中文 / EN / 日本語**) social relationship map for ***CITY THE ANIMATION*** (*Kyoto Animation*, 2025) & Keiichi Arawi's ***CITY***, built with React + TypeScript + Vite and deployed on **Cloudflare Workers Static Assets**.
 
+**Live Site:** [https://social-map.city.chius.dev](https://social-map.city.chius.dev)
+
 </div>
 
 ---
