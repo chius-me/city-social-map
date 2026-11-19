@@ -1,0 +1,1182 @@
+import type { RelationEdge } from "../types";
+
+export const EDGES: RelationEdge[] = [
+  // =========================================================================
+  // 1. THE MOB -> Beat up -> Honkan (All 6 members merge at spine x=264 -> y=186 -> Honkan)
+  // =========================================================================
+  {
+    id: "mob-new-honkan",
+    from: "new-mob",
+    to: "honkan",
+    type: "specific",
+    label: { zh: "暴打", en: "Beat up", ja: "ボコボコに" },
+    labelPos: { x: 374, y: 186 },
+    points: [
+      [225, 138],
+      [264, 138],
+      [264, 186],
+      [502, 186],
+      [502, 146],
+      [553, 146],
+    ],
+    story: {
+      zh: "路人团初登场时把追贼的本官误认成了伪装小偷，一拥而上将他五花大绑并痛扁了一顿。",
+      en: "In THE MOB's debut, all six members mistook Officer Honkan for a thief in disguise, beat him up, and tied him up.",
+      ja: "初登場時、本官さんを泥棒の変装と勘違いしたモブ全員で取り囲んでボコボコにしてしまった。",
+    },
+  },
+  {
+    id: "mob-good-honkan",
+    from: "good-person",
+    to: "honkan",
+    type: "specific",
+    points: [
+      [308, 138],
+      [264, 138],
+      [264, 186],
+      [502, 186],
+      [502, 146],
+      [553, 146],
+    ],
+    story: {
+      zh: "连一向温厚善良的「好人」当时也在路人团里误把本官当小偷拿下。",
+      en: "Even the ever-benevolent Good Person joined THE MOB in accidentally subduing Honkan.",
+      ja: "普段は温厚な「いい人」も、モブの一員として本官さんを取り押さえる騒動に参加。",
+    },
+  },
+  {
+    id: "mob-polka-honkan",
+    from: "polka-dot-guy",
+    to: "honkan",
+    type: "specific",
+    points: [
+      [225, 186],
+      [502, 186],
+      [502, 146],
+      [553, 146],
+    ],
+    story: {
+      zh: "波点衬衫男与路人团伙伴一起参与了暴打无辜本官的乌龙事件。",
+      en: "Polka Dot Shirt Guy teamed up with THE MOB in the hilarious mistaken-identity beatdown of Honkan.",
+      ja: "水玉シャツの男もモブ仲間と一緒に本官さんを泥棒と誤解して捕獲した。",
+    },
+  },
+  {
+    id: "mob-tshirt-honkan",
+    from: "t-shirt-guy",
+    to: "honkan",
+    type: "specific",
+    points: [
+      [225, 234],
+      [264, 234],
+      [264, 186],
+      [502, 186],
+      [502, 146],
+      [553, 146],
+    ],
+    story: {
+      zh: "T恤男（蓼科神威）在路人团拿下本官后，一本正经地主持了现场「审讯」。",
+      en: "T-Shirt Guy (Kamui Tateshina) took charge and interrogated Honkan after THE MOB beat him up.",
+      ja: "Tシャツの男（蓼科神威）は本官さんを取り押さえた後、リーダー格として尋問を仕切った。",
+    },
+  },
+  {
+    id: "mob-sweater-honkan",
+    from: "sweater-girl",
+    to: "honkan",
+    type: "specific",
+    points: [
+      [308, 234],
+      [264, 234],
+      [264, 186],
+      [502, 186],
+      [502, 146],
+      [553, 146],
+    ],
+    story: {
+      zh: "毛衣女随路人团一同出手教训了被误认为小偷的本官。",
+      en: "Sweater Girl joined THE MOB in beating up Officer Honkan during the shopping-street chaos.",
+      ja: "セーターの女もモブの一員として本官さん撃退（誤認）に加わった。",
+    },
+  },
+  {
+    id: "mob-dress-honkan",
+    from: "dress-girl",
+    to: "honkan",
+    type: "specific",
+    points: [
+      [225, 280],
+      [264, 280],
+      [264, 186],
+      [502, 186],
+      [502, 146],
+      [553, 146],
+    ],
+    story: {
+      zh: "连衣裙女与其余五位路人共同制造了痛扁本官的名场面。",
+      en: "Dress Girl completed the six-person MOB takedown of poor Officer Honkan.",
+      ja: "ワンピースの女も他のモブたちと共に本官さんを追い詰めた。",
+    },
+  },
+
+  // =========================================================================
+  // 2. SHOPPING STREET (Kuratake -> Toudou -> Mimineko)
+  // =========================================================================
+  {
+    id: "kuratake-toudou",
+    from: "kuratake",
+    to: "toudou",
+    type: "specific",
+    label: { zh: "供货", en: "Supplies", ja: "卸し・供給" },
+    labelPos: { x: 64, y: 404 },
+    points: [
+      [118, 427],
+      [118, 377],
+    ],
+    story: {
+      zh: "仓岳把顾客走「免费捷径」送来的谢礼源源不断卖给东堂商店，既是供货商也是常客。",
+      en: "Kuratake sells the quirky thank-you gifts he receives from his barber-shop 'free shortcuts' to Toudou's Artifact Shop.",
+      ja: "理容院クラタケの「無料ショートカット」のお礼にもらった品物を東堂商店へ卸している。",
+    },
+  },
+  {
+    id: "toudou-mimineko",
+    from: "toudou",
+    to: "mimineko",
+    type: "specific",
+    label: { zh: "饲养", en: "Owns", ja: "飼い主" },
+    labelPos: { x: 234, y: 378 },
+    points: [
+      [174, 360],
+      [297, 360],
+    ],
+    story: {
+      zh: "耳猫是东堂饲养的宠物，在东堂商店里拥有专属小窝，不过平时总爱满城乱跑。",
+      en: "Toudou owns Mimineko and keeps a cozy bed for it in his shop—though the ear-cat prefers roaming all over CITY.",
+      ja: "東堂はミミネコの飼い主で店内に寝床を用意しているが、ミミネコ自身は街じゅうを気ままに散歩している。",
+    },
+  },
+
+  // =========================================================================
+  // 3. HONKAN -> Crush -> Wako
+  // =========================================================================
+  {
+    id: "honkan-wako",
+    from: "honkan",
+    to: "wako",
+    type: "specific",
+    label: { zh: "暗恋", en: "Crush", ja: "片思い" },
+    labelPos: { x: 734, y: 164 },
+    points: [
+      [671, 146],
+      [796, 146],
+      [796, 214],
+      [860, 214],
+    ],
+    story: {
+      zh: "总是吃瘪的认真警官本官，心里纯情地暗恋着总是笑声爽朗、脑洞奇特的泉环子。",
+      en: "Beneath his stiff, dutiful exterior, Officer Honkan harbors a sweet, hopeless crush on the quirky Wako Izumi.",
+      ja: "いつも真面目な本官さんは、天真爛漫で不思議な魅力を持つ泉わこに密かな恋心を抱いている。",
+    },
+  },
+
+  // =========================================================================
+  // 4. ADATARA FAMILY (Children + Dr. Adatara Trolls Tatewaku + Three Crows)
+  // =========================================================================
+  {
+    id: "dr-adatara-mr-adatara",
+    from: "dr-adatara",
+    to: "mr-adatara",
+    type: "children",
+    points: [
+      [726, 247],
+      [726, 276],
+      [656, 276],
+      [656, 306],
+    ],
+    story: {
+      zh: "安达太良博士是安达太良家父亲的亲生父亲、五个孩子的祖父。",
+      en: "Dr. Adatara is the father of Mr. Adatara and grandfather to all five Adatara siblings.",
+      ja: "安達太良博士は安達太良の父の実父であり、5人きょうだいのおじいちゃん。",
+    },
+  },
+  // Mr. & Mrs. Adatara -> 5 children (shared family-tree bus from couple bridge at x=656, y=318)
+  {
+    id: "mr-adatara-tatsuta",
+    from: "mr-adatara",
+    to: "tatsuta",
+    type: "children",
+    points: [
+      [630, 318],
+      [656, 318],
+      [656, 356],
+      [542, 356],
+      [542, 389],
+    ],
+    story: {
+      zh: "达太是安达太良夫妇的长男，继承了「酒之安达太良」家业。",
+      en: "Tatsuta is the eldest son of Mr. and Mrs. Adatara and heir to Adatara Sake.",
+      ja: "達太は安達太良夫妻の長男で、酒屋の頼れる跡取り。",
+    },
+  },
+  {
+    id: "mrs-adatara-tatsuta",
+    from: "mrs-adatara",
+    to: "tatsuta",
+    type: "children",
+    points: [
+      [682, 318],
+      [656, 318],
+      [656, 356],
+      [542, 356],
+      [542, 389],
+    ],
+    story: {
+      zh: "安达太良母与长男达太。",
+      en: "Mrs. Adatara is Tatsuta's mother.",
+      ja: "安達太良の母と長男・達太。",
+    },
+  },
+  {
+    id: "mr-adatara-umi",
+    from: "mr-adatara",
+    to: "umi",
+    type: "children",
+    points: [
+      [630, 318],
+      [656, 318],
+      [656, 356],
+      [598, 356],
+      [598, 469],
+    ],
+    story: {
+      zh: "海是安达太良夫妇的次女、双胞胎中的姐姐。",
+      en: "Umi is the second daughter of Mr. and Mrs. Adatara (elder twin).",
+      ja: "うみは安達太良夫妻の次女で、双子の姉。",
+    },
+  },
+  {
+    id: "mrs-adatara-umi",
+    from: "mrs-adatara",
+    to: "umi",
+    type: "children",
+    points: [
+      [682, 318],
+      [656, 318],
+      [656, 356],
+      [598, 356],
+      [598, 469],
+    ],
+    story: {
+      zh: "安达太良母与次女海。",
+      en: "Mrs. Adatara is Umi's mother.",
+      ja: "安達太良の母と次女・うみ。",
+    },
+  },
+  {
+    id: "mr-adatara-sora",
+    from: "mr-adatara",
+    to: "sora",
+    type: "children",
+    points: [
+      [630, 318],
+      [656, 318],
+      [656, 389],
+    ],
+    story: {
+      zh: "空是安达太良夫妇的三女、双胞胎中的妹妹。",
+      en: "Sora is the third daughter of Mr. and Mrs. Adatara (younger twin).",
+      ja: "そらは安達太良夫妻の三女で、双子の妹。",
+    },
+  },
+  {
+    id: "mrs-adatara-sora",
+    from: "mrs-adatara",
+    to: "sora",
+    type: "children",
+    points: [
+      [682, 318],
+      [656, 318],
+      [656, 389],
+    ],
+    story: {
+      zh: "安达太良母与三女空。",
+      en: "Mrs. Adatara is Sora's mother.",
+      ja: "安達太良の母と三女・そら。",
+    },
+  },
+  {
+    id: "mr-adatara-ryouta",
+    from: "mr-adatara",
+    to: "ryouta",
+    type: "children",
+    points: [
+      [630, 318],
+      [656, 318],
+      [656, 356],
+      [710, 356],
+      [710, 469],
+    ],
+    story: {
+      zh: "良太是安达太良夫妇的次男，就读于 CITY 南高中 2 年 3 班。",
+      en: "Ryouta is the second son of Mr. and Mrs. Adatara.",
+      ja: "良太は安達太良夫妻の次男で、CITY南高校2年3組に通う。",
+    },
+  },
+  {
+    id: "mrs-adatara-ryouta",
+    from: "mrs-adatara",
+    to: "ryouta",
+    type: "children",
+    points: [
+      [682, 318],
+      [656, 318],
+      [656, 356],
+      [710, 356],
+      [710, 469],
+    ],
+    story: {
+      zh: "安达太良母与次男良太。",
+      en: "Mrs. Adatara is Ryouta's mother.",
+      ja: "安達太良の母と次男・良太。",
+    },
+  },
+  {
+    id: "mr-adatara-kamome",
+    from: "mr-adatara",
+    to: "kamome",
+    type: "children",
+    points: [
+      [630, 318],
+      [656, 318],
+      [656, 356],
+      [762, 356],
+      [762, 389],
+    ],
+    story: {
+      zh: "鸥是安达太良夫妇的长女，温柔爱笑的社会人姐姐。",
+      en: "Kamome is the eldest daughter of Mr. and Mrs. Adatara.",
+      ja: "かもめは安達太良夫妻の長女で、いつも笑顔のお姉さん。",
+    },
+  },
+  {
+    id: "mrs-adatara-kamome",
+    from: "mrs-adatara",
+    to: "kamome",
+    type: "children",
+    points: [
+      [682, 318],
+      [656, 318],
+      [656, 356],
+      [762, 356],
+      [762, 389],
+    ],
+    story: {
+      zh: "安达太良母与长女鸥。",
+      en: "Mrs. Adatara is Kamome's mother.",
+      ja: "安達太良の母と長女・かもめ。",
+    },
+  },
+  {
+    id: "dr-adatara-trolls-tatewaku",
+    from: "dr-adatara",
+    to: "tatewaku",
+    type: "specific",
+    label: { zh: "整蛊捉弄", en: "Trolls", ja: "からかう" },
+    labelPos: { x: 1068, y: 274 },
+    points: [
+      [792, 230],
+      [822, 230],
+      [822, 274],
+      [1308, 274],
+      [1308, 486],
+      [1363, 486],
+    ],
+    story: {
+      zh: "安达太良博士把隔壁真壁家视为竞争对手，动辄用各种奇葩发明整蛊捉弄纯情少年真壁立涌！",
+      en: "Harboring a quirky grudge against neighboring Makabe's Bistro, Dr. Adatara relentlessly pranks and trolls poor Tatewaku.",
+      ja: "お隣の真壁家をライバル視する安達太良博士は、純情な立涌をからかって遊ぶのが大好きな悪戯じいさん。",
+    },
+  },
+
+  // =========================================================================
+  // 5. MONT BLANC TRIO (Friendship triangle + Nagumo <-> Obaba)
+  // =========================================================================
+  {
+    id: "wako-niikura",
+    from: "wako",
+    to: "niikura",
+    type: "friendship",
+    points: [
+      [972, 206],
+      [994, 206],
+      [994, 179],
+    ],
+    story: {
+      zh: "同住木目生庄的好友！泉环子甚至自来熟地住进了新仓房间的壁橱里，两人经常一起研究摄影。",
+      en: "Close friends and Woodgrain Manor neighbors—Wako casually moved herself right into Niikura's closet!",
+      ja: "モクメセイ荘の仲良し同士。わこは勝手ににーくらの部屋の押し入れに住み着くほどの距離感。",
+    },
+  },
+  {
+    id: "niikura-nagumo",
+    from: "niikura",
+    to: "nagumo",
+    type: "friendship",
+    points: [
+      [1074, 179],
+      [1074, 206],
+      [1111, 206],
+    ],
+    story: {
+      zh: "从时定东高中延续到蒙布朗大学的前后辈挚友！新仓嘴上要和南云平起平坐，实际上永远心软借钱给她。",
+      en: "Best friends since high school! Niikura admires Nagumo's athletic legend while forever getting roped into her broke schemes.",
+      ja: "時定東高校時代からの先輩・後輩にして大親友。お金を貸したり振り回されたりしながらも強い絆で結ばれている。",
+    },
+  },
+  {
+    id: "wako-nagumo",
+    from: "wako",
+    to: "nagumo",
+    type: "friendship",
+    points: [
+      [948, 231],
+      [948, 246],
+      [1140, 246],
+      [1140, 231],
+    ],
+    story: {
+      zh: "蒙布朗大学同级生兼木目生庄二楼邻居，两个电波与行动派的奇妙组合总能点燃全场笑点。",
+      en: "Mont Blanc sophomores and Woodgrain Manor 2nd-floor neighbors whose combined chaotic energy powers CITY.",
+      ja: "モンブラン大学2年・モクメセイ荘2階の隣人同士。マイペースな怪人わこと無鉄砲な南雲の名コンビ。",
+    },
+  },
+  {
+    id: "nagumo-debt-obaba",
+    from: "nagumo",
+    to: "obaba",
+    type: "specific",
+    label: { zh: "拖欠房租", en: "Unpaid Debt", ja: "家賃滞納" },
+    labelPos: { x: 1296, y: 144 },
+    points: [
+      [1184, 197],
+      [1184, 144],
+      [1391, 144],
+      [1391, 197],
+    ],
+    story: {
+      zh: "沉迷赛马常年吃土的南云长期拖欠木目生庄房租，成了房东老婆婆全城追杀的头号目标！",
+      en: "Perpetually broke from horse racing, Nagumo owes Obaba months of unpaid rent at Woodgrain Manor.",
+      ja: "競馬好きでいつも一文無しの南雲は、モクメセイ荘の家賃を滞納し続けてオババから追い回されている。",
+    },
+  },
+  {
+    id: "nagumo-rivals-obaba",
+    from: "nagumo",
+    to: "obaba",
+    type: "specific",
+    bidirectional: true,
+    arrowStart: true,
+    arrowEnd: true,
+    label: { zh: "宿敌", en: "Rivals", ja: "宿敵" },
+    labelPos: { x: 1281, y: 234 },
+    points: [
+      [1225, 214],
+      [1337, 214],
+    ],
+    story: {
+      zh: "体育全能欠租房客 × 战力天花板房东老婆婆！二人围绕房租展开了无数次超越人类极限的爆笑死斗。",
+      en: "Athletic deadbeat tenant vs. invincible martial-arts landlady—locked in an eternal, high-octane slapstick rivalry.",
+      ja: "運動万能な滞納住人 vs 戦闘力最強の大家！家賃をめぐる壮絶かつ爆笑のライバル対決は本作の華。",
+    },
+  },
+
+  // =========================================================================
+  // 6. WAKO, SHIA, RIKO IZUMI, AMAGI & ADATARA TWINS
+  // =========================================================================
+  {
+    id: "wako-older-sister-riko",
+    from: "wako",
+    to: "riko-izumi",
+    type: "specific",
+    label: { zh: "姐姐", en: "Older Sister", ja: "姉" },
+    labelPos: { x: 856, y: 476 },
+    points: [
+      [886, 231],
+      [886, 326],
+      [838, 326],
+      [838, 386],
+      [886, 386],
+      [886, 639],
+    ],
+    story: {
+      zh: "泉环子是泉莉子的亲姐姐——一个在大学里住朋友壁橱，一个在高中上课睡大觉坐拥后援会，姐妹俩都深藏不露！",
+      en: "Wako is Riko Izumi's older sister—one an eccentric college genius, the other a sleepy high-school idol with secret hacking chops.",
+      ja: "泉わこは泉りこの実姉。変人天才の姉とファンクラブ持ちの妹、どちらも只者ではない最強姉妹。",
+    },
+  },
+  {
+    id: "wako-shia",
+    from: "wako",
+    to: "shia",
+    type: "friendship",
+    points: [
+      [908, 231],
+      [908, 339],
+    ],
+    story: {
+      zh: "泉环子与艺人诗亚是高中同学兼挚友，诗亚的代表作角色「爆炸先生」其实正是环子画的！",
+      en: "High-school classmates and close friends—Wako is actually the one who originally drew Shia's signature character, Mr. Explosion!",
+      ja: "高校時代からの親友同士。しあの代名詞「ミスターエクスプロージョン」を描いたのは実はわこ！",
+    },
+  },
+  {
+    id: "shia-agent-kamome",
+    from: "shia",
+    to: "kamome",
+    type: "employment",
+    label: { zh: "经纪人", en: "Agent", ja: "マネージャー" },
+    labelPos: { x: 846, y: 424 },
+    points: [
+      [866, 373],
+      [866, 406],
+      [806, 406],
+    ],
+    story: {
+      zh: "安达太良鸥受雇担任艺人诗亚的经纪人，悉心打理她的通告日程，哪怕常被任性的诗亚坑到受伤也总是笑脸相迎。",
+      en: "Kamome works as Shia's dedicated talent agent, tirelessly managing her schedule despite Shia's diva antics.",
+      ja: "安達太良かもめはタレント・しあの担当マネージャー。ワガママに振り回されても笑顔で支え続けている。",
+    },
+  },
+  {
+    id: "shia-sora",
+    from: "shia",
+    to: "sora",
+    type: "friendship",
+    points: [
+      [908, 373],
+      [908, 544],
+      [654, 544],
+      [654, 423],
+    ],
+    story: {
+      zh: "经常去经纪人鸥家做客的诗亚和双胞胎妹妹空成了好朋友，空还听诗亚的话留了同款发型！",
+      en: "From visiting Kamome's house, Shia became fast friends with Sora—who happily copied Shia's hairstyle.",
+      ja: "かもめの家によく遊びに来るしあは双子のそらとも大の仲良し。そらはしあと同じ髪型を真似している。",
+    },
+  },
+  {
+    id: "shia-umi",
+    from: "shia",
+    to: "umi",
+    type: "friendship",
+    points: [
+      [908, 373],
+      [908, 544],
+      [598, 544],
+      [598, 503],
+    ],
+    story: {
+      zh: "双胞胎姐姐海也超喜欢来家做客的诗亚，姐妹俩和童颜艺人诗亚玩成一片。",
+      en: "Elder twin Umi adores hanging out with Shia and eagerly copied her hairstyle too.",
+      ja: "双子の姉・うみもしあが大好き。そらと一緒にしあと仲良く遊んでいる。",
+    },
+  },
+  {
+    id: "amagi-teaches-riko",
+    from: "amagi",
+    to: "riko-izumi",
+    type: "specific",
+    label: { zh: "执教", en: "Teaches", ja: "担当教諭" },
+    labelPos: { x: 928, y: 716 },
+    points: [
+      [888, 757],
+      [888, 673],
+    ],
+    story: {
+      zh: "天城宗光老师是 CITY 南高中 2 年 3 班的任课老师，每天面对上课打瞌睡的泉莉子与一众奇葩学生依然无比认真。",
+      en: "Exhausted-yet-devoted teacher Munemitsu Amagi teaches Riko Izumi's Class 2-3 at CITY Minami High School.",
+      ja: "CITY南高校の天城先生は泉りこたちのクラスの担当教諭。居眠り常習犯のりこにも真剣に授業を行う。",
+    },
+  },
+
+  // =========================================================================
+  // 7. CITY THREE CROWS (Mr. Adatara — Editor in Chief — Chef Makabe)
+  // =========================================================================
+  {
+    id: "mr-adatara-editor",
+    from: "mr-adatara",
+    to: "editor-in-chief",
+    type: "friendship",
+    points: [
+      [568, 301],
+      [568, 288],
+      [964, 288],
+      [964, 356],
+      [1042, 356],
+    ],
+    story: {
+      zh: "「CITY 三羽乌（CITY 三羽ガラス）」铁三角成员！安达太良父与《周刊CITY》主编是多年好友。",
+      en: "Members of the legendary 'CITY Three Crows'—Mr. Adatara and the Editor in Chief are longtime best buddies.",
+      ja: "親友トリオ「CITY三羽ガラス」の仲間！安達太良の父と編集長は気の置けない間柄。",
+    },
+  },
+  {
+    id: "editor-chef-makabe",
+    from: "editor-in-chief",
+    to: "chef-makabe",
+    type: "friendship",
+    points: [
+      [1180, 356],
+      [1340, 356],
+    ],
+    story: {
+      zh: "编辑部就在真壁西餐厅正对面！主编与真壁鹤菱既是邻居更是「CITY 三羽乌」挚友。",
+      en: "With CITY Weekly right across the street from Makabe's Bistro, the Editor in Chief and Chef Makabe are best pals in the 'CITY Three Crows'.",
+      ja: "編集部は洋食マカベの向かい！編集長と真壁鶴菱は「CITY三羽ガラス」の固い友情で結ばれている。",
+    },
+  },
+  {
+    id: "mr-adatara-chef-makabe",
+    from: "mr-adatara",
+    to: "chef-makabe",
+    type: "friendship",
+    points: [
+      [506, 318],
+      [476, 318],
+      [476, 562],
+      [1292, 562],
+      [1292, 356],
+      [1340, 356],
+    ],
+    story: {
+      zh: "尽管安达太良博士总和隔壁真壁家较劲，安达太良父与真壁鹤菱本人却是「CITY 三羽乌」里的铁杆哥们！",
+      en: "Despite Dr. Adatara's comedic rivalry with the Makabes, Mr. Adatara and Chef Makabe are best friends in the 'CITY Three Crows'!",
+      ja: "博士は真壁家に敵意を燃やすが、安達太良の父と真壁鶴菱自身は「CITY三羽ガラス」の大親友！",
+    },
+  },
+
+  // =========================================================================
+  // 8. CITY WEEKLY MAGAZINE (Employment + Todoroki/Naganohara/Kamaboko + Fan)
+  // =========================================================================
+  {
+    id: "editor-employs-arama",
+    from: "editor-in-chief",
+    to: "arama-san",
+    type: "employment",
+    points: [
+      [1111, 373],
+      [1111, 390],
+      [1018, 390],
+      [1018, 407],
+    ],
+    story: {
+      zh: "荒真作为《周刊CITY》的资深编辑，长期在严厉主编手下负责特别采访专栏。",
+      en: "Senior editor Arama-san works directly under the strict Editor in Chief at CITY Weekly Magazine.",
+      ja: "先輩社員のあらまさんは編集長のもとで『週刊CITY誌』の特設コラムを担当。",
+    },
+  },
+  {
+    id: "editor-employs-todoroki",
+    from: "editor-in-chief",
+    to: "todoroki",
+    type: "employment",
+    points: [
+      [1111, 373],
+      [1111, 390],
+      [1204, 390],
+      [1204, 407],
+    ],
+    story: {
+      zh: "轰是《周刊CITY》编辑部的新人编辑，奉主编之命担任漫画家鬼蒲鉾的责编。",
+      en: "Rookie editor Todoroki is employed by the Editor in Chief to handle CITY Weekly's comic section.",
+      ja: "新人編集者の轟は編集長のもとで鬼カマボコの担当編集を務めている。",
+    },
+  },
+  {
+    id: "editor-employs-naganohara",
+    from: "editor-in-chief",
+    to: "naganohara",
+    type: "employment",
+    points: [
+      [1111, 373],
+      [1111, 464],
+      [1018, 464],
+      [1018, 483],
+    ],
+    story: {
+      zh: "《周刊CITY》重金聘请的当红大漫画家长野原大介（即《日常》长野原美绪），原本要接替周刊漫画连载。",
+      en: "CITY Weekly hired superstar mangaka Daisuke Naganohara (grown-up Mio from Nichijou!) to serialize in the magazine.",
+      ja: "『週刊CITY誌』が新たに招いた人気漫画家・長野原大介（『日常』のみお）。",
+    },
+  },
+  {
+    id: "editor-employs-kamaboko",
+    from: "editor-in-chief",
+    to: "kamaboko",
+    type: "employment",
+    points: [
+      [1111, 373],
+      [1111, 464],
+      [1204, 464],
+      [1204, 483],
+    ],
+    story: {
+      zh: "鬼蒲鉾受雇在《周刊CITY》连载每周漫画《失望先生（落胆君）》。",
+      en: "Kamaboko Oni draws the weekly comic strip 'Rakutan-kun' for CITY Weekly Magazine.",
+      ja: "鬼カマボコは『週刊CITY誌』で代表作『落胆くん』を連載している漫画家。",
+    },
+  },
+  {
+    id: "todoroki-idolizes-naganohara",
+    from: "todoroki",
+    to: "naganohara",
+    type: "specific",
+    label: { zh: "崇拜", en: "Idolizes", ja: "憧れ・心酔" },
+    labelPos: { x: 1111, y: 520 },
+    points: [
+      [1150, 424],
+      [1132, 424],
+      [1132, 500],
+      [1077, 500],
+    ],
+    story: {
+      zh: "轰是人气大漫画家长野原大介的头号迷弟，见到偶像时激动不已！",
+      en: "Todoroki completely idolizes star mangaka Daisuke Naganohara!",
+      ja: "轟は人気漫画家・長野原大介の熱狂的ファンで、彼女を深く尊敬している。",
+    },
+  },
+  {
+    id: "todoroki-kamaboko",
+    from: "todoroki",
+    to: "kamaboko",
+    type: "friendship",
+    points: [
+      [1258, 424],
+      [1272, 424],
+      [1272, 500],
+      [1260, 500],
+    ],
+    story: {
+      zh: "责编轰与漫画家鬼蒲鉾虽然天天一起焦虑截稿日和创意瓶颈，却早已成为彼此信赖的挚友。",
+      en: "Editor and mangaka turned genuine buddies—bonding through endless creative crises and deadlines.",
+      ja: "担当編集と漫画家という立場を超え、苦楽を共にする良き相棒・親友同士。",
+    },
+  },
+  {
+    id: "kamaboko-fan-tekaridake",
+    from: "kamaboko",
+    to: "tekaridake",
+    type: "specific",
+    label: { zh: "铁杆粉丝", en: "Fan", ja: "ファン" },
+    labelPos: { x: 1228, y: 576 },
+    points: [
+      [1204, 517],
+      [1204, 608],
+      [1138, 608],
+      [1138, 705],
+    ],
+    story: {
+      zh: "鬼蒲鉾是光岳剧团的忠实粉丝，日常生活中经常穿着剧团《MONOEYE》等演出的官方周边 T 恤！",
+      en: "Kamaboko Oni is a devoted fan of Theater Troupe Tekaridake—often spotted wearing their 'MONOEYE' play merch!",
+      ja: "鬼カマボコは劇団テカリダケの熱心なファンで、普段から劇団の公演グッズTシャツを愛用している。",
+    },
+  },
+
+  // =========================================================================
+  // 9. MAKABE FAMILY (Children + Matsuri—Ecchan + Tatewaku Crush Riko)
+  // =========================================================================
+  {
+    id: "obaba-chef-makabe",
+    from: "obaba",
+    to: "chef-makabe",
+    type: "children",
+    points: [
+      [1391, 231],
+      [1391, 339],
+    ],
+    story: {
+      zh: "原图以血缘箭头标示老婆婆与真壁鹤菱的家族代际关系（原作设定中，老婆婆实际上是真壁母的生母、真壁鹤菱的岳母，立涌与茉莉的外婆）。",
+      en: "Shown as a direct generational link on VayItsHere's Social Map (in manga/anime canon, Obaba is Mrs. Makabe's mother and Chef Makabe's mother-in-law!).",
+      ja: "元マップではオババから鶴菱への世代矢印で表現（原作設定上は真壁の母の実母・鶴菱の義母、立涌とまつりの祖母）。",
+    },
+  },
+  {
+    id: "chef-makabe-tatewaku",
+    from: "chef-makabe",
+    to: "tatewaku",
+    type: "children",
+    points: [
+      [1468, 356],
+      [1487, 356],
+      [1487, 434],
+      [1422, 434],
+      [1422, 479],
+    ],
+    story: {
+      zh: "真壁立涌是洋食马卡贝店主真壁鹤菱与真壁母的长子。",
+      en: "Tatewaku is the eldest child of Chef Makabe and Mrs. Makabe.",
+      ja: "真壁立涌は鶴菱と真壁の母の長男。",
+    },
+  },
+  {
+    id: "mrs-makabe-tatewaku",
+    from: "mrs-makabe",
+    to: "tatewaku",
+    type: "children",
+    points: [
+      [1506, 356],
+      [1487, 356],
+      [1487, 434],
+      [1422, 434],
+      [1422, 479],
+    ],
+    story: {
+      zh: "真壁母与儿子真壁立涌。",
+      en: "Mrs. Makabe is Tatewaku's mother.",
+      ja: "真壁の母と長男・立涌。",
+    },
+  },
+  {
+    id: "chef-makabe-matsuri",
+    from: "chef-makabe",
+    to: "matsuri",
+    type: "children",
+    points: [
+      [1468, 356],
+      [1487, 356],
+      [1487, 434],
+      [1568, 434],
+      [1568, 479],
+    ],
+    story: {
+      zh: "真壁茉莉是真壁鹤菱与真壁母的女儿，活泼开朗的初中生妹妹。",
+      en: "Matsuri is the daughter of Chef Makabe and Mrs. Makabe.",
+      ja: "真壁まつりは鶴菱と真壁の母の長女。",
+    },
+  },
+  {
+    id: "mrs-makabe-matsuri",
+    from: "mrs-makabe",
+    to: "matsuri",
+    type: "children",
+    points: [
+      [1506, 356],
+      [1487, 356],
+      [1487, 434],
+      [1568, 434],
+      [1568, 479],
+    ],
+    story: {
+      zh: "真壁母与女儿真壁茉莉。",
+      en: "Mrs. Makabe is Matsuri's mother.",
+      ja: "真壁の母と長女・まつり。",
+    },
+  },
+  {
+    id: "matsuri-ecchan",
+    from: "matsuri",
+    to: "ecchan",
+    type: "friendship",
+    points: [
+      [1622, 496],
+      [1662, 496],
+    ],
+    story: {
+      zh: "全作最治愈催泪的挚友组合！真壁茉莉与雨饰悦理（小英）形影不离，离别前共同度过的夏日时光感人至深。",
+      en: "One of the warmest friendships in all of CITY—Matsuri and Ecchan cherish every moment together before Ecchan's move to England.",
+      ja: "本作屈指の泣ける大親友コンビ！まつりとえっちゃんの絆は『CITY』の温かさの象徴。",
+    },
+  },
+  {
+    id: "tatewaku-crush-riko",
+    from: "tatewaku",
+    to: "riko-izumi",
+    type: "specific",
+    label: { zh: "暗恋", en: "Crush", ja: "片思い" },
+    labelPos: { x: 1260, y: 636 },
+    points: [
+      [1363, 504],
+      [1308, 504],
+      [1308, 656],
+      [947, 656],
+    ],
+    story: {
+      zh: "正值青春最中央的真壁立涌一往情深地暗恋着同班女神泉莉子，为了接近她屡屡上演羞耻又纯情的搞笑名场面！",
+      en: "Deep in the throes of youth, Tatewaku has a massive, earnest crush on his sleepy classmate Riko Izumi.",
+      ja: "「青春ど真ん中」の真壁立涌はクラスメイトの泉りこにぞっこん！純情ゆえの空回りも見どころ。",
+    },
+  },
+
+  // =========================================================================
+  // 10. TANABE MANSION (Kidnapped perimeter highway + 8 Employment edges)
+  // =========================================================================
+  {
+    id: "tanabe-kidnapped-good-person",
+    from: "tanabe",
+    to: "good-person",
+    type: "specific",
+    label: { zh: "强行绑架表彰", en: "Kidnapped", ja: "強引に拉致表彰" },
+    labelPos: { x: 512, y: 576 },
+    points: [
+      [616, 615],
+      [616, 576],
+      [24, 576],
+      [24, 26],
+      [374, 26],
+      [374, 121],
+    ],
+    story: {
+      zh: "富婆田边一心想要隆重表彰行善无数的「好人」，不惜派出管家与重兵满城追捕、强行请回豪宅，成了好人的头号宿敌！",
+      en: "Obsessed with throwing Good Person a lavish thank-you banquet, Tanabe repeatedly 'kidnaps' him—making her his comedic archnemesis.",
+      ja: "善行を重ねる「いい人」を盛大に表彰しようと、タナベは執事の穂高らを動員して何度も拉致を試みる。",
+    },
+  },
+  {
+    id: "tanabe-kidnapped-nagumo",
+    from: "tanabe",
+    to: "nagumo",
+    type: "specific",
+    points: [
+      [616, 615],
+      [616, 576],
+      [24, 576],
+      [24, 26],
+      [1154, 26],
+      [1154, 197],
+    ],
+    story: {
+      zh: "南云美鸟也曾被田边锁定为「值得表彰的市民」而遭强行带回田边双子塔，不得不一路闯关突破塔之首领才能脱身！",
+      en: "Midori Nagumo also got 'kidnapped' into Tanabe's Twin Towers for an absurdly grand award ceremony—and had to fight past the Tower Bosses to escape!",
+      ja: "南雲美鳥もまたタナベの「強引すぎる表彰」のターゲットとなり、双子タワーのボスたちを突破する大騒動に巻き込まれた。",
+    },
+  },
+  {
+    id: "tanabe-employs-hotaka",
+    from: "tanabe",
+    to: "hotaka",
+    type: "employment",
+    points: [
+      [616, 649],
+      [616, 686],
+      [676, 686],
+    ],
+    story: {
+      zh: "穗高是田边大小姐最忠心的贴身执事，全程配合大小姐执行各种疯狂的「表彰计划」。",
+      en: "Hotaka is Tanabe's loyal right-hand butler who carries out her extravagant plans across CITY.",
+      ja: "穂高はタナベお嬢様に仕える忠実な執事。",
+    },
+  },
+  {
+    id: "tanabe-employs-servants",
+    from: "tanabe",
+    to: "unnamed-servants",
+    type: "employment",
+    points: [
+      [616, 649],
+      [616, 760],
+      [667, 760],
+    ],
+    story: {
+      zh: "田边豪宅雇佣了大批无名仆人来操办奢华宴会与日常起居。",
+      en: "Tanabe employs an army of unnamed household servants to run her enormous estate.",
+      ja: "広大なタナベ邸を維持するため、数多くの使用人が雇われている。",
+    },
+  },
+  {
+    id: "tanabe-employs-magician",
+    from: "tanabe",
+    to: "magician",
+    type: "employment",
+    points: [
+      [616, 649],
+      [616, 686],
+      [561, 686],
+    ],
+    story: {
+      zh: "田边雇佣魔术师镇守高塔 11 层，以飞鸟魔术「款待」并留住贵宾。",
+      en: "Hired by Tanabe to guard the 11th floor of the Twin Towers with bird magic.",
+      ja: "タナベタワー11階を任されている鳥使いのマジシャン。",
+    },
+  },
+  {
+    id: "tanabe-employs-abacus",
+    from: "tanabe",
+    to: "abacus",
+    type: "employment",
+    points: [
+      [616, 649],
+      [616, 734],
+      [561, 734],
+    ],
+    story: {
+      zh: "算盘既是田边塔 10 层的数学考官，平时也是田边家的正式财务会计。",
+      en: "Employed by Tanabe both as the 10th-floor math-quiz boss and the estate's actual accountant.",
+      ja: "タナベタワー10階ボス兼、タナベ家の経理担当。",
+    },
+  },
+  {
+    id: "tanabe-employs-mitsuami",
+    from: "tanabe",
+    to: "mitsuami",
+    type: "employment",
+    points: [
+      [616, 649],
+      [616, 782],
+      [561, 782],
+    ],
+    story: {
+      zh: "三股辫平日是田边豪宅的普通仆人，客人闯塔时则化身 9 层强悍武术家。",
+      en: "Works as a regular servant for Tanabe, transforming into the 9th-floor martial artist whenever guests try to flee.",
+      ja: "普段は使用人だが、タナベタワー9階では凄腕の武術家として立ちはだかる。",
+    },
+  },
+  {
+    id: "tanabe-employs-oni",
+    from: "tanabe",
+    to: "oni",
+    type: "employment",
+    points: [
+      [616, 649],
+      [616, 830],
+      [561, 830],
+    ],
+    story: {
+      zh: "受雇于田边豪宅、镇守高塔 8 层的蒙面柔道大师。",
+      en: "Hired by Tanabe to guard the 8th floor of the Twin Towers as a masked judo master.",
+      ja: "タナベタワー8階を守る仮面の柔道家。",
+    },
+  },
+  {
+    id: "tanabe-employs-memory-master",
+    from: "tanabe",
+    to: "memory-master",
+    type: "employment",
+    points: [
+      [616, 649],
+      [616, 878],
+      [566, 878],
+    ],
+    story: {
+      zh: "受雇镇守田边塔 6 层的体弱记忆大师。",
+      en: "Employed by Tanabe as the 6th-floor Tower Boss.",
+      ja: "タナベタワー6階を担当するメモリーマスター。",
+    },
+  },
+  {
+    id: "tanabe-employs-gawsc",
+    from: "tanabe",
+    to: "gawsc",
+    type: "employment",
+    points: [
+      [616, 649],
+      [616, 924],
+      [561, 924],
+    ],
+    story: {
+      zh: "受雇镇守田边塔 5 层「空手之间」的巨型白化西洋寿司师傅（虽然胳膊折了）。",
+      en: "Hired by Tanabe for the 5th floor's 'KARATE NO MA' trial—broken arm and all.",
+      ja: "タナベタワー5階「空手の間」を任されている謎の巨大西洋寿司職人。",
+    },
+  },
+
+  // =========================================================================
+  // 11. THE THEATER TROUPE TEKARIDAKE (6 Friendship links from Tekaridake)
+  // =========================================================================
+  {
+    id: "tekaridake-quaksky",
+    from: "tekaridake",
+    to: "quaksky",
+    type: "friendship",
+    points: [
+      [1138, 739],
+      [1138, 778],
+      [1095, 778],
+    ],
+    story: {
+      zh: "光岳剧团的挚友（？）搭档——嘎嘎斯基平时爱咬团长，但演起戏来默契十足。",
+      en: "Troupe mates—Quaksky bites Tekaridake during rehearsals, yet sticks with the troupe.",
+      ja: "稽古中に光岳へ噛みつくクワックスキーだが、れっきとした劇団の仲間。",
+    },
+  },
+  {
+    id: "tekaridake-fighting-monkey",
+    from: "tekaridake",
+    to: "fighting-monkey",
+    type: "friendship",
+    points: [
+      [1138, 739],
+      [1138, 778],
+      [1177, 778],
+    ],
+    story: {
+      zh: "格斗猴动不动就一记铁拳招呼团长，靠可乐饼维持着微妙又深厚的剧团情谊。",
+      en: "Fighting Monkey regularly punches Tekaridake, yet croquettes always mend their theatrical bond.",
+      ja: "光岳を豪快に殴るファイティングモンキーも、コロッケがあれば仲直りする劇団仲間。",
+    },
+  },
+  {
+    id: "tekaridake-mr-x",
+    from: "tekaridake",
+    to: "mr-x",
+    type: "friendship",
+    points: [
+      [1138, 739],
+      [1138, 830],
+      [1095, 830],
+    ],
+    story: {
+      zh: "神秘莫测的 X 先生是光岳的剧团好友兼赛跑搭档。",
+      en: "The enigmatic Mr. X is Tekaridake's trusty troupe buddy and race partner.",
+      ja: "正体不明のミスターXは、光岳の頼れる（？）劇団仲間＆レース相棒。",
+    },
+  },
+  {
+    id: "tekaridake-mr-squeek",
+    from: "tekaridake",
+    to: "mr-squeek",
+    type: "friendship",
+    points: [
+      [1138, 739],
+      [1138, 830],
+      [1177, 830],
+    ],
+    story: {
+      zh: "吱吱先生有时会出手拉架，保护可怜的光岳团长不被其他动物团员打太狠。",
+      en: "Mr. Squeek is the gentle friend who occasionally stops the rest of the troupe from pounding Tekaridake.",
+      ja: "他の団員から光岳を守ろうと仲裁に入ってくれる優しい劇団仲間。",
+    },
+  },
+  {
+    id: "tekaridake-hell-bird",
+    from: "tekaridake",
+    to: "hell-bird",
+    type: "friendship",
+    points: [
+      [1138, 739],
+      [1138, 882],
+      [1095, 882],
+    ],
+    story: {
+      zh: "地狱鸟虽然爱啄团长、扔团长，但始终是光岳剧团不可或缺的核心演员。",
+      en: "Hell Bird pecks and tosses Tekaridake in rehearsals, yet stays loyal to the troupe.",
+      ja: "光岳をつついたり投げたりしつつも、劇団テカリダケを支える大切なメンバー。",
+    },
+  },
+  {
+    id: "tekaridake-hedgester",
+    from: "tekaridake",
+    to: "hedgester",
+    type: "friendship",
+    points: [
+      [1138, 739],
+      [1138, 882],
+      [1177, 882],
+    ],
+    story: {
+      zh: "蓝色尖刺的刺猬仔常扎光岳团长，也是光岳笔下经典角色「闷闷不乐的针鼹」的灵魂演绎者！",
+      en: "Blue-spiked Hedgester pokes Tekaridake backstage and brings 'the Sulky Echidna' to life onstage.",
+      ja: "青いトゲで光岳を刺しつつも、当たり役「すねたハリモグラ」で観客を魅了する名優。",
+    },
+  },
+];
