@@ -1,14 +1,12 @@
-import React from 'react';
-import { Compass, Sparkles } from 'lucide-react';
+import React, { useEffect } from 'react';
 import {
   CITY_SITES,
   SHELL_TEXT,
-  getSisterSite,
   pickText,
   type CitySiteId,
   type Locale,
 } from './ecosystem';
-import { CityLogo, GitHubMark } from './CityLogo';
+import { CityLogo } from './CityLogo';
 
 interface CityTopShellProps {
   siteId: CitySiteId;
@@ -32,9 +30,12 @@ export const CityTopShell: React.FC<CityTopShellProps> = ({
   children,
 }) => {
   const currentSite = CITY_SITES[siteId];
-  const sisterSite = getSisterSite(siteId);
   const st = SHELL_TEXT[locale];
-  const sisterLabel = pickText(sisterSite.shortLabel, locale);
+
+  useEffect(() => {
+    document.title = pickText(currentSite.tabTitle, locale);
+    document.documentElement.lang = locale === 'zh' ? 'zh-CN' : locale;
+  }, [currentSite, locale]);
 
   return (
     <>
@@ -51,35 +52,6 @@ export const CityTopShell: React.FC<CityTopShellProps> = ({
 
       <div className="city-top-shelf">
         {children}
-
-        <a
-          href={sisterSite.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="city-sister-pill"
-          title={`${pickText(sisterSite.name, locale)} (${sisterSite.domain})`}
-        >
-          {sisterSite.id === 'avatar' ? (
-            <Sparkles size={13} strokeWidth={2.5} />
-          ) : (
-            <Compass size={13} strokeWidth={2.5} />
-          )}
-          <span>{sisterLabel}</span>
-          <span className="city-sister-arrow" aria-hidden="true">
-            ↗
-          </span>
-        </a>
-
-        <a
-          href={currentSite.repoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="city-github-btn"
-          aria-label={`${st.sourceCode} (${currentSite.repoSlug})`}
-          title={`${st.sourceCode} · ${currentSite.repoSlug}`}
-        >
-          <GitHubMark size={16} />
-        </a>
 
         <div className="city-locale-switch" role="group" aria-label="Language">
           {(

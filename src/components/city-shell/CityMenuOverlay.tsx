@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
-import { ExternalLink } from 'lucide-react';
 import {
   CITY_EXTERNAL_LINKS,
   CITY_SITES,
-  CITY_SITE_LIST,
   SHELL_TEXT,
   getSisterSite,
   pickText,
   type CitySiteId,
   type Locale,
 } from './ecosystem';
-import { CityDots, CityLogo, GitHubMark, MiminekoMascot } from './CityLogo';
+import { CityLogo, GitHubMark, MiminekoMascot } from './CityLogo';
 
 export interface CityMenuTile {
   id: string;
@@ -30,7 +28,8 @@ interface CityMenuOverlayProps {
   tagline: string;
   tiles: CityMenuTile[];
   onClose: () => void;
-  wide?: boolean;
+  extraLinks?: { id: string; label: string; href: string }[];
+  creditNote?: string;
   children?: React.ReactNode;
 }
 
@@ -41,12 +40,20 @@ export const CityMenuOverlay: React.FC<CityMenuOverlayProps> = ({
   tagline,
   tiles,
   onClose,
-  wide = false,
+  extraLinks,
+  creditNote,
   children,
 }) => {
   const currentSite = CITY_SITES[siteId];
   const sisterSite = getSisterSite(siteId);
   const st = SHELL_TEXT[locale];
+
+  const tileHasSister = tiles.some((t) =>
+    Boolean(t.href && t.href.startsWith(sisterSite.url))
+  );
+  const tileHasOfficial = tiles.some((t) =>
+    Boolean(t.href && t.href.startsWith('https://city-the-animation.com'))
+  );
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -67,7 +74,7 @@ export const CityMenuOverlay: React.FC<CityMenuOverlayProps> = ({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className={`city-menu-overlay-inner ${wide ? 'is-wide' : ''}`}>
+      <div className="city-menu-overlay-inner">
         <div className="city-menu-hero">
           <div className="city-menu-brand">
             <div className="city-menu-brand-row">
@@ -126,87 +133,28 @@ export const CityMenuOverlay: React.FC<CityMenuOverlayProps> = ({
 
         {children}
 
-        <section className="city-ecosystem-section" aria-label={st.ecosystemHeading}>
-          <div className="city-ecosystem-head">
-            <h3 className="city-ecosystem-heading">{st.ecosystemHeading}</h3>
-            <CityDots />
-          </div>
-
-          <div className="city-ecosystem-grid">
-            {CITY_SITE_LIST.map((site) => {
-              const isCurrent = site.id === siteId;
-              return (
-                <article
-                  key={site.id}
-                  className={`city-ecosystem-card ${isCurrent ? 'is-current' : ''}`}
-                >
-                  <div>
-                    <div className="city-ecosystem-card-top">
-                      <div className="city-ecosystem-card-title-row">
-                        <span
-                          className="city-ecosystem-swatch"
-                          style={{ backgroundColor: site.accent }}
-                          aria-hidden="true"
-                        />
-                        <h4 className="city-ecosystem-card-title">
-                          {pickText(site.name, locale)}
-                        </h4>
-                      </div>
-                      <span
-                        className={`city-ecosystem-badge ${isCurrent ? 'is-current' : ''}`}
-                      >
-                        {isCurrent ? st.currentSiteBadge : st.sisterSiteBadge}
-                      </span>
-                    </div>
-                    <p className="city-ecosystem-summary">
-                      {pickText(site.summary, locale)}
-                    </p>
-                  </div>
-
-                  <div className="city-ecosystem-actions">
-                    <a
-                      href={site.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`city-ecosystem-action ${!isCurrent ? 'is-primary' : ''}`}
-                    >
-                      <span>{site.domain}</span>
-                      <ExternalLink size={12} strokeWidth={2.4} />
-                    </a>
-                    <a
-                      href={site.repoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="city-ecosystem-action"
-                    >
-                      <GitHubMark size={13} />
-                      <span>{site.repoSlug}</span>
-                    </a>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-
         <div className="city-menu-links">
-          <a
-            href={currentSite.repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="city-link-pill"
-          >
-            <GitHubMark size={14} />
-            <span>{currentSite.repoSlug} ↗</span>
-          </a>
-          <a
-            href={sisterSite.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="city-link-pill"
-          >
-            <span>{pickText(sisterSite.name, locale)} ↗</span>
-          </a>
+          {!tileHasSister && (
+            <a
+              href={sisterSite.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="city-link-pill city-link-pill--sister"
+            >
+              <span>{pickText(sisterSite.name, locale)} ↗</span>
+            </a>
+          )}
+          {extraLinks?.map((link) => (
+            <a
+              key={link.id}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="city-link-pill"
+            >
+              <span>{link.label} ↗</span>
+            </a>
+          ))}
           <a
             href={CITY_EXTERNAL_LINKS.awesomeRepo}
             target="_blank"
@@ -215,17 +163,31 @@ export const CityMenuOverlay: React.FC<CityMenuOverlayProps> = ({
           >
             <span>{st.awesomeRepo} ↗</span>
           </a>
+          {!tileHasOfficial && (
+            <a
+              href={CITY_EXTERNAL_LINKS.officialSite}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="city-link-pill"
+            >
+              <span>{st.officialSite} ↗</span>
+            </a>
+          )}
           <a
-            href={CITY_EXTERNAL_LINKS.officialSite}
+            href={currentSite.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="city-link-pill"
           >
-            <span>{st.officialSite} ↗</span>
+            <GitHubMark size={14} />
+            <span>{st.sourceShort} ↗</span>
           </a>
         </div>
 
-        <footer className="city-menu-footer">{st.disclaimer}</footer>
+        <footer className="city-menu-footer">
+          {st.disclaimer}
+          {creditNote ? ` · ${creditNote}` : ''}
+        </footer>
       </div>
     </div>
   );

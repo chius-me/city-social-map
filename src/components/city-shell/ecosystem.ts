@@ -21,6 +21,7 @@ export interface CitySiteEntry {
   repoSlug: string;
   accent: string;
   name: LocalizedText;
+  tabTitle: LocalizedText;
   shortLabel: LocalizedText;
   summary: LocalizedText;
 }
@@ -38,6 +39,11 @@ export const CITY_SITES: Record<CitySiteId, CitySiteEntry> = {
       zh: 'CITY 人物关系图',
       en: 'CITY Social Map',
       ja: 'CITY 相関図マップ',
+    },
+    tabTitle: {
+      zh: 'CITY Social Map · 《小城日常》人物关系图',
+      en: 'CITY Social Map · CITY THE ANIMATION',
+      ja: 'CITY Social Map · 『CITY THE ANIMATION』相関図',
     },
     shortLabel: {
       zh: '人物关系图',
@@ -62,6 +68,11 @@ export const CITY_SITES: Record<CitySiteId, CitySiteEntry> = {
       zh: 'CITY 风格头像工坊',
       en: 'CITY Avatar Studio',
       ja: 'CITY 風アイコン工房',
+    },
+    tabTitle: {
+      zh: 'CITY Avatar · 《小城日常》风格头像工坊',
+      en: 'CITY Avatar · CITY THE ANIMATION',
+      ja: 'CITY Avatar · 『CITY THE ANIMATION』アイコン工房',
     },
     shortLabel: {
       zh: '头像工坊',
@@ -95,12 +106,6 @@ export const SHELL_TEXT: Record<
   Locale,
   {
     menuLabel: string;
-    ecosystemHeading: string;
-    currentSiteBadge: string;
-    sisterSiteBadge: string;
-    openSite: string;
-    visitCurrentDomain: string;
-    sourceCode: string;
     sourceShort: string;
     awesomeRepo: string;
     officialSite: string;
@@ -109,44 +114,26 @@ export const SHELL_TEXT: Record<
 > = {
   zh: {
     menuLabel: '导航菜单',
-    ecosystemHeading: 'CITY 系列互动站点与源码',
-    currentSiteBadge: '当前站点',
-    sisterSiteBadge: '姊妹站点',
-    openSite: '访问站点',
-    visitCurrentDomain: '线上地址',
-    sourceCode: 'GitHub 源码',
     sourceShort: 'GitHub',
     awesomeRepo: 'Awesome CITY',
     officialSite: '动画官网',
     disclaimer:
-      '非官方同人交互项目 · 原作角色及视觉版权归 © あらゐけいいち・講談社／CITY THE ANIMATION 製作委員会',
+      '非官方同人交互项目 · 原作 © あらゐけいいち・講談社／CITY THE ANIMATION 製作委員会',
   },
   en: {
-    menuLabel: 'Navigation Menu',
-    ecosystemHeading: 'CITY Fan Web Projects & Source',
-    currentSiteBadge: 'Current',
-    sisterSiteBadge: 'Sister Site',
-    openSite: 'Open Site',
-    visitCurrentDomain: 'Live URL',
-    sourceCode: 'GitHub Repo',
+    menuLabel: 'Menu',
     sourceShort: 'GitHub',
     awesomeRepo: 'Awesome CITY',
     officialSite: 'Official Site',
     disclaimer:
-      'Unofficial fan-made interactive project · Original characters © Keiichi Arawi · Kodansha / CITY THE ANIMATION',
+      'Unofficial fan-made tool · Original characters © Keiichi Arawi · Kodansha / CITY THE ANIMATION',
   },
   ja: {
     menuLabel: 'メニュー',
-    ecosystemHeading: 'CITY 関連サイト＆ソースコード',
-    currentSiteBadge: '表示中',
-    sisterSiteBadge: '姉妹サイト',
-    openSite: 'サイトを開く',
-    visitCurrentDomain: '公開 URL',
-    sourceCode: 'GitHub ソース',
     sourceShort: 'GitHub',
     awesomeRepo: 'Awesome CITY',
     officialSite: '公式サイト',
     disclaimer:
-      '非公式ファンツール · 原作キャラクター等 © あらゐけいいち・講談社／CITY THE ANIMATION 製作委員会',
+      '非公式ファンツール · 原作 © あらゐけいいち・講談社／CITY THE ANIMATION 製作委員会',
   },
 };

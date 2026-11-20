@@ -97,20 +97,6 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
       },
       {
         title: {
-          zh: "CITY Avatar · 《小城日常》风格头像工坊",
-          en: "CITY Avatar · Official-Style Avatar Studio",
-          ja: "CITY Avatar · 『CITY』風アイコン工房",
-        },
-        description: {
-          zh: "姊妹交互项目：上传人物或宠物照片，通过 Cloudflare Workers AI 重绘为官网角色卡风格头像。",
-          en: "Sister project: stylize any person or pet photo into a CITY official-style cel avatar via Workers AI.",
-          ja: "姉妹プロジェクト：人物やペットの写真を『CITY』公式サイト風アイコンへAI変換。",
-        },
-        url: "https://avatar.city.chius.dev",
-        tag: "AVATAR",
-      },
-      {
-        title: {
           zh: "awesome-citytheanimation 资源仓库",
           en: "awesome-citytheanimation (GitHub)",
           ja: "awesome-citytheanimation（GitHub）",
