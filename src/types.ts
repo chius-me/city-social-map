@@ -69,10 +69,6 @@ export interface Character {
   tagline?: LocalizedText;
   /** Rich character bio */
   bio: LocalizedText;
-  /** Optional spoiler-free alternate bio & title for Spoiler-Free Mode */
-  spoilerSafeName?: LocalizedText;
-  spoilerSafeBio?: LocalizedText;
-  hasSpoiler?: boolean;
   /** Short comic badge (e.g. "#28", "11F", "CAT") */
   badge?: string;
   /** Featured on city-the-animation.com official character page */

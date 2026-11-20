@@ -39,7 +39,6 @@ export default function App() {
   const [locale, setLocale] = useState<Locale>("zh");
   const [viewMode, setViewMode] = useState<ViewMode>(initialHash.viewMode);
   const [egoCenterId, setEgoCenterId] = useState<string>(initialHash.charId ?? "nagumo");
-  const [spoilerFree, setSpoilerFree] = useState<boolean>(false);
 
   const [visibleRelationTypes, setVisibleRelationTypes] = useState<Record<RelationType, boolean>>({
     children: true,
@@ -89,6 +88,7 @@ export default function App() {
 
   const selectedCharacter = selectedCharacterId ? CHARACTER_MAP[selectedCharacterId] ?? null : null;
   const selectedFaction = selectedFactionId ? FACTION_MAP[selectedFactionId] ?? null : null;
+  const drawerOpen = Boolean(selectedCharacter || selectedFaction);
 
   const activePath = useMemo(() => {
     if (!pathMode || !pathStartId || !pathEndId) return null;
@@ -259,8 +259,6 @@ export default function App() {
         onChangeLocale={setLocale}
         viewMode={viewMode}
         onChangeViewMode={handleChangeViewMode}
-        spoilerFree={spoilerFree}
-        onToggleSpoilerFree={() => setSpoilerFree((v) => !v)}
         directoryOpen={directoryOpen}
         onToggleDirectory={() => {
           setMenuOpen(false);
@@ -296,7 +294,7 @@ export default function App() {
       {viewMode === "map" ? (
         <SocialMapCanvas
           locale={locale}
-          spoilerFree={spoilerFree}
+          drawerOpen={drawerOpen}
           visibleRelationTypes={visibleRelationTypes}
           onToggleRelationType={handleToggleRelationType}
           selectedCharacterId={selectedCharacterId}
@@ -315,7 +313,7 @@ export default function App() {
       ) : (
         <CharacterNetworkCanvas
           locale={locale}
-          spoilerFree={spoilerFree}
+          drawerOpen={drawerOpen}
           initialSubMode={initialHash.subMode}
           egoCenterId={egoCenterId}
           onChangeEgoCenter={(cid) => {
@@ -341,7 +339,7 @@ export default function App() {
       {pathMode && !menuOpen && !directoryOpen && (
         <PathFinderBar
           locale={locale}
-          spoilerFree={spoilerFree}
+          drawerOpen={drawerOpen}
           startId={pathStartId}
           endId={pathEndId}
           result={activePath}
@@ -360,7 +358,6 @@ export default function App() {
       {!menuOpen && !directoryOpen && (
         <DetailDrawer
           locale={locale}
-          spoilerFree={spoilerFree}
           character={selectedCharacter}
           faction={selectedFaction}
           onClose={handleClearSelection}
@@ -376,7 +373,6 @@ export default function App() {
       {!menuOpen && !directoryOpen && (
         <BottomControls
           locale={locale}
-          spoilerFree={spoilerFree}
           viewMode={viewMode}
           visibleRelationTypes={visibleRelationTypes}
           onToggleRelationType={handleToggleRelationType}
@@ -386,7 +382,7 @@ export default function App() {
           onZoomIn={() => cameraRef.current?.zoomIn()}
           onZoomOut={() => cameraRef.current?.zoomOut()}
           onResetView={() => cameraRef.current?.resetView()}
-          drawerOpen={Boolean(selectedCharacter || selectedFaction)}
+          drawerOpen={drawerOpen}
           searchInputRef={searchInputRef}
         />
       )}
@@ -395,7 +391,6 @@ export default function App() {
       <DirectoryModal
         open={directoryOpen}
         locale={locale}
-        spoilerFree={spoilerFree}
         onClose={() => setDirectoryOpen(false)}
         onPickCharacter={handleLocateCharacter}
       />
@@ -404,8 +399,6 @@ export default function App() {
       <MenuOverlay
         open={menuOpen}
         locale={locale}
-        spoilerFree={spoilerFree}
-        onToggleSpoilerFree={() => setSpoilerFree((v) => !v)}
         onClose={() => setMenuOpen(false)}
         onOpenMap={() => {
           setDirectoryOpen(false);

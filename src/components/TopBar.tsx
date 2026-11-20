@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, Compass, Eye, EyeOff, Map, Route } from "lucide-react";
+import { BookOpen, Compass, Map, Route } from "lucide-react";
 import type { Locale } from "../types";
 import { UI_TEXT } from "../data/i18n";
 import { CityLogo } from "./CityLogo";
@@ -11,8 +11,6 @@ interface TopBarProps {
   onChangeLocale: (l: Locale) => void;
   viewMode: ViewMode;
   onChangeViewMode: (m: ViewMode) => void;
-  spoilerFree: boolean;
-  onToggleSpoilerFree: () => void;
   directoryOpen: boolean;
   onToggleDirectory: () => void;
   pathMode: boolean;
@@ -27,8 +25,6 @@ export const TopBar: React.FC<TopBarProps> = ({
   onChangeLocale,
   viewMode,
   onChangeViewMode,
-  spoilerFree,
-  onToggleSpoilerFree,
   directoryOpen,
   onToggleDirectory,
   pathMode,
@@ -58,8 +54,8 @@ export const TopBar: React.FC<TopBarProps> = ({
 
       {/* Top-Right Official-Site-Inspired Rounded-Bottom-Left Shelf */}
       <div className="fixed top-0 right-0 z-50 flex items-center gap-1.5 sm:gap-2.5 pl-3 sm:pl-5 pr-2.5 sm:pr-4 py-2 sm:py-2.5 city-top-shelf pointer-events-auto">
-        {/* Desktop Mode Switcher Pills */}
-        <nav className="hidden lg:flex items-center gap-1 bg-[#F4F3EE] p-1 rounded-full border-2 border-[#141419]">
+        {/* Desktop & Tablet Mode Switcher Pills */}
+        <nav className="hidden md:flex items-center gap-1 bg-[#F4F3EE] p-1 rounded-full border-2 border-[#141419]">
           <button
             type="button"
             onClick={() => {
@@ -118,8 +114,8 @@ export const TopBar: React.FC<TopBarProps> = ({
           </button>
         </nav>
 
-        {/* Compact Mobile / Tablet Quick View Toggle (Map <-> Ego Radar) */}
-        <div className="flex lg:hidden items-center gap-1">
+        {/* Compact Mobile Quick View Toggle (Map <-> Ego Radar) */}
+        <div className="flex md:hidden items-center gap-1">
           <button
             type="button"
             onClick={() => {
@@ -138,17 +134,17 @@ export const TopBar: React.FC<TopBarProps> = ({
             {viewMode === "map" ? (
               <>
                 <Compass className="w-3.5 h-3.5" />
-                <span className="hidden xs:inline sm:inline">{t.networkTab}</span>
+                <span className="hidden sm:inline">{t.networkTab}</span>
               </>
             ) : (
               <>
                 <Map className="w-3.5 h-3.5" />
-                <span className="hidden xs:inline sm:inline">{t.mapTab}</span>
+                <span className="hidden sm:inline">{t.mapTab}</span>
               </>
             )}
           </button>
 
-          {/* Tablet-only Directory & Path icons */}
+          {/* Small-tablet Directory & Path icons */}
           <button
             type="button"
             onClick={onToggleDirectory}
@@ -172,24 +168,6 @@ export const TopBar: React.FC<TopBarProps> = ({
             <Route className="w-4 h-4" />
           </button>
         </div>
-
-        {/* Spoiler-Free Mode Toggle (Desktop pill / Tablet icon) */}
-        <button
-          type="button"
-          onClick={onToggleSpoilerFree}
-          title={spoilerFree ? t.spoilerFreeOn : t.spoilerFreeOff}
-          aria-pressed={spoilerFree}
-          className={`hidden md:flex items-center gap-1 px-2.5 py-1.5 rounded-full border-2 border-[#141419] text-[11px] font-extrabold cursor-pointer transition-colors ${
-            spoilerFree
-              ? "bg-[#33333F] text-[#99CB77]"
-              : "bg-white text-[#141419] hover:bg-[#FFF6E0]"
-          }`}
-        >
-          {spoilerFree ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-          <span className="hidden xl:inline">
-            {spoilerFree ? t.spoilerFreeOn : t.spoilerFreeOff}
-          </span>
-        </button>
 
         {/* Trilingual Switcher (中文 / EN / 日本語) */}
         <div

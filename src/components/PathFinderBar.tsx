@@ -4,12 +4,11 @@ import type { Character, Locale } from "../types";
 import { CHARACTERS, CHARACTER_MAP } from "../data/characters";
 import { FACTION_MAP } from "../data/factions";
 import { UI_TEXT, pickText } from "../data/i18n";
-import { getDisplayFullName, getDisplayMapName } from "../utils/display";
 import type { PathResult } from "../utils/pathfinding";
 
 interface PathFinderBarProps {
   locale: Locale;
-  spoilerFree: boolean;
+  drawerOpen?: boolean;
   startId: string | null;
   endId: string | null;
   result: PathResult | null;
@@ -22,7 +21,7 @@ interface PathFinderBarProps {
 
 export const PathFinderBar: React.FC<PathFinderBarProps> = ({
   locale,
-  spoilerFree,
+  drawerOpen = false,
   startId,
   endId,
   result,
@@ -37,15 +36,17 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
   const sortedChars = React.useMemo(
     () =>
       [...CHARACTERS].sort((a, b) =>
-        getDisplayMapName(a, locale, spoilerFree).localeCompare(
-          getDisplayMapName(b, locale, spoilerFree)
-        )
+        pickText(a.mapName, locale).localeCompare(pickText(b.mapName, locale))
       ),
-    [locale, spoilerFree]
+    [locale]
   );
 
   return (
-    <div className="fixed top-[72px] left-1/2 -translate-x-1/2 z-40 w-[calc(100vw-1.5rem)] max-w-2xl pointer-events-auto">
+    <div
+      className={`fixed top-[72px] -translate-x-1/2 z-40 w-[calc(100vw-1.5rem)] pointer-events-auto transition-[left] duration-300 ${
+        drawerOpen ? "left-1/2 lg:left-[calc(50%-200px)] max-w-xl" : "left-1/2 max-w-2xl"
+      }`}
+    >
       <div className="bg-white/96 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 city-ink-card">
         <div className="flex items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-2">
@@ -81,7 +82,7 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
             <option value="">{t.pathFrom}…</option>
             {sortedChars.map((c) => (
               <option key={c.id} value={c.id}>
-                {getDisplayFullName(c, locale, spoilerFree)}
+                {pickText(c.fullName, locale)}
               </option>
             ))}
           </select>
@@ -105,7 +106,7 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
             <option value="">{t.pathTo}…</option>
             {sortedChars.map((c) => (
               <option key={c.id} value={c.id}>
-                {getDisplayFullName(c, locale, spoilerFree)}
+                {pickText(c.fullName, locale)}
               </option>
             ))}
           </select>
@@ -193,7 +194,7 @@ export const PathFinderBar: React.FC<PathFinderBarProps> = ({
                             alt=""
                             className="w-5 h-5 rounded-full object-cover border border-[#141419] bg-white"
                           />
-                          <span>{getDisplayMapName(char, locale, spoilerFree)}</span>
+                          <span>{pickText(char.mapName, locale)}</span>
                         </button>
                         {stepLabel && (
                           <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#5A5A6A]">

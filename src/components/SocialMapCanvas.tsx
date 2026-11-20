@@ -4,7 +4,6 @@ import { CHARACTERS, CHARACTER_MAP } from "../data/characters";
 import { FACTIONS, FACTION_MAP } from "../data/factions";
 import { EDGES } from "../data/edges";
 import { UI_TEXT, pickText } from "../data/i18n";
-import { getDisplayBadge, getDisplayMapName } from "../utils/display";
 import type { PathResult } from "../utils/pathfinding";
 
 export const MAP_WIDTH = 1776;
@@ -22,7 +21,7 @@ export interface MapCameraHandle {
 
 interface SocialMapCanvasProps {
   locale: Locale;
-  spoilerFree: boolean;
+  drawerOpen?: boolean;
   visibleRelationTypes: Record<RelationType, boolean>;
   onToggleRelationType: (t: RelationType) => void;
   selectedCharacterId: string | null;
@@ -105,7 +104,7 @@ function getEdgeHighlightColor(type: RelationType): string {
 
 export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
   locale,
-  spoilerFree,
+  drawerOpen = false,
   visibleRelationTypes,
   onToggleRelationType,
   selectedCharacterId,
@@ -154,30 +153,29 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
 
   const clampScale = (s: number) => Math.max(0.18, Math.min(2.6, s));
 
-  const computeFitTransform = useCallback(() => {
-    const el = viewportRef.current;
-    if (!el) return { x: 0, y: 0, scale: 0.72 };
-    const vw = el.clientWidth;
-    const vh = el.clientHeight;
-    const padX = vw < 640 ? 10 : 44;
-    const padTop = vw < 640 ? 68 : 78;
-    const padBottom = vw < 640 ? 78 : 88;
-    const availW = Math.max(160, vw - padX * 2);
-    const availH = Math.max(160, vh - padTop - padBottom);
-    const scale = clampScale(Math.min(availW / MAP_WIDTH, availH / MAP_HEIGHT));
-    const x = (vw - MAP_WIDTH * scale) / 2;
-    const y = padTop + (availH - MAP_HEIGHT * scale) / 2;
-    return { x, y, scale };
-  }, []);
+  const computeFitTransform = useCallback(
+    (accountForDrawer = drawerOpen) => {
+      const el = viewportRef.current;
+      if (!el) return { x: 0, y: 0, scale: 0.72 };
+      const vw = el.clientWidth;
+      const vh = el.clientHeight;
+      const padX = vw < 640 ? 12 : 44;
+      const padTop = vw < 640 ? 70 : 86;
+      const padBottom = vw < 640 ? 80 : 96;
+      const effectiveW = vw >= 1024 && accountForDrawer ? vw - 400 : vw;
+      const availW = Math.max(160, effectiveW - padX * 2);
+      const availH = Math.max(160, vh - padTop - padBottom);
+      const scale = clampScale(Math.min(availW / MAP_WIDTH, availH / MAP_HEIGHT));
+      const x = (effectiveW - MAP_WIDTH * scale) / 2;
+      const y = padTop + (availH - MAP_HEIGHT * scale) / 2;
+      return { x, y, scale };
+    },
+    [drawerOpen]
+  );
 
   useEffect(() => {
-    setCamera(computeFitTransform());
-    const onResize = () => {
-      // Keep user's current position if already zoomed in; only refit gently on resize if near fit
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [computeFitTransform]);
+    setCamera(computeFitTransform(false));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const animateTo = useCallback((next: { x: number; y: number; scale: number }) => {
     setIsAnimating(true);
@@ -214,10 +212,10 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
         if (!el) return;
         const vw = el.clientWidth;
         const vh = el.clientHeight;
-        // Offset center slightly left on desktop if drawer is likely open
-        const centerX = vw >= 1024 ? vw * 0.44 : vw * 0.5;
-        const centerY = vh * 0.5;
-        const s = clampScale(vw < 640 ? Math.min(targetScale, 1.05) : targetScale);
+        // Center in the open canvas area beside DetailDrawer
+        const centerX = vw >= 1024 ? (vw - 400) / 2 : vw * 0.5;
+        const centerY = vw < 640 ? vh * 0.24 : vh * 0.5;
+        const s = clampScale(vw < 640 ? Math.min(targetScale, 0.95) : targetScale);
         animateTo({
           x: centerX - wx * s,
           y: centerY - wy * s,
@@ -229,17 +227,19 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
         if (!el) return;
         const vw = el.clientWidth;
         const vh = el.clientHeight;
-        const padX = vw < 640 ? 24 : 96;
+        const padX = vw < 640 ? 24 : 56;
         const padY = 96;
-        const availW = vw >= 1024 ? vw * 0.72 - padX : vw - padX * 2;
-        const availH = vh - padY * 2;
+        const effectiveW = vw >= 1024 ? vw - 400 : vw;
+        const availW = effectiveW - padX * 2;
+        const availH = vw < 640 ? vh * 0.36 - 24 : vh - padY * 2;
         const s = clampScale(Math.min(availW / bounds.width, availH / bounds.height, 1.6));
         const cx = bounds.x + bounds.width / 2;
         const cy = bounds.y + bounds.height / 2;
-        const targetCenterX = vw >= 1024 ? vw * 0.44 : vw * 0.5;
+        const targetCenterX = vw >= 1024 ? effectiveW / 2 : vw * 0.5;
+        const targetCenterY = vw < 640 ? vh * 0.24 : vh * 0.5;
         animateTo({
           x: targetCenterX - cx * s,
-          y: vh * 0.5 - cy * s,
+          y: targetCenterY - cy * s,
           scale: s,
         });
       },
@@ -1140,8 +1140,8 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
           {/* ============================================================== */}
           <g className="characters-layer">
             {CHARACTERS.map((char) => {
-              const name = getDisplayMapName(char, locale, spoilerFree);
-              const badge = getDisplayBadge(char, spoilerFree);
+              const name = pickText(char.mapName, locale);
+              const badge = char.badge;
               const w = char.width ?? Math.max(94, name.length * 14 + 34);
               const halfW = w / 2;
               const halfH = PILL_HEIGHT / 2;
@@ -1334,7 +1334,9 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
       {/* Floating Edge Story Banner (bottom-center when hovering/selecting an edge) */}
       {activeEdgeObject && (
         <div
-          className="pointer-events-auto fixed bottom-24 left-1/2 -translate-x-1/2 z-30 max-w-md w-[calc(100vw-2rem)]"
+          className={`pointer-events-auto fixed bottom-20 -translate-x-1/2 z-30 max-w-md w-[calc(100vw-2rem)] transition-[left] duration-300 ${
+            drawerOpen ? "left-1/2 lg:left-[calc(50%-200px)]" : "left-1/2"
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="bg-[#33333F] text-white rounded-2xl px-4 py-3 city-ink-card-sm">
@@ -1346,11 +1348,7 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
                   className="w-5 h-5 rounded-full border border-white/60 object-cover"
                 />
                 <span className="px-2 py-0.5 rounded-full bg-[#F7B647] text-[#141419]">
-                  {getDisplayMapName(
-                    CHARACTER_MAP[activeEdgeObject.from],
-                    locale,
-                    spoilerFree
-                  )}
+                  {pickText(CHARACTER_MAP[activeEdgeObject.from].mapName, locale)}
                 </span>
                 <span className="text-[#F09CB4]">
                   {activeEdgeObject.bidirectional
@@ -1365,11 +1363,7 @@ export const SocialMapCanvas: React.FC<SocialMapCanvasProps> = ({
                   className="w-5 h-5 rounded-full border border-white/60 object-cover"
                 />
                 <span className="px-2 py-0.5 rounded-full bg-[#99CB77] text-[#141419]">
-                  {getDisplayMapName(
-                    CHARACTER_MAP[activeEdgeObject.to],
-                    locale,
-                    spoilerFree
-                  )}
+                  {pickText(CHARACTER_MAP[activeEdgeObject.to].mapName, locale)}
                 </span>
                 <span className="text-[#C4E4F5] ml-1">
                   ·{" "}

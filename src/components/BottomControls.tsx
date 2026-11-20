@@ -4,12 +4,10 @@ import type { Character, Faction, FactionId, Locale, RelationType } from "../typ
 import { CHARACTERS } from "../data/characters";
 import { FACTIONS, FACTION_MAP } from "../data/factions";
 import { UI_TEXT, pickText } from "../data/i18n";
-import { getDisplayBadge, getDisplayFullName, getDisplayMapName } from "../utils/display";
 import type { ViewMode } from "./TopBar";
 
 interface BottomControlsProps {
   locale: Locale;
-  spoilerFree: boolean;
   viewMode: ViewMode;
   visibleRelationTypes: Record<RelationType, boolean>;
   onToggleRelationType: (t: RelationType) => void;
@@ -45,7 +43,6 @@ const FEATURED_SLIDE_IDS = [
 
 export const BottomControls: React.FC<BottomControlsProps> = ({
   locale,
-  spoilerFree,
   viewMode,
   visibleRelationTypes,
   onToggleRelationType,
@@ -86,9 +83,6 @@ export const BottomControls: React.FC<BottomControlsProps> = ({
         c.fullName.zh,
         c.fullName.en,
         c.fullName.ja,
-        c.spoilerSafeName?.zh ?? "",
-        c.spoilerSafeName?.en ?? "",
-        c.spoilerSafeName?.ja ?? "",
         c.reading ?? "",
         c.cv?.zh ?? "",
         c.cv?.en ?? "",
@@ -127,7 +121,11 @@ export const BottomControls: React.FC<BottomControlsProps> = ({
   return (
     <>
       {/* Bottom-Left Compact Floating Filter & Faction Quick-Jump Dock */}
-      <div className="fixed bottom-3 left-3 sm:bottom-5 sm:left-5 z-30 flex flex-col items-start gap-2 pointer-events-auto">
+      <div
+        className={`${
+          drawerOpen ? "hidden sm:flex" : "flex"
+        } fixed bottom-3 left-3 sm:bottom-4 sm:left-4 z-40 flex-col items-start gap-2 pointer-events-auto`}
+      >
         {filterOpen && (
           <div className="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 w-72 sm:w-80 city-ink-card-sm max-h-[60vh] overflow-y-auto city-scroll">
             <div className="flex items-center justify-between mb-2">
@@ -249,7 +247,14 @@ export const BottomControls: React.FC<BottomControlsProps> = ({
       </div>
 
       {/* Bottom-Right Official-Site-Inspired Character Finder + Stacked Pill Zoom Controls */}
-      <div className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-30 flex items-end gap-2 sm:gap-3.5 pointer-events-auto">
+      {/* Automatically shifts cleanly left of DetailDrawer on desktop/tablet when a dossier is open! */}
+      <div
+        className={`fixed bottom-3 sm:bottom-4 z-40 items-end gap-2 sm:gap-3 pointer-events-auto transition-[right] duration-300 ${
+          drawerOpen
+            ? "hidden sm:flex sm:right-[392px] lg:right-[412px]"
+            : "flex right-3 sm:right-5"
+        }`}
+      >
         {/* Official `.controls-character` Character Search & Stepper Pill */}
         <div ref={searchBoxRef} className="relative flex flex-col items-end">
           {/* Search Autocomplete Popover with Circular Avatars */}
@@ -263,7 +268,6 @@ export const BottomControls: React.FC<BottomControlsProps> = ({
                 <ul className="divide-y divide-[#141419]/10 max-h-72 overflow-y-auto city-scroll">
                   {searchResults.map((c) => {
                     const fac = c.factions[0] ? FACTION_MAP[c.factions[0]] : null;
-                    const badge = getDisplayBadge(c, spoilerFree);
                     return (
                       <li key={c.id}>
                         <button
@@ -284,7 +288,7 @@ export const BottomControls: React.FC<BottomControlsProps> = ({
                             </div>
                             <div className="min-w-0">
                               <div className="text-xs font-extrabold text-[#141419] truncate">
-                                {getDisplayFullName(c, locale, spoilerFree)}
+                                {pickText(c.fullName, locale)}
                               </div>
                               <div className="text-[10.5px] text-[#666678] truncate">
                                 {pickText(c.role, locale)}
@@ -292,9 +296,9 @@ export const BottomControls: React.FC<BottomControlsProps> = ({
                               </div>
                             </div>
                           </div>
-                          {badge && (
+                          {c.badge && (
                             <span className="px-1.5 py-0.5 rounded-full bg-[#141419] text-white text-[10px] font-extrabold shrink-0">
-                              {badge}
+                              {c.badge}
                             </span>
                           )}
                         </button>
@@ -321,8 +325,8 @@ export const BottomControls: React.FC<BottomControlsProps> = ({
 
           {/* `.controls-character-block` rounded white pill */}
           <div className="bg-white/95 backdrop-blur-md p-1.5 pl-2.5 rounded-full city-ink-pill flex items-center gap-1.5 sm:gap-2">
-            {/* Prev/Next Featured Character Cycler with mini avatar (hidden when typing) */}
-            {query.trim().length === 0 && (
+            {/* Prev/Next Featured Character Cycler with mini avatar (hidden when typing or when drawerOpen keeps search compact) */}
+            {!drawerOpen && query.trim().length === 0 && (
               <div className="hidden sm:flex items-center gap-1 pr-1.5 border-r border-[#141419]/15">
                 <button
                   type="button"
@@ -345,9 +349,7 @@ export const BottomControls: React.FC<BottomControlsProps> = ({
                     alt=""
                     className="w-6 h-6 rounded-full object-cover border-[1.5px] border-[#141419] shrink-0 bg-white"
                   />
-                  <span className="truncate">
-                    {getDisplayMapName(currentSlideChar, locale, spoilerFree)}
-                  </span>
+                  <span className="truncate">{pickText(currentSlideChar.mapName, locale)}</span>
                 </button>
                 <button
                   type="button"
@@ -381,7 +383,9 @@ export const BottomControls: React.FC<BottomControlsProps> = ({
                   }
                 }}
                 placeholder={t.searchPlaceholder}
-                className="w-28 sm:w-44 md:w-52 bg-transparent text-xs font-bold text-[#141419] placeholder:text-[#8A8A9C] focus:outline-none px-1.5 py-1"
+                className={`${
+                  drawerOpen ? "w-36 md:w-48" : "w-28 sm:w-40 md:w-48"
+                } bg-transparent text-xs font-bold text-[#141419] placeholder:text-[#8A8A9C] focus:outline-none px-1.5 py-1`}
               />
               {query && (
                 <button

@@ -2,7 +2,6 @@ import React, { useMemo, useState } from "react";
 import {
   Compass,
   Crosshair,
-  EyeOff,
   ExternalLink,
   Flag,
   MapPin,
@@ -17,13 +16,6 @@ import { CHARACTERS, CHARACTER_MAP } from "../data/characters";
 import { FACTION_MAP } from "../data/factions";
 import { EDGES } from "../data/edges";
 import { RELATION_CATEGORY_META, UI_TEXT, pickText } from "../data/i18n";
-import {
-  getDisplayBadge,
-  getDisplayBio,
-  getDisplayFullName,
-  getDisplayMapName,
-  getDisplayTagline,
-} from "../utils/display";
 
 const CATEGORY_ORDER: RelationCategory[] = [
   "family",
@@ -36,7 +28,6 @@ const CATEGORY_ORDER: RelationCategory[] = [
 
 interface DetailDrawerProps {
   locale: Locale;
-  spoilerFree: boolean;
   character: Character | null;
   faction: Faction | null;
   onClose: () => void;
@@ -49,7 +40,6 @@ interface DetailDrawerProps {
 
 export const DetailDrawer: React.FC<DetailDrawerProps> = ({
   locale,
-  spoilerFree,
   character,
   faction,
   onClose,
@@ -105,7 +95,7 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
   return (
     <>
       <aside
-        className="fixed top-[70px] right-3 sm:right-4 bottom-24 sm:bottom-[166px] z-40 w-[calc(100vw-1.5rem)] sm:w-[392px] pointer-events-auto flex flex-col"
+        className="fixed left-2.5 right-2.5 sm:left-auto sm:right-4 bottom-2.5 sm:bottom-4 top-auto sm:top-[72px] h-[62vh] max-h-[520px] sm:h-auto sm:max-h-none z-40 sm:z-30 sm:w-[364px] lg:w-[384px] pointer-events-auto flex flex-col"
         aria-label="Details"
       >
         {/* Official rotating 4-color conic-gradient border frame (.page-frame) */}
@@ -114,7 +104,6 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
             {character ? (
               <CharacterPanel
                 locale={locale}
-                spoilerFree={spoilerFree}
                 t={t}
                 character={character}
                 connections={connections}
@@ -129,7 +118,6 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
             ) : faction ? (
               <FactionPanel
                 locale={locale}
-                spoilerFree={spoilerFree}
                 t={t}
                 faction={faction}
                 members={factionMembers}
@@ -162,15 +150,15 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
               </button>
               <img
                 src={character.avatar}
-                alt={getDisplayFullName(character, locale, spoilerFree)}
+                alt={pickText(character.fullName, locale)}
                 className="w-44 h-44 rounded-full object-cover border-[3.5px] border-[#141419] shadow-[4px_4px_0_#141419] bg-white"
               />
               <div>
-                {character.reading && !(spoilerFree && character.hasSpoiler) && (
+                {character.reading && (
                   <div className="text-xs font-bold text-[#666678]">{character.reading}</div>
                 )}
                 <div className="text-xl font-black text-[#141419]">
-                  {getDisplayFullName(character, locale, spoilerFree)}
+                  {pickText(character.fullName, locale)}
                 </div>
                 {character.cv && (
                   <div className="mt-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FFF4D6] border border-[#F7B647] text-xs font-extrabold text-[#141419]">
@@ -189,7 +177,6 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
 
 interface CharacterPanelProps {
   locale: Locale;
-  spoilerFree: boolean;
   t: (typeof UI_TEXT)[Locale];
   character: Character;
   connections: {
@@ -208,7 +195,6 @@ interface CharacterPanelProps {
 
 const CharacterPanel: React.FC<CharacterPanelProps> = ({
   locale,
-  spoilerFree,
   t,
   character,
   connections,
@@ -224,11 +210,6 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
   const headerBg = primaryFaction ? primaryFaction.fill : "#E6F4FD";
   const accentColor = primaryFaction ? primaryFaction.accent : "#1395EA";
   const isJohnLennon = character.id === "john-lennon";
-
-  const displayFullName = getDisplayFullName(character, locale, spoilerFree);
-  const displayBio = getDisplayBio(character, locale, spoilerFree);
-  const displayTagline = getDisplayTagline(character, locale, spoilerFree);
-  const displayBadge = getDisplayBadge(character, spoilerFree);
 
   // Group connections by semantic RelationCategory (FandomGraph style!)
   const groupedConnections = useMemo(() => {
@@ -250,7 +231,7 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
     <>
       {/* Header Banner with Crisp Character Portrait Avatar */}
       <div
-        className="relative px-5 pt-4 pb-4 border-b-[2.5px] border-[#141419]"
+        className="relative px-4 pt-3.5 pb-3.5 border-b-[2.5px] border-[#141419]"
         style={{ backgroundColor: headerBg }}
       >
         <button
@@ -263,7 +244,7 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
         </button>
 
         {/* Faction badges */}
-        <div className="flex flex-wrap items-center gap-1.5 pr-9 mb-2.5">
+        <div className="flex flex-wrap items-center gap-1.5 pr-9 mb-2">
           {character.factions.length > 0 ? (
             character.factions.map((fid) => {
               const f = FACTION_MAP[fid];
@@ -284,15 +265,9 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
               {t.soloResident}
             </span>
           )}
-          {displayBadge && (
+          {character.badge && (
             <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#141419] text-[#F7B647]">
-              {displayBadge}
-            </span>
-          )}
-          {spoilerFree && character.hasSpoiler && (
-            <span className="px-2 py-0.5 rounded-full text-[10.5px] font-extrabold bg-[#33333F] text-[#99CB77] inline-flex items-center gap-1">
-              <EyeOff className="w-3 h-3" />
-              <span>{t.spoilerBadge}</span>
+              {character.badge}
             </span>
           )}
         </div>
@@ -303,37 +278,31 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
             type="button"
             onClick={onOpenLightbox}
             className="relative shrink-0 group cursor-zoom-in focus:outline-none"
-            title={displayFullName}
+            title={pickText(character.fullName, locale)}
           >
             <div
-              className="w-[74px] h-[74px] rounded-full p-[3px] border-[2.5px] border-[#141419] shadow-[3px_3px_0_#141419] transition-transform group-hover:scale-105 bg-white"
+              className="w-[70px] h-[70px] rounded-full p-[3px] border-[2.5px] border-[#141419] shadow-[3px_3px_0_#141419] transition-transform group-hover:scale-105 bg-white"
               style={{ borderColor: "#141419", backgroundColor: accentColor }}
             >
               <img
                 src={character.avatar}
-                alt={displayFullName}
+                alt={pickText(character.fullName, locale)}
                 className="w-full h-full rounded-full object-cover bg-white border border-[#141419]/30"
               />
             </div>
           </button>
 
           <div className="min-w-0 flex-1">
-            {character.reading && !(spoilerFree && character.hasSpoiler) && (
+            {character.reading && (
               <div className="text-[11px] font-bold text-[#141419]/65 tracking-wider">
                 {character.reading}
               </div>
             )}
             <h2 className="text-xl font-black text-[#141419] leading-tight">
-              {displayFullName}
+              {pickText(character.fullName, locale)}
             </h2>
             <div className="text-xs font-bold text-[#141419]/70 mt-0.5 truncate">
-              {spoilerFree && character.spoilerSafeName
-                ? locale === "zh"
-                  ? `${character.spoilerSafeName.ja} · ${character.spoilerSafeName.en}`
-                  : locale === "ja"
-                  ? `${character.spoilerSafeName.en} · ${character.spoilerSafeName.zh}`
-                  : `${character.spoilerSafeName.ja} · ${character.spoilerSafeName.zh}`
-                : locale === "zh"
+              {locale === "zh"
                 ? `${character.fullName.ja} · ${character.fullName.en}`
                 : locale === "ja"
                 ? `${character.fullName.en} · ${character.fullName.zh}`
@@ -351,7 +320,7 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
       </div>
 
       {/* Scrollable Body */}
-      <div className="flex-1 overflow-y-auto city-scroll px-5 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto city-scroll px-4 py-3.5 space-y-3.5">
         {/* Role & CV Grid */}
         <div className="grid grid-cols-1 gap-2">
           <div className="bg-white rounded-xl p-2.5 border-2 border-[#141419]/15 flex items-start gap-2">
@@ -382,15 +351,15 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
         </div>
 
         {/* Official / Iconic Catchphrase & Bio in Official #33333F Commentary Bubble */}
-        <div className="bg-[#33333F] text-white rounded-2xl p-4 border-2 border-[#141419] relative">
-          {displayTagline && (
+        <div className="bg-[#33333F] text-white rounded-2xl p-3.5 border-2 border-[#141419] relative">
+          {character.tagline && (
             <div className="text-xs font-extrabold text-[#F7B647] mb-1.5 flex items-center gap-1.5">
               <span>★</span>
-              <span>{displayTagline}</span>
+              <span>{pickText(character.tagline, locale)}</span>
             </div>
           )}
           <p className="text-xs sm:text-[13px] leading-relaxed text-white/95">
-            {displayBio}
+            {pickText(character.bio, locale)}
           </p>
         </div>
 
@@ -452,10 +421,10 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
 
           {connections.length === 0 ? (
             <div className="rounded-xl border-2 border-dashed border-[#141419]/35 p-3.5 bg-white text-xs font-bold text-[#5A5A6A] leading-relaxed">
-              {isJohnLennon && !spoilerFree ? t.johnLennonEasterEgg : t.noConnections}
+              {isJohnLennon ? t.johnLennonEasterEgg : t.noConnections}
             </div>
           ) : (
-            <div className="space-y-3.5">
+            <div className="space-y-3">
               {/* Compact relation breakdown pills */}
               {groupedConnections.length > 1 && (
                 <div className="flex flex-wrap gap-1">
@@ -528,7 +497,7 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
                               >
                                 <img
                                   src={other.avatar}
-                                  alt={getDisplayFullName(other, locale, spoilerFree)}
+                                  alt={pickText(other.fullName, locale)}
                                   className="w-full h-full rounded-full object-cover bg-white"
                                   loading="lazy"
                                 />
@@ -544,7 +513,7 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
                                       {arrow}
                                     </span>
                                     <span className="text-xs font-extrabold text-[#141419] truncate group-hover:underline">
-                                      {getDisplayFullName(other, locale, spoilerFree)}
+                                      {pickText(other.fullName, locale)}
                                     </span>
                                   </div>
                                   <span
@@ -604,7 +573,6 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({
 
 interface FactionPanelProps {
   locale: Locale;
-  spoilerFree: boolean;
   t: (typeof UI_TEXT)[Locale];
   faction: Faction;
   members: Character[];
@@ -614,7 +582,6 @@ interface FactionPanelProps {
 
 const FactionPanel: React.FC<FactionPanelProps> = ({
   locale,
-  spoilerFree,
   t,
   faction,
   members,
@@ -624,7 +591,7 @@ const FactionPanel: React.FC<FactionPanelProps> = ({
   return (
     <>
       <div
-        className="relative px-5 pt-4 pb-4 border-b-[2.5px] border-[#141419]"
+        className="relative px-4 pt-3.5 pb-3.5 border-b-[2.5px] border-[#141419]"
         style={{ backgroundColor: faction.fill }}
       >
         <button
@@ -651,13 +618,13 @@ const FactionPanel: React.FC<FactionPanelProps> = ({
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto city-scroll px-5 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto city-scroll px-4 py-3.5 space-y-3.5">
         <div className="bg-white rounded-xl p-2.5 border-2 border-[#141419]/15 flex items-center gap-2 text-xs font-extrabold">
           <MapPin className="w-4 h-4 text-[#8CC466] shrink-0" />
           <span>{pickText(faction.location, locale)}</span>
         </div>
 
-        <div className="bg-[#33333F] text-white rounded-2xl p-4 border-2 border-[#141419]">
+        <div className="bg-[#33333F] text-white rounded-2xl p-3.5 border-2 border-[#141419]">
           <p className="text-xs sm:text-[13px] leading-relaxed text-white/95">
             {pickText(faction.description, locale)}
           </p>
@@ -674,39 +641,34 @@ const FactionPanel: React.FC<FactionPanelProps> = ({
             </span>
           </h3>
           <div className="grid grid-cols-2 gap-2">
-            {members.map((m) => {
-              const badge = getDisplayBadge(m, spoilerFree);
-              return (
-                <button
-                  key={m.id}
-                  type="button"
-                  onClick={() => onSelectCharacter(m)}
-                  className="px-2.5 py-2 rounded-xl border-2 border-[#141419] bg-white hover:bg-[#FFF6E0] text-left transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
-                >
-                  <img
-                    src={m.avatar}
-                    alt={getDisplayMapName(m, locale, spoilerFree)}
-                    className="w-8 h-8 rounded-full object-cover border-[1.8px] border-[#141419] shrink-0 bg-white"
-                    loading="lazy"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="text-xs font-extrabold text-[#141419] truncate flex items-center justify-between gap-1">
-                      <span className="truncate">
-                        {getDisplayMapName(m, locale, spoilerFree)}
+            {members.map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => onSelectCharacter(m)}
+                className="px-2.5 py-2 rounded-xl border-2 border-[#141419] bg-white hover:bg-[#FFF6E0] text-left transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+              >
+                <img
+                  src={m.avatar}
+                  alt={pickText(m.mapName, locale)}
+                  className="w-8 h-8 rounded-full object-cover border-[1.8px] border-[#141419] shrink-0 bg-white"
+                  loading="lazy"
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs font-extrabold text-[#141419] truncate flex items-center justify-between gap-1">
+                    <span className="truncate">{pickText(m.mapName, locale)}</span>
+                    {m.badge && (
+                      <span className="px-1.5 py-0.2 rounded-full bg-[#141419] text-[#F7B647] text-[9px] shrink-0">
+                        {m.badge}
                       </span>
-                      {badge && (
-                        <span className="px-1.5 py-0.2 rounded-full bg-[#141419] text-[#F7B647] text-[9px] shrink-0">
-                          {badge}
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-[10px] font-bold text-[#666678] truncate mt-0.5">
-                      {m.cv ? `CV: ${pickText(m.cv, locale)}` : pickText(m.role, locale)}
-                    </div>
+                    )}
                   </div>
-                </button>
-              );
-            })}
+                  <div className="text-[10px] font-bold text-[#666678] truncate mt-0.5">
+                    {m.cv ? `CV: ${pickText(m.cv, locale)}` : pickText(m.role, locale)}
+                  </div>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
 

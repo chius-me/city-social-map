@@ -2,8 +2,6 @@ import React from "react";
 import {
   BookOpen,
   Compass,
-  Eye,
-  EyeOff,
   ExternalLink,
   Keyboard,
   Map,
@@ -18,8 +16,6 @@ import { CityLogo, MiminekoMascot } from "./CityLogo";
 interface MenuOverlayProps {
   open: boolean;
   locale: Locale;
-  spoilerFree: boolean;
-  onToggleSpoilerFree: () => void;
   onClose: () => void;
   onOpenMap: () => void;
   onOpenNetwork: () => void;
@@ -30,8 +26,6 @@ interface MenuOverlayProps {
 export const MenuOverlay: React.FC<MenuOverlayProps> = ({
   open,
   locale,
-  spoilerFree,
-  onToggleSpoilerFree,
   onClose,
   onOpenMap,
   onOpenNetwork,
@@ -64,24 +58,6 @@ export const MenuOverlay: React.FC<MenuOverlayProps> = ({
             <p className="text-xs sm:text-sm font-bold text-[#444455] leading-relaxed">
               “{t.tagline}”
             </p>
-
-            {/* Spoiler-Free Toggle Switch (handy on mobile too!) */}
-            <button
-              type="button"
-              onClick={onToggleSpoilerFree}
-              className={`mt-1 px-3.5 py-2 rounded-full border-2 border-[#141419] text-xs font-extrabold flex items-center gap-2 cursor-pointer transition-colors shadow-[2.5px_2.5px_0_#141419] ${
-                spoilerFree
-                  ? "bg-[#33333F] text-[#99CB77]"
-                  : "bg-white text-[#141419] hover:bg-[#FFF6E0]"
-              }`}
-            >
-              {spoilerFree ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
-              <span>{spoilerFree ? t.spoilerFreeOn : t.spoilerFreeOff}</span>
-            </button>
           </div>
 
           {/* Official-Style Vibrant Navigation Tiles (.menu-list) */}

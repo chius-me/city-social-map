@@ -4,17 +4,10 @@ import type { Character, FactionId, Locale } from "../types";
 import { CHARACTERS } from "../data/characters";
 import { FACTIONS, FACTION_MAP } from "../data/factions";
 import { UI_TEXT, pickText } from "../data/i18n";
-import {
-  getDisplayBadge,
-  getDisplayBio,
-  getDisplayFullName,
-  getDisplayTagline,
-} from "../utils/display";
 
 interface DirectoryModalProps {
   open: boolean;
   locale: Locale;
-  spoilerFree: boolean;
   onClose: () => void;
   onPickCharacter: (char: Character) => void;
 }
@@ -22,7 +15,6 @@ interface DirectoryModalProps {
 export const DirectoryModal: React.FC<DirectoryModalProps> = ({
   open,
   locale,
-  spoilerFree,
   onClose,
   onPickCharacter,
 }) => {
@@ -51,9 +43,6 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
         c.fullName.zh,
         c.fullName.en,
         c.fullName.ja,
-        c.spoilerSafeName?.zh ?? "",
-        c.spoilerSafeName?.en ?? "",
-        c.spoilerSafeName?.ja ?? "",
         c.reading ?? "",
         c.cv?.zh ?? "",
         c.cv?.en ?? "",
@@ -183,10 +172,7 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
           <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filtered.map((char) => {
               const primary = char.factions[0] ? FACTION_MAP[char.factions[0]] : null;
-              const displayName = getDisplayFullName(char, locale, spoilerFree);
-              const displayBio = getDisplayBio(char, locale, spoilerFree);
-              const displayTagline = getDisplayTagline(char, locale, spoilerFree);
-              const displayBadge = getDisplayBadge(char, spoilerFree);
+              const displayName = pickText(char.fullName, locale);
 
               return (
                 <button
@@ -214,7 +200,7 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
                       />
                     </div>
                     <div className="min-w-0 flex-1">
-                      {char.reading && !(spoilerFree && char.hasSpoiler) && (
+                      {char.reading && (
                         <div className="text-[10px] font-bold text-[#141419]/65 truncate">
                           {char.reading}
                         </div>
@@ -223,9 +209,9 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
                         {displayName}
                       </div>
                     </div>
-                    {displayBadge && (
+                    {char.badge && (
                       <span className="px-2 py-0.5 rounded-full bg-[#141419] text-[#F7B647] text-[10.5px] font-extrabold shrink-0">
-                        {displayBadge}
+                        {char.badge}
                       </span>
                     )}
                   </div>
@@ -259,14 +245,14 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
                       <span className="truncate">{pickText(char.role, locale)}</span>
                     </div>
 
-                    {displayTagline && (
+                    {char.tagline && (
                       <div className="text-xs font-extrabold text-[#DD5549]">
-                        “{displayTagline}”
+                        “{pickText(char.tagline, locale)}”
                       </div>
                     )}
 
                     <p className="text-xs text-[#444455] leading-relaxed line-clamp-3 mt-auto">
-                      {displayBio}
+                      {pickText(char.bio, locale)}
                     </p>
                   </div>
                 </button>

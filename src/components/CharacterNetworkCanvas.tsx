@@ -19,7 +19,6 @@ import { CHARACTERS, CHARACTER_MAP } from "../data/characters";
 import { FACTIONS, FACTION_MAP } from "../data/factions";
 import { EDGES } from "../data/edges";
 import { RELATION_CATEGORY_META, UI_TEXT, pickText } from "../data/i18n";
-import { getDisplayBadge, getDisplayMapName } from "../utils/display";
 import type { MapCameraHandle } from "./SocialMapCanvas";
 import type { PathResult } from "../utils/pathfinding";
 
@@ -41,7 +40,7 @@ const ALL_CATEGORIES: RelationCategory[] = [
 
 interface CharacterNetworkCanvasProps {
   locale: Locale;
-  spoilerFree: boolean;
+  drawerOpen?: boolean;
   initialSubMode?: NetworkSubMode;
   egoCenterId: string;
   onChangeEgoCenter: (charId: string) => void;
@@ -292,7 +291,7 @@ function computeCurvedEdgeGeometry(
 
 export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
   locale,
-  spoilerFree,
+  drawerOpen = false,
   initialSubMode = "ego",
   egoCenterId,
   onChangeEgoCenter,
@@ -388,10 +387,11 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
       if (!el) return { x: 0, y: 0, scale: 0.8 };
       const vw = el.clientWidth;
       const vh = el.clientHeight;
-      const padTop = vw < 640 ? 116 : 118;
+      const padTop = vw < 640 ? 124 : 120;
       const padBottom = vw < 640 ? 84 : 88;
-      const padX = vw < 640 ? 18 : 64;
-      const availW = Math.max(200, vw - padX * 2);
+      const padX = vw < 640 ? 18 : vw < 1200 ? 36 : 56;
+      const effectiveW = vw >= 1024 && drawerOpen ? vw - 400 : vw;
+      const availW = Math.max(200, effectiveW - padX * 2);
       const availH = Math.max(200, vh - padTop - padBottom);
 
       if (mode === "ego") {
@@ -399,7 +399,7 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
         const spanW = ring2 ? 1040 : 760;
         const spanH = ring2 ? 960 : 700;
         const scale = clampScale(Math.min(availW / spanW, availH / spanH, 1.18));
-        const targetCenterX = vw >= 1024 && selectedCharacterId ? vw * 0.42 : vw * 0.5;
+        const targetCenterX = effectiveW * 0.5;
         const targetCenterY = padTop + availH * 0.5;
         return {
           x: targetCenterX - CX * scale,
@@ -410,12 +410,12 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
 
       const scale = clampScale(Math.min(availW / WORLD_W, availH / WORLD_H));
       return {
-        x: (vw - WORLD_W * scale) / 2,
+        x: (effectiveW - WORLD_W * scale) / 2,
         y: padTop + (availH - WORLD_H * scale) / 2,
         scale,
       };
     },
-    [selectedCharacterId, showRing2, subMode]
+    [drawerOpen, showRing2, subMode]
   );
 
   // Initial fit & refit when toggling subMode or Ring 2
@@ -764,11 +764,12 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
         if (!el || !targetChar) return;
         const vw = el.clientWidth;
         const vh = el.clientHeight;
-        const centerX = vw >= 1024 ? vw * 0.44 : vw * 0.5;
+        const centerX = vw >= 1024 && drawerOpen ? (vw - 400) / 2 : vw * 0.5;
+        const centerY = vw < 640 && drawerOpen ? vh * 0.24 : vh * 0.5;
         const s = clampScale(vw < 640 ? Math.min(targetScale, 0.95) : targetScale);
         animateTo({
           x: centerX - targetChar.x * s,
-          y: vh * 0.5 - targetChar.y * s,
+          y: centerY - targetChar.y * s,
           scale: s,
         });
       },
@@ -782,6 +783,7 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
     [
       animateTo,
       computeFitTransform,
+      drawerOpen,
       egoCenterId,
       resolvedPosMap,
       selectedCharacterId,
@@ -1084,7 +1086,9 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
     >
       {/* Floating Comic Sub-Mode & Category Filter Control Bar (top-center) */}
       <div
-        className="fixed top-[74px] sm:top-[68px] left-1/2 -translate-x-1/2 z-30 pointer-events-auto flex flex-col items-center gap-1.5 max-w-[calc(100vw-1rem)]"
+        className={`fixed top-[74px] sm:top-[72px] -translate-x-1/2 z-30 pointer-events-auto flex flex-col items-center gap-1.5 max-w-[calc(100vw-1rem)] transition-[left] duration-300 ${
+          drawerOpen ? "left-1/2 lg:left-[calc(50%-200px)]" : "left-1/2"
+        }`}
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
       >
@@ -1354,13 +1358,7 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
                     fontWeight="800"
                     fill="#F7B647"
                   >
-                    {spoilerFree
-                      ? locale === "zh"
-                        ? "独自游离于全城关系网之外的神秘存在…"
-                        : locale === "ja"
-                        ? "街の相関図の輪の外に佇む謎の人物…"
-                        : "Standing completely outside the entire CITY web…"
-                      : t.johnLennonEasterEgg.slice(0, 44)}
+                    {t.johnLennonEasterEgg.slice(0, 44)}
                   </text>
                 </g>
               )}
@@ -1646,8 +1644,8 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
             {nodes.map((baseNode) => {
               const node = resolvedPosMap.get(baseNode.char.id) ?? baseNode;
               const { char, x, y, r, ring } = node;
-              const name = getDisplayMapName(char, locale, spoilerFree);
-              const badge = getDisplayBadge(char, spoilerFree);
+              const name = pickText(char.mapName, locale);
+              const badge = char.badge;
 
               const isCenter = subMode === "ego" && ring === 0;
               const isSelected = selectedCharacterId === char.id;
@@ -1909,7 +1907,9 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
       {/* Floating Edge Lore Bubble at bottom-center (identical comic style to Classic Map) */}
       {activeEdgeObject && (
         <div
-          className="pointer-events-auto fixed bottom-24 left-1/2 -translate-x-1/2 z-30 max-w-md w-[calc(100vw-2rem)]"
+          className={`pointer-events-auto fixed bottom-20 -translate-x-1/2 z-30 max-w-md w-[calc(100vw-2rem)] transition-[left] duration-300 ${
+            drawerOpen ? "left-1/2 lg:left-[calc(50%-200px)]" : "left-1/2"
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="bg-[#33333F] text-white rounded-2xl px-4 py-3 city-ink-card-sm">
@@ -1921,11 +1921,7 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
                   className="w-5 h-5 rounded-full border border-white/60 object-cover"
                 />
                 <span className="px-2 py-0.5 rounded-full bg-[#F7B647] text-[#141419]">
-                  {getDisplayMapName(
-                    CHARACTER_MAP[activeEdgeObject.from],
-                    locale,
-                    spoilerFree
-                  )}
+                  {pickText(CHARACTER_MAP[activeEdgeObject.from].mapName, locale)}
                 </span>
                 <span className="text-[#F09CB4]">
                   {activeEdgeObject.bidirectional
@@ -1940,11 +1936,7 @@ export const CharacterNetworkCanvas: React.FC<CharacterNetworkCanvasProps> = ({
                   className="w-5 h-5 rounded-full border border-white/60 object-cover"
                 />
                 <span className="px-2 py-0.5 rounded-full bg-[#99CB77] text-[#141419]">
-                  {getDisplayMapName(
-                    CHARACTER_MAP[activeEdgeObject.to],
-                    locale,
-                    spoilerFree
-                  )}
+                  {pickText(CHARACTER_MAP[activeEdgeObject.to].mapName, locale)}
                 </span>
                 <span
                   className="px-2 py-0.5 rounded-full text-[10.5px] font-extrabold text-[#141419]"
