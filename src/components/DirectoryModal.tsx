@@ -62,7 +62,7 @@ export const DirectoryModal: React.FC<DirectoryModalProps> = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-white/92 backdrop-blur-md city-confetti-bg flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-[80] bg-white/92 backdrop-blur-md city-confetti-bg flex flex-col overflow-hidden">
       {/* Header */}
       <div className="border-b-[3px] border-[#141419] bg-white/95 px-4 sm:px-8 py-4 flex items-center justify-between gap-4 shrink-0">
         <div>

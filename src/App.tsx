@@ -3,7 +3,7 @@ import type { Character, Faction, FactionId, Locale, RelationEdge, RelationType 
 import { CHARACTER_MAP } from "./data/characters";
 import { FACTION_MAP } from "./data/factions";
 import { findSocialPath } from "./utils/pathfinding";
-import { LoadingCurtain } from "./components/LoadingCurtain";
+import { CityLoadingCurtain } from "./components/city-shell";
 import { TopBar, type ViewMode } from "./components/TopBar";
 import { SocialMapCanvas, type MapCameraHandle } from "./components/SocialMapCanvas";
 import {
@@ -252,7 +252,7 @@ export default function App() {
 
   return (
     <main className="relative w-screen h-screen overflow-hidden">
-      <LoadingCurtain />
+      <CityLoadingCurtain subtitle="SOCIAL MAP" />
 
       <TopBar
         locale={locale}

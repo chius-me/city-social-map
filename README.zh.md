@@ -14,7 +14,7 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?logo=typescript&logoColor=white)
 
-[在线体验](https://social.city.chius.dev) · [人物星图](https://social.city.chius.dev/#mode=network&char=nagumo) · [问题反馈](https://github.com/chius-me/city-social-map/issues) · [Awesome CITY](https://github.com/chius-me/awesome-citytheanimation)
+[在线体验](https://social.city.chius.dev) · [人物星图](https://social.city.chius.dev/#mode=network&char=nagumo) · [CITY 头像工坊](https://avatar.city.chius.dev) · [问题反馈](https://github.com/chius-me/city-social-map/issues) · [Awesome CITY](https://github.com/chius-me/awesome-citytheanimation)
 
 </div>
 
@@ -61,6 +61,7 @@ npm run build    # 类型检查并构建生产产物
 
 - **原始关系图拓扑**：[File:CITY Social Map by VayItsHere.jpeg](https://city.wiki.gg/wiki/File:CITY_Social_Map_by_VayItsHere.jpeg)，由社区作者 **VayItsHere / Mokkachino (Discord)** 于 2025 年 6 月创作并收录于 [CITY Wiki](https://city.wiki.gg/)。
 - **精选资料清单**：[`chius-me/awesome-citytheanimation`](https://github.com/chius-me/awesome-citytheanimation)。
+- **姊妹项目**：[`chius-me/city-avatar`](https://github.com/chius-me/city-avatar)（[`avatar.city.chius.dev`](https://avatar.city.chius.dev)）。
 - **视觉风格参考**：[《CITY THE ANIMATION》官方网站](https://city-the-animation.com/)。
 - **译名与声优校对**：动画官方制作人员表、[Bangumi 番组计划](https://bgm.tv/subject/514358)、[AniList](https://anilist.co/anime/181841/CITY-THE-ANIMATION) 与 [萌娘百科](https://zh.moegirl.org.cn/CITY)。
 

@@ -132,7 +132,7 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
       {/* Portrait Lightbox Overlay (click character avatar to inspect closely) */}
       {portraitLightboxOpen && character && (
         <div
-          className="fixed inset-0 z-[70] bg-[#141419]/70 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-[85] bg-[#141419]/70 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setPortraitLightboxOpen(false)}
         >
           <div
