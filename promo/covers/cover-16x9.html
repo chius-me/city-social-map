@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="zh-CN" data-om-signature="off">
+<head>
+<meta charset="utf-8">
+<title>CITY Social Map — 16:9 &amp; 4:3 巨字爆裂主封面</title>
+<style>
+  @font-face { font-family: "M PLUS Rounded 1c"; src: url("../assets/fonts/MPlusRounded1c-800.ttf") format("truetype"); font-weight: 800; font-style: normal; }
+  @font-face { font-family: "M PLUS Rounded 1c"; src: url("../assets/fonts/MPlusRounded1c-900.ttf") format("truetype"); font-weight: 900; font-style: normal; }
+  @font-face { font-family: "Noto Sans SC"; src: url("../assets/fonts/NotoSansSC-900.woff") format("woff"); font-weight: 900; font-style: normal; }
+  @font-face { font-family: "Poppins"; src: url("../assets/fonts/Poppins-800.woff") format("woff"); font-weight: 800; font-style: normal; }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: #141419;
+    color: #141419;
+    font-family: "M PLUS Rounded 1c", "Noto Sans SC", "Poppins", sans-serif;
+  }
+
+  #film {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    padding: 14px;
+    background: #141419;
+    overflow: hidden;
+  }
+
+  /* 4-Color C-I-T-Y Comic Backdrop with Vertical Center Gutter at x=960 */
+  .manga-grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 14px;
+  }
+  .cell {
+    position: relative;
+    border-radius: 26px;
+    border: 6px solid #141419;
+    overflow: hidden;
+  }
+  .c-gold { background: #F7B647; }
+  .c-pink { background: #F09CB4; }
+  .c-green { background: #99CB77; }
+  .c-coral { background: #EE847D; }
+  .halftone {
+    position: absolute;
+    inset: 0;
+    opacity: 0.16;
+    background-image: radial-gradient(#141419 2.2px, transparent 2.2px);
+    background-size: 16px 16px;
+    pointer-events: none;
+  }
+  .sunburst {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-conic-gradient(from 0deg at 50% 42%, rgba(255,253,249,0.16) 0deg 10deg, rgba(255,253,249,0) 10deg 20deg);
+    z-index: 2;
+  }
+
+  /* Top Brand Capsule strictly centered at x=960 inside 4:3 safe frame */
+  .top-pill-wrap {
+    position: absolute;
+    left: 50%;
+    top: 28px;
+    transform: translateX(-50%);
+    z-index: 30;
+  }
+  .top-pill {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #FFFDF9;
+    border: 6px solid #141419;
+    box-shadow: 9px 9px 0 #141419;
+    border-radius: 999px;
+    padding: 8px 34px;
+    white-space: nowrap;
+  }
+  .top-pill-title {
+    font-size: 46px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: #141419;
+  }
+
+  /* Character Sticker Nodes */
+  .char-chip {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 16;
+  }
+  .char-ring {
+    border-radius: 999px;
+    border: 7px solid #141419;
+    box-shadow: 10px 10px 0 #141419;
+    background: #FFFDF9;
+    padding: 5px;
+  }
+  .char-ring img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 999px;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(1.06);
+  }
+
+  /* Large Expressive Gag Stamps (>=42px) */
+  .gag-stamp {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 22;
+    border-radius: 999px;
+    border: 5px solid #141419;
+    box-shadow: 7px 7px 0 #141419;
+    padding: 7px 24px;
+    font-size: 44px;
+    line-height: 1.05;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  /* Giant Full-Span Lower Poster Typography Zone (centered inside x: 275..1645, clearing bottom-right 00:29 corner) */
+  .hero-headline-svg {
+    position: absolute;
+    left: 280px;
+    top: 530px;
+    width: 1360px;
+    height: 245px;
+    z-index: 28;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .sub-banner-wrap {
+    position: absolute;
+    left: 870px;
+    top: 778px;
+    transform: translateX(-50%) rotate(-1.8deg);
+    z-index: 30;
+  }
+  .sub-banner {
+    background: #F7B647;
+    border: 8px solid #141419;
+    box-shadow: 14px 14px 0 #141419;
+    border-radius: 34px;
+    padding: 10px 46px;
+    font-size: 124px;
+    line-height: 1.08;
+    font-weight: 900;
+    color: #141419;
+    white-space: nowrap;
+    letter-spacing: -2px;
+  }
+  .sub-banner em {
+    font-style: normal;
+    color: #C22119;
+    text-shadow: 5px 5px 0 #FFFDF9;
+  }
+</style>
+</head>
+<body>
+<div id="film" data-composition-id="cover" data-width="1920" data-height="1080" data-om-signature="off">
+  <div class="manga-grid">
+    <div class="cell c-gold"><div class="halftone"></div></div>
+    <div class="cell c-pink"><div class="halftone"></div></div>
+    <div class="cell c-green"><div class="halftone"></div></div>
+    <div class="cell c-coral"><div class="halftone"></div></div>
+  </div>
+  <div class="sunburst"></div>
+
+  <!-- Top Brand Header Pill -->
+  <div class="top-pill-wrap">
+    <div class="top-pill">
+      <svg viewBox="0 0 264 84" height="58" width="182">
+        <path d="M54 22 C49 12 37 8 26 11 C12 15 6 29 7 44 C8 60 18 72 34 73 C45 74 54 68 59 58 L44 49 C41 55 37 57 32 56 C25 55 22 49 22 42 C22 33 26 27 33 26 C38 25 42 28 44 32 Z" fill="#F7B647" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        <rect x="74" y="12" width="25" height="60" rx="6" fill="#F09CB4" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        <path d="M113 12 L173 12 Q177 12 177 16 L177 29 Q177 33 173 33 L155 33 L155 68 Q155 72 151 72 L135 72 Q131 72 131 68 L131 33 L113 33 Q109 33 109 29 L109 16 Q109 12 113 12 Z" fill="#99CB77" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        <path d="M188 12 L211 12 L222 34 L234 12 L257 12 L234 50 L234 68 Q234 72 230 72 L214 72 Q210 72 210 68 L210 50 Z" fill="#EE847D" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+      </svg>
+      <span class="top-pill-title">《小城日常》人物关系图</span>
+      <svg viewBox="0 0 120 112" width="66" height="62">
+        <path d="M78 58 C95 52 108 32 110 15 C111 9 104 9 100 15 C95 23 89 35 76 42" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M28 56 C24 44 40 34 60 36 C78 38 88 50 86 68 L83 84 C82 88 74 88 74 83 L74 73 L55 74 L51 87 C49 92 40 91 41 85 L43 72 C33 70 29 63 28 56 Z" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linejoin="round"/>
+        <path d="M32 45 C26 24 31 10 38 11 C45 12 45 27 42 42" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linecap="round"/>
+        <path d="M46 43 C47 22 55 12 61 15 C67 18 62 33 56 45" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linecap="round"/>
+        <path d="M17 61 C18 47 32 39 48 41 C61 43 66 54 61 65 C56 75 40 78 27 74 C20 71 16 66 17 61 Z" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linejoin="round"/>
+        <ellipse cx="30" cy="57" rx="5.5" ry="6.2" fill="#FFF" stroke="#141419" stroke-width="3"/>
+        <circle cx="29" cy="58" r="3.4" fill="#0A64A4"/><circle cx="28" cy="56.5" r="1.2" fill="#FFF"/>
+        <ellipse cx="46" cy="58" rx="6" ry="6.5" fill="#FFF" stroke="#141419" stroke-width="3"/>
+        <circle cx="44.5" cy="59" r="3.6" fill="#0A64A4"/><circle cx="43.5" cy="57.5" r="1.2" fill="#FFF"/>
+        <path d="M23 50 L36 54 M53 51 L40 54.5" stroke="#141419" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M27 72 Q44 80 59 71" fill="none" stroke="#DD5549" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="41" cy="83" r="10.5" fill="#F7B647" stroke="#141419" stroke-width="3.6"/>
+        <path d="M31 83 Q41 87 51 83" fill="none" stroke="#141419" stroke-width="2.5"/>
+        <circle cx="41" cy="87" r="2.2" fill="#141419"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Thick Comic Connection Web Lines between the 5 4:3-Safe Hero Cast Members -->
+  <svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;z-index:8;pointer-events:none;">
+    <defs>
+      <marker id="arr-b" viewBox="0 0 14 14" refX="10" refY="7" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+        <path d="M 1 2 L 12 7 L 1 12 Z" fill="#141419"/>
+      </marker>
+    </defs>
+    <!-- White halos then thick black ink connectors -->
+    <g fill="none" stroke="#FFFDF9" stroke-width="18" stroke-linecap="round">
+      <path d="M 960 390 Q 795 360 655 340"/>
+      <path d="M 645 340 Q 515 390 400 445"/>
+      <path d="M 960 390 Q 1120 360 1275 340"/>
+      <path d="M 1275 340 Q 1405 385 1520 445"/>
+    </g>
+    <g fill="none" stroke="#141419" stroke-width="10" stroke-linecap="round">
+      <path d="M 850 370 Q 790 356 730 348" marker-end="url(#arr-b)"/>
+      <path d="M 645 340 Q 515 390 400 445" stroke-dasharray="18 14"/>
+      <path d="M 960 390 Q 1120 360 1275 340" stroke-dasharray="18 14"/>
+      <path d="M 1455 412 Q 1398 380 1358 364" marker-end="url(#arr-b)"/>
+    </g>
+  </svg>
+
+  <!-- 5 Oversized Core Cast Portraits strictly inside 4:3 Safe Zone (x: 280..1640) -->
+  <div class="char-chip" style="left:400px;top:445px;">
+    <div class="char-ring" style="width:204px;height:204px;background:#D7EED0;"><img src="../assets/avatars/naganohara.webp" alt="长野原大介"></div>
+  </div>
+  <div class="gag-stamp" style="left:495px;top:530px;background:#D7EED0;color:#141419;transform:translate(-50%,-50%) rotate(-4deg);">★日常联动</div>
+
+  <div class="char-chip" style="left:645px;top:340px;">
+    <div class="char-ring" style="width:230px;height:230px;background:#F7B647;"><img src="../assets/avatars/obaba.webp" alt="老太婆"></div>
+  </div>
+  <div class="gag-stamp" style="left:792px;top:248px;background:#141419;color:#F7B647;transform:translate(-50%,-50%) rotate(-5deg);">⚡欠租宿敌</div>
+
+  <div class="char-chip" style="left:960px;top:388px;z-index:18;">
+    <div class="char-ring" style="width:288px;height:288px;border-width:8px;background:conic-gradient(from 18deg,#F7B647 0 90deg,#F09CB4 90deg 180deg,#99CB77 180deg 270deg,#EE847D 270deg 360deg);padding:10px;">
+      <img src="../assets/avatars/nagumo.webp" alt="南云美鸟" style="border:5px solid #141419;">
+    </div>
+  </div>
+
+  <div class="char-chip" style="left:1275px;top:340px;">
+    <div class="char-ring" style="width:230px;height:230px;background:#F09CB4;"><img src="../assets/avatars/wako.webp" alt="泉和子"></div>
+  </div>
+  <div class="gag-stamp" style="left:1410px;top:248px;background:#FAD4DF;color:#A91D52;transform:translate(-50%,-50%) rotate(5deg);">♡纯情暗恋</div>
+
+  <div class="char-chip" style="left:1520px;top:445px;">
+    <div class="char-ring" style="width:204px;height:204px;background:#7CC5F8;"><img src="../assets/avatars/honkan.webp" alt="本官"></div>
+  </div>
+
+  <!-- 16:9 Widescreen Bonus Wing Cameos (100% outside x: 240..1680 so 4:3 never slices them!) -->
+  <div class="char-chip" style="left:118px;top:415px;">
+    <div class="char-ring" style="width:172px;height:172px;background:#99CB77;"><img src="../assets/avatars/tatewaku.webp" alt="真壁立涌"></div>
+  </div>
+  <div class="gag-stamp" style="left:118px;top:528px;background:#FFFDF9;color:#141419;font-size:36px;padding:5px 18px;">足球部 #28</div>
+
+  <div class="char-chip" style="left:1802px;top:415px;">
+    <div class="char-ring" style="width:172px;height:172px;background:#FFFDF9;"><img src="../assets/avatars/john-lennon.webp" alt="约翰·列侬"></div>
+  </div>
+  <div class="gag-stamp" style="left:1802px;top:528px;background:#33333F;color:#F7B647;font-size:36px;padding:5px 18px;">「死了。」</div>
+
+  <!-- Massive Full-Span Comic Headline (crisp multi-stroke SVG paint-order, 140px-188px!) -->
+  <svg class="hero-headline-svg" viewBox="0 0 1360 230">
+    <g transform="rotate(-1.8 680 120)">
+      <!-- Drop offset comic shadow -->
+      <text x="692" y="182" text-anchor="middle" font-family="'M PLUS Rounded 1c', 'Noto Sans SC', sans-serif" font-weight="900">
+        <tspan font-family="'Poppins', sans-serif" font-weight="800" font-size="182" fill="#141419" stroke="#141419" stroke-width="44" stroke-linejoin="round" paint-order="stroke fill">65</tspan><tspan font-size="140" fill="#141419" stroke="#141419" stroke-width="44" stroke-linejoin="round" paint-order="stroke fill">位怪人全城连线</tspan>
+      </text>
+      <!-- Outer white comic sticker halo -->
+      <text x="680" y="170" text-anchor="middle" font-family="'M PLUS Rounded 1c', 'Noto Sans SC', sans-serif" font-weight="900">
+        <tspan font-family="'Poppins', sans-serif" font-weight="800" font-size="182" fill="#FFFDF9" stroke="#FFFDF9" stroke-width="48" stroke-linejoin="round" paint-order="stroke fill">65</tspan><tspan font-size="140" fill="#FFFDF9" stroke="#FFFDF9" stroke-width="48" stroke-linejoin="round" paint-order="stroke fill">位怪人全城连线</tspan>
+      </text>
+      <!-- Inner thick ink outline + crisp vibrant fill -->
+      <text x="680" y="170" text-anchor="middle" font-family="'M PLUS Rounded 1c', 'Noto Sans SC', sans-serif" font-weight="900">
+        <tspan font-family="'Poppins', sans-serif" font-weight="800" font-size="182" fill="#F7B647" stroke="#141419" stroke-width="24" stroke-linejoin="round" paint-order="stroke fill">65</tspan><tspan font-size="140" fill="#FFFDF9" stroke="#141419" stroke-width="24" stroke-linejoin="round" paint-order="stroke fill">位怪人全城连线</tspan>
+      </text>
+    </g>
+  </svg>
+
+  <!-- Giant Lower Banner centered slightly left so bottom-right 00:29 duration badge clears in BOTH 4:3 & 16:9 -->
+  <div class="sub-banner-wrap">
+    <div class="sub-banner"><em>一张图</em>全看懂！</div>
+  </div>
+</div>
+</body>
+</html>

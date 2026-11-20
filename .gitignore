@@ -4,3 +4,8 @@ dist
 .dev.vars
 .DS_Store
 *.local
+
+# Promo generated renders, caches & local binary bundles
+/promo/.om/
+/promo/assets/
+/promo/out/

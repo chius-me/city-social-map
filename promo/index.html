@@ -1,0 +1,1766 @@
+<!doctype html>
+<html lang="zh-CN" data-composition-variables='[
+  {"id":"hookKicker","type":"string","label":"开场眉题","default":"京都动画《小城日常 CITY》互动人物关系图谱","group":"文案"},
+  {"id":"hookTitle","type":"string","label":"主钩子标题","default":"65 位小城怪人，怎么全都扯上了关系？！","group":"文案"},
+  {"id":"radarCaption","type":"string","label":"星图解说字幕","default":"点一下角色 · 全城关系网立刻围绕 TA 展开","group":"文案"},
+  {"id":"stopLine","type":"string","label":"急停吐槽台词","default":"「死了。」","group":"文案"},
+  {"id":"dropBanner","type":"string","label":"高潮横幅文案","default":"全景图谱 × 人物星图 · 65 位居民一网打尽","group":"文案"},
+  {"id":"siteUrl","type":"string","label":"网站域名","default":"social.city.chius.dev","group":"文案"},
+  {"id":"ctaSub","type":"string","label":"收尾副标题","default":"65 位居民 · 65 条原著羁绊 · 中 / EN / 日 三语免费逛","group":"文案"},
+  {"id":"paper","type":"color","label":"纸张底色","default":"#FFFDF9","group":"色彩"},
+  {"id":"ink","type":"color","label":"漫画黑边","default":"#141419","group":"色彩"},
+  {"id":"cityC","type":"color","label":"CITY 黄 (C)","default":"#F7B647","group":"色彩"},
+  {"id":"cityI","type":"color","label":"CITY 粉 (I)","default":"#F09CB4","group":"色彩"},
+  {"id":"cityT","type":"color","label":"CITY 绿 (T)","default":"#99CB77","group":"色彩"},
+  {"id":"cityY","type":"color","label":"CITY 珊瑚 (Y)","default":"#EE847D","group":"色彩"},
+  {"id":"endHold","type":"number","label":"结尾停留（秒）","default":1.6,"min":0.8,"max":5,"step":0.1,"group":"节奏"}
+]'>
+<head>
+<meta charset="utf-8">
+<title>CITY Social Map — 《小城日常》人物关系互动地图宣传片</title>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/om.js"></script>
+<style id="om-fonts">
+@font-face { font-family: "M PLUS Rounded 1c"; src: url("assets/fonts/MPlusRounded1c-700.ttf") format("truetype"); font-weight: 700; font-style: normal; }
+@font-face { font-family: "M PLUS Rounded 1c"; src: url("assets/fonts/MPlusRounded1c-800.ttf") format("truetype"); font-weight: 800; font-style: normal; }
+@font-face { font-family: "M PLUS Rounded 1c"; src: url("assets/fonts/MPlusRounded1c-900.ttf") format("truetype"); font-weight: 900; font-style: normal; }
+@font-face { font-family: "Noto Sans SC"; src: url("assets/fonts/NotoSansSC-500.woff") format("woff"); font-weight: 500; font-style: normal; }
+@font-face { font-family: "Noto Sans SC"; src: url("assets/fonts/NotoSansSC-700.woff") format("woff"); font-weight: 700; font-style: normal; }
+@font-face { font-family: "Noto Sans SC"; src: url("assets/fonts/NotoSansSC-800.woff") format("woff"); font-weight: 800; font-style: normal; }
+@font-face { font-family: "Noto Sans SC"; src: url("assets/fonts/NotoSansSC-900.woff") format("woff"); font-weight: 900; font-style: normal; }
+@font-face { font-family: "Poppins"; src: url("assets/fonts/Poppins-600.woff") format("woff"); font-weight: 600; font-style: normal; }
+@font-face { font-family: "Poppins"; src: url("assets/fonts/Poppins-700.woff") format("woff"); font-weight: 700; font-style: normal; }
+@font-face { font-family: "Poppins"; src: url("assets/fonts/Poppins-800.woff") format("woff"); font-weight: 800; font-style: normal; }
+</style>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: var(--paper, #FFFDF9);
+    color: var(--ink, #141419);
+    font-family: "M PLUS Rounded 1c", "Noto Sans SC", "Poppins", sans-serif;
+  }
+
+  #film {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: var(--paper, #FFFDF9);
+    color: var(--ink, #141419);
+  }
+
+  /* Decorative backgrounds ALWAYS first in DOM */
+  .paper-bg {
+    position: absolute;
+    inset: 0;
+    background-color: var(--paper, #FFFDF9);
+    pointer-events: none;
+  }
+  .confetti-bg {
+    position: absolute;
+    inset: -140px;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'%3E%3Cg font-family='Arial Black, sans-serif' font-weight='900' font-size='22' opacity='0.44'%3E%3Ctext x='46' y='54' fill='%2399cb77' transform='rotate(-22 46 54)'%3EC%3C/text%3E%3Ctext x='172' y='118' fill='%23f09cb4' transform='rotate(18 172 118)'%3EY%3C/text%3E%3Ctext x='290' y='52' fill='%2399cb77' transform='rotate(-14 290 52)'%3ET%3C/text%3E%3Ctext x='376' y='88' fill='%23c5b4f0' transform='rotate(35 376 88)'%3EI%3C/text%3E%3Ctext x='36' y='182' fill='%23ee847d' transform='rotate(28 36 182)'%3ET%3C/text%3E%3Ctext x='132' y='198' fill='%2399cb77' transform='rotate(-32 132 198)'%3EI%3C/text%3E%3Ctext x='228' y='194' fill='%23c5b4f0' transform='rotate(20 228 194)'%3ET%3C/text%3E%3Ctext x='344' y='176' fill='%23f09cb4' transform='rotate(-18 344 176)'%3EY%3C/text%3E%3Ctext x='86' y='284' fill='%23c5b4f0' transform='rotate(-28 86 284)'%3EY%3C/text%3E%3Ctext x='198' y='304' fill='%23f09cb4' transform='rotate(14 198 304)'%3EC%3C/text%3E%3Ctext x='304' y='286' fill='%2399cb77' transform='rotate(26 304 286)'%3EY%3C/text%3E%3Ctext x='392' y='278' fill='%23f7b647' transform='rotate(-20 392 278)'%3EC%3C/text%3E%3Ctext x='18' y='354' fill='%2399cb77' transform='rotate(24 18 354)'%3ET%3C/text%3E%3Ctext x='108' y='392' fill='%23f7b647' transform='rotate(-16 108 392)'%3EC%3C/text%3E%3Ctext x='246' y='362' fill='%23c5b4f0' transform='rotate(42 246 362)'%3EI%3C/text%3E%3Ctext x='338' y='396' fill='%23f09cb4' transform='rotate(-22 338 396)'%3EY%3C/text%3E%3C/g%3E%3C/svg%3E");
+    background-size: 420px 420px;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+  }
+  .scene-hidden { opacity: 0; }
+
+  .ink-box {
+    background: #FFFFFF;
+    border: 4px solid var(--ink, #141419);
+    box-shadow: 7px 7px 0 var(--ink, #141419);
+  }
+  .city-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .city-dots i {
+    display: block;
+    width: 11px;
+    height: 11px;
+    border-radius: 99px;
+    border: 2px solid var(--ink, #141419);
+    font-style: normal;
+  }
+  .halftone {
+    position: absolute;
+    inset: 0;
+    opacity: 0.14;
+    background-image: radial-gradient(#141419 1.6px, transparent 1.6px);
+    background-size: 14px 14px;
+    pointer-events: none;
+  }
+
+  /* ===========================================================
+     SCENE 1: HOOK — 4-PANEL MANGA OPENING (ALL 4 C-I-T-Y FIELDS LIVE ON FRAME 0)
+     =========================================================== */
+  #hook-gutter-bg {
+    position: absolute;
+    inset: 0;
+    background: #141419;
+    pointer-events: none;
+  }
+  #s-hook {
+    padding: 16px;
+  }
+  #hook-grid {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 14px;
+    transform-origin: 640px 552px;
+  }
+  .m-panel {
+    position: relative;
+    border: 5px solid #141419;
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 28px 34px;
+  }
+  .p-c { background: var(--cityC, #F7B647); }
+  .p-i { background: var(--cityI, #F09CB4); }
+  .p-t { background: var(--cityT, #99CB77); }
+  .p-y { background: var(--cityY, #EE847D); }
+
+  .panel-inner {
+    position: relative;
+    z-index: 4;
+  }
+  #pi-i, #pi-t, #pi-y { opacity: 0; }
+
+  .panel-stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #FFFDF9;
+    border: 3.5px solid #141419;
+    box-shadow: 5px 5px 0 #141419;
+    border-radius: 999px;
+    padding: 7px 18px;
+    font-size: 20px;
+    font-weight: 900;
+  }
+  .panel-head {
+    margin: 12px 0 0 0;
+    font-size: 42px;
+    line-height: 1.12;
+    font-weight: 900;
+    color: #141419;
+  }
+  .cast-pair {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .face {
+    width: 112px;
+    height: 112px;
+    border-radius: 999px;
+    border: 4.5px solid #141419;
+    box-shadow: 5px 5px 0 #141419;
+    object-fit: cover;
+    background: #FFFDF9;
+  }
+  .face-sm {
+    width: 82px;
+    height: 82px;
+    border-radius: 999px;
+    border: 4px solid #141419;
+    box-shadow: 4px 4px 0 #141419;
+    object-fit: cover;
+    background: #FFFDF9;
+  }
+  .vs-badge {
+    background: #141419;
+    color: #F7B647;
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: 19px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  /* Hook top bar + center comic stamp */
+  #hook-top-pill-wrap {
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    transform: translateX(-50%);
+    z-index: 30;
+  }
+  #hook-top-pill {
+    background: #FFFDF9;
+    border: 4.5px solid #141419;
+    box-shadow: 7px 7px 0 #141419;
+    border-radius: 999px;
+    padding: 8px 26px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    white-space: nowrap;
+  }
+
+  #hook-center-wrap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 25;
+  }
+  #hook-card {
+    width: 830px;
+    border-radius: 34px;
+    padding: 8px;
+    border: 5px solid #141419;
+    box-shadow: 15px 15px 0 #141419;
+    background: conic-gradient(from 28deg, #F7B647 0 90deg, #EE847D 90deg 180deg, #99CB77 180deg 270deg, #F09CB4 270deg 360deg);
+    opacity: 0;
+  }
+  .hook-card-inner {
+    background: #FFFDF9;
+    border-radius: 24px;
+    border: 3.5px solid #141419;
+    padding: 36px 44px;
+    text-align: center;
+  }
+  .hook-kicker-badge {
+    display: inline-block;
+    background: #F7B647;
+    border: 3px solid #141419;
+    box-shadow: 4px 4px 0 #141419;
+    border-radius: 999px;
+    padding: 7px 22px;
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 18px;
+  }
+  .hook-main-title {
+    margin: 0;
+    font-size: 56px;
+    line-height: 1.18;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #141419;
+  }
+  .hook-main-sub {
+    margin: 18px auto 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: #141419;
+    color: #FFFDF9;
+    padding: 10px 26px;
+    border-radius: 999px;
+    font-size: 21px;
+    font-weight: 900;
+  }
+  .hook-main-sub b { color: #F7B647; }
+
+  /* ===========================================================
+     SCENE 2: EGO RADAR + DOSSIER MORPH (DIRECTION A)
+     =========================================================== */
+  .brand-pill {
+    position: absolute;
+    top: 28px;
+    left: 34px;
+    border-radius: 22px;
+    padding: 12px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 20;
+  }
+  .top-shelf {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-left: 3.5px solid #141419;
+    border-bottom: 3.5px solid #141419;
+    border-bottom-left-radius: 36px;
+    padding: 14px 28px 14px 30px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 30;
+  }
+  .nav-pills {
+    display: flex;
+    gap: 6px;
+    background: #F4F3EE;
+    padding: 5px;
+    border-radius: 999px;
+    border: 2.5px solid #141419;
+  }
+  .nav-pill {
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .nav-pill.active {
+    background: #141419;
+    color: #F7B647;
+  }
+  .radar-bar {
+    position: absolute;
+    top: 48px;
+    left: 640px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 20;
+    white-space: nowrap;
+  }
+  .seg-group {
+    display: flex;
+    background: #F4F3EE;
+    border: 2px solid #141419;
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .seg-item {
+    padding: 6px 15px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .seg-item.active { background: #141419; color: #F7B647; }
+  .pill-btn {
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 2px solid #141419;
+    background: #C4E4F5;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .radar-caption {
+    position: absolute;
+    left: 42px;
+    bottom: 34px;
+    z-index: 25;
+  }
+  .radar-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #F7B647;
+    border: 3px solid #141419;
+    box-shadow: 4px 4px 0 #141419;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 12px;
+  }
+  .radar-title {
+    margin: 0;
+    font-size: 46px;
+    line-height: 1.1;
+    font-weight: 900;
+    text-shadow: 3px 3px 0 #FFFFFF;
+  }
+
+  .dossier-frame {
+    position: absolute;
+    top: 100px;
+    right: 36px;
+    width: 500px;
+    height: 944px;
+    border-radius: 30px;
+    padding: 6px;
+    border: 3.5px solid #141419;
+    box-shadow: 9px 9px 0 #141419;
+    background: conic-gradient(from 18deg at 50% 50%, #F7B647 0 90deg, #EE847D 90deg 180deg, #99CB77 180deg 270deg, #F09CB4 270deg 360deg);
+    z-index: 22;
+  }
+  .dossier-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #FFFDF9;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .dossier-page {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .dossier-head {
+    background: #FAD4DF;
+    padding: 20px 24px;
+    border-bottom: 3px solid #141419;
+  }
+  .dossier-badge {
+    display: inline-block;
+    background: #FFFFFF;
+    border: 2.5px solid #141419;
+    border-radius: 999px;
+    padding: 3px 14px;
+    font-size: 14px;
+    font-weight: 900;
+    margin-bottom: 12px;
+  }
+  .dossier-profile {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .dossier-avatar {
+    width: 92px;
+    height: 92px;
+    border-radius: 999px;
+    border: 3.5px solid #141419;
+    box-shadow: 4px 4px 0 #141419;
+    object-fit: cover;
+    background: #FFF;
+  }
+  .dossier-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    flex: 1;
+  }
+  .info-row {
+    background: #FFFFFF;
+    border: 2.5px solid rgba(20, 20, 25, 0.16);
+    border-radius: 16px;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .cv-row {
+    background: #FFF9EC;
+    border: 2.5px solid #F7B647;
+    border-radius: 16px;
+    padding: 12px 16px;
+    font-size: 18px;
+    font-weight: 900;
+  }
+  .commentary-box {
+    background: #33333F;
+    color: #FFFFFF;
+    border: 3px solid #141419;
+    border-radius: 20px;
+    padding: 16px 20px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .cta-radar {
+    background: #141419;
+    color: #F7B647;
+    border: 3px solid #141419;
+    box-shadow: 4px 4px 0 #B82E22;
+    border-radius: 16px;
+    padding: 13px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 900;
+  }
+  .rel-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    background: #FFFFFF;
+    border: 2.5px solid rgba(20, 20, 25, 0.22);
+    border-radius: 16px;
+    padding: 11px 14px;
+  }
+  .rel-item img {
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    border: 2.5px solid #141419;
+    object-fit: cover;
+  }
+  .rel-tag {
+    margin-left: auto;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 900;
+    border: 1.5px solid rgba(20, 20, 25, 0.25);
+    white-space: nowrap;
+  }
+
+  /* ===========================================================
+     SCENE 3: BURST MONTAGE (PATH FINDER + EGGS + FACTIONS + STATS)
+     =========================================================== */
+  .burst-shot {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+  .burst-top-bar {
+    position: absolute;
+    top: 48px;
+    left: 84px;
+    right: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .burst-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #141419;
+    color: #F7B647;
+    border-radius: 999px;
+    padding: 11px 28px;
+    font-size: 24px;
+    font-weight: 900;
+    box-shadow: 5px 5px 0 #DD5549;
+  }
+  .burst-tag {
+    background: #FFFFFF;
+    border: 3.5px solid #141419;
+    box-shadow: 5px 5px 0 #141419;
+    border-radius: 999px;
+    padding: 10px 24px;
+    font-size: 21px;
+    font-weight: 900;
+  }
+
+  .path-chain-wrap {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    top: 220px;
+    background: #FFFFFF;
+    border: 5px solid #141419;
+    box-shadow: 12px 12px 0 #141419;
+    border-radius: 36px;
+    padding: 64px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .path-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: 220px;
+    text-align: center;
+  }
+  .path-avatar {
+    width: 142px;
+    height: 142px;
+    border-radius: 999px;
+    border: 5px solid #141419;
+    box-shadow: 6px 6px 0 #141419;
+    object-fit: cover;
+    background: #FFFDF9;
+  }
+  .path-name {
+    font-size: 28px;
+    font-weight: 900;
+    background: #FFFDF9;
+    border: 3px solid #141419;
+    border-radius: 999px;
+    padding: 4px 20px;
+  }
+  .path-role {
+    font-size: 16px;
+    font-weight: 800;
+    color: #5A5A6A;
+  }
+  .path-hop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    margin: 0 -10px;
+  }
+  .path-rel-badge {
+    padding: 7px 18px;
+    border-radius: 999px;
+    border: 3px solid #141419;
+    box-shadow: 3px 3px 0 #141419;
+    font-size: 18px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+  .path-arrow-line {
+    width: 100%;
+    height: 6px;
+    background: #141419;
+    border-radius: 99px;
+    transform-origin: 0 50%;
+  }
+  .burst-bottom-banner {
+    position: absolute;
+    left: 50%;
+    bottom: 84px;
+    transform: translateX(-50%);
+    font-size: 46px;
+    font-weight: 900;
+    background: #F7B647;
+    border: 4.5px solid #141419;
+    box-shadow: 8px 8px 0 #141419;
+    border-radius: 26px;
+    padding: 18px 42px;
+    white-space: nowrap;
+  }
+
+  .dual-cards {
+    position: absolute;
+    left: 84px;
+    right: 84px;
+    top: 170px;
+    bottom: 90px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+  .feat-card {
+    border: 5px solid #141419;
+    box-shadow: 12px 12px 0 #141419;
+    border-radius: 36px;
+    padding: 40px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .feat-pill {
+    display: inline-block;
+    align-self: flex-start;
+    background: #FFFDF9;
+    border: 3.5px solid #141419;
+    box-shadow: 4px 4px 0 #141419;
+    border-radius: 999px;
+    padding: 8px 22px;
+    font-size: 21px;
+    font-weight: 900;
+  }
+  .feat-hero-row {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin: 26px 0;
+  }
+  .feat-avatar {
+    width: 168px;
+    height: 168px;
+    border-radius: 999px;
+    border: 5px solid #141419;
+    box-shadow: 7px 7px 0 #141419;
+    object-fit: cover;
+    background: #FFF;
+  }
+  .feat-mini-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255, 253, 249, 0.92);
+    border: 3px solid #141419;
+    border-radius: 22px;
+    padding: 16px 22px;
+  }
+  .feat-mini-row img {
+    width: 64px;
+    height: 64px;
+    border-radius: 999px;
+    border: 3px solid #141419;
+    object-fit: cover;
+  }
+
+  .faction-grid {
+    position: absolute;
+    left: 84px;
+    right: 84px;
+    top: 175px;
+    bottom: 85px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .fac-card {
+    background: #FFFFFF;
+    border: 4.5px solid #141419;
+    box-shadow: 8px 8px 0 #141419;
+    border-radius: 28px;
+    padding: 24px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .fac-tag {
+    align-self: flex-start;
+    padding: 5px 15px;
+    border-radius: 999px;
+    border: 2.5px solid #141419;
+    font-size: 16px;
+    font-weight: 900;
+  }
+  .fac-faces { display: flex; align-items: center; }
+  .fac-faces img {
+    width: 82px;
+    height: 82px;
+    border-radius: 999px;
+    border: 4px solid #141419;
+    object-fit: cover;
+    margin-right: -16px;
+    background: #FFF;
+  }
+
+  .flash-card-bg {
+    position: absolute;
+    inset: 42px;
+    border-radius: 40px;
+    border: 6px solid #141419;
+    box-shadow: 16px 16px 0 #141419;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+  }
+  .flash-big-num {
+    font-family: "Poppins", "Noto Sans SC", sans-serif;
+    font-size: 280px;
+    line-height: 0.92;
+    font-weight: 800;
+    color: #141419;
+    text-shadow: 10px 10px 0 #FFFFFF;
+    margin: 0;
+  }
+  .flash-title {
+    font-size: 62px;
+    font-weight: 900;
+    margin: 18px 0 0 0;
+    background: #FFFDF9;
+    border: 4.5px solid #141419;
+    box-shadow: 7px 7px 0 #141419;
+    border-radius: 999px;
+    padding: 12px 42px;
+  }
+  .flash-avatar-strip { display: flex; gap: 16px; margin-top: 34px; }
+  .flash-avatar-strip img {
+    width: 108px;
+    height: 108px;
+    border-radius: 999px;
+    border: 4.5px solid #141419;
+    box-shadow: 5px 5px 0 #141419;
+    object-fit: cover;
+    background: #FFF;
+  }
+
+  /* ===========================================================
+     SCENE 4: JOHN LENNON DEADPAN STOP
+     =========================================================== */
+  #s-stop {
+    background: var(--paper, #FFFDF9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .lennon-ring {
+    width: 310px;
+    height: 310px;
+    border-radius: 999px;
+    border: 5px dashed rgba(20, 20, 25, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .lennon-avatar {
+    width: 204px;
+    height: 204px;
+    border-radius: 999px;
+    border: 5px solid #141419;
+    box-shadow: 8px 8px 0 #141419;
+    object-fit: cover;
+    background: #FFF;
+  }
+  .lennon-zero-pill {
+    margin-top: 24px;
+    background: #FFFFFF;
+    border: 3.5px solid #141419;
+    box-shadow: 5px 5px 0 #141419;
+    border-radius: 999px;
+    padding: 9px 28px;
+    font-size: 24px;
+    font-weight: 900;
+  }
+  #lennon-quote-box {
+    margin-top: 28px;
+    background: #33333F;
+    color: #FFFFFF;
+    border: 4.5px solid #141419;
+    box-shadow: 10px 10px 0 #141419;
+    border-radius: 28px;
+    padding: 26px 52px;
+    text-align: center;
+  }
+
+  /* ===========================================================
+     SCENE 5: FULL PANORAMA DROP (REAL UI SCREENSHOTS)
+     =========================================================== */
+  .drop-ray-bg {
+    position: absolute;
+    inset: 0;
+    background: repeating-conic-gradient(from 0deg at 50% 54%, rgba(247, 182, 71, 0.14) 0deg 15deg, rgba(255, 253, 249, 0.0) 15deg 30deg);
+    pointer-events: none;
+  }
+  .drop-banner-wrap {
+    position: absolute;
+    left: 50%;
+    top: 38px;
+    transform: translateX(-50%);
+    z-index: 30;
+  }
+  #drop-banner {
+    background: #141419;
+    color: #FFFDF9;
+    border: 4.5px solid #F7B647;
+    box-shadow: 9px 9px 0 #DD5549;
+    border-radius: 999px;
+    padding: 14px 44px;
+    font-size: 36px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+  .drop-frame {
+    position: absolute;
+    width: 1020px;
+    height: 610px;
+    border-radius: 28px;
+    padding: 10px;
+    border: 5px solid #141419;
+    box-shadow: 14px 14px 0 #141419;
+    background: #FFFDF9;
+    overflow: hidden;
+  }
+  .drop-frame-left { left: 86px; top: 210px; z-index: 12; }
+  .drop-frame-right {
+    right: 86px;
+    top: 295px;
+    z-index: 18;
+    background: conic-gradient(from 20deg, #F7B647 0 90deg, #EE847D 90deg 180deg, #99CB77 180deg 270deg, #F09CB4 270deg 360deg);
+  }
+  .drop-screen-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    border: 3px solid #141419;
+    overflow: hidden;
+    background: #FFFDF9;
+  }
+  .drop-screen-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: center center;
+  }
+  .drop-chip {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: #FFFDF9;
+    border: 3px solid #141419;
+    box-shadow: 4px 4px 0 #141419;
+    border-radius: 999px;
+    padding: 7px 20px;
+    font-size: 20px;
+    font-weight: 900;
+    z-index: 5;
+  }
+  .drop-float-badge {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #FFFDF9;
+    border: 3.5px solid #141419;
+    box-shadow: 6px 6px 0 #141419;
+    border-radius: 999px;
+    padding: 8px 20px 8px 10px;
+    font-size: 20px;
+    font-weight: 900;
+    z-index: 28;
+  }
+  .drop-float-badge img {
+    width: 58px;
+    height: 58px;
+    border-radius: 999px;
+    border: 3px solid #141419;
+    object-fit: cover;
+  }
+
+  /* ===========================================================
+     SCENE 6: END CARD (LEAVE BOTTOM-RIGHT CORNER CLEAR!)
+     =========================================================== */
+  #s-end {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .end-orbit {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 34px;
+  }
+  .end-orbit img {
+    width: 82px;
+    height: 82px;
+    border-radius: 999px;
+    border: 4px solid #141419;
+    box-shadow: 5px 5px 0 #141419;
+    object-fit: cover;
+    background: #FFF;
+  }
+  .end-hero-lockup {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    background: #FFFFFF;
+    border: 5px solid #141419;
+    box-shadow: 14px 14px 0 #141419;
+    border-radius: 38px;
+    padding: 36px 56px;
+  }
+  .end-url-btn {
+    margin-top: 38px;
+    background: #141419;
+    color: #F7B647;
+    border: 4.5px solid #141419;
+    box-shadow: 9px 9px 0 #B82E22;
+    border-radius: 999px;
+    padding: 20px 64px;
+    font-family: "Poppins", sans-serif;
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .end-sub-pill {
+    margin-top: 24px;
+    background: #FFFDF9;
+    border: 3.5px solid #141419;
+    box-shadow: 5px 5px 0 #141419;
+    border-radius: 999px;
+    padding: 10px 30px;
+    font-size: 24px;
+    font-weight: 900;
+  }
+</style>
+</head>
+<body>
+<div id="film" data-composition-id="film" data-width="1920" data-height="1080" data-fps="60">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="29.203" data-track-index="8" data-volume="1"></audio>
+  <!-- Decorative Background Layers First in DOM -->
+  <div class="paper-bg"></div>
+  <div class="confetti-bg" id="confetti-layer"></div>
+
+  <!-- ======================================================================
+       SCENE 1: HOOK — 4-PANEL KYOANI MANGA GRID (FULL COLOR ON FRAME 0!)
+       ====================================================================== -->
+  <section id="s-hook" class="scene">
+    <div id="hook-gutter-bg"></div>
+    <div id="hook-cam" style="width:100%;height:100%;transform-origin:960px 540px;">
+    <div id="hook-grid">
+      <!-- PANEL 1 (C #F7B647) -->
+      <div class="m-panel p-c" id="panel-c" data-om-id="panel-c">
+        <div class="halftone"></div>
+        <div class="panel-inner" id="pi-c">
+          <div class="panel-stamp">01 · 木目生庄房租战争</div>
+          <h2 class="panel-head">欠租宿敌！死斗开启！</h2>
+          <div class="cast-pair">
+            <img class="face" src="assets/avatars/nagumo.webp" alt="南云美鸟">
+            <div class="vs-badge">拖欠房租 ⚡</div>
+            <img class="face" src="assets/avatars/obaba.webp" alt="老太婆">
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 2 (I #F09CB4) -->
+      <div class="m-panel p-i" id="panel-i" data-om-id="panel-i" style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;">
+        <div class="halftone"></div>
+        <div class="panel-inner" id="pi-i" style="display:flex;flex-direction:column;align-items:flex-end;">
+          <div class="panel-stamp">02 · 蒙布朗大学 &amp; 巡警</div>
+          <h2 class="panel-head">壁橱怪人 &amp; 巡警暗恋！？</h2>
+          <div class="cast-pair" style="justify-content:flex-end;">
+            <img class="face" src="assets/avatars/honkan.webp" alt="本官">
+            <div class="vs-badge" style="background:#FFF;color:#A91D52;border:3px solid #141419;">♡ 纯情暗恋</div>
+            <img class="face" src="assets/avatars/wako.webp" alt="泉和子">
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3 (T #99CB77) -->
+      <div class="m-panel p-t" id="panel-t" data-om-id="panel-t" style="display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;">
+        <div class="halftone"></div>
+        <div class="panel-inner" id="pi-t" style="display:flex;flex-direction:column;gap:12px;max-width:500px;">
+          <div class="cast-pair" style="margin:0;gap:12px;">
+            <img class="face-sm" src="assets/avatars/good-person.webp" alt="好人">
+            <img class="face-sm" src="assets/avatars/t-shirt-guy.webp" alt="蓼科神威">
+            <img class="face-sm" src="assets/avatars/dress-girl.webp" alt="鬼瓦">
+            <img class="face-sm" src="assets/avatars/john-lennon.webp" alt="约翰·列侬">
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div class="vs-badge">6 人暴打本官</div>
+            <div class="vs-badge" style="background:#33333F;color:#F7B647;">0 连线：「死了。」</div>
+          </div>
+          <h2 class="panel-head" style="margin:0;font-size:38px;">路人团暴走 &amp; 神秘彩蛋</h2>
+          <div class="panel-stamp" style="align-self:flex-start;">03 · 路人团 × 约翰·列侬</div>
+        </div>
+      </div>
+
+      <!-- PANEL 4 (Y #EE847D) -->
+      <div class="m-panel p-y" id="panel-y" data-om-id="panel-y" style="display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;text-align:right;">
+        <div class="halftone"></div>
+        <div class="panel-inner" id="pi-y" style="display:flex;flex-direction:column;align-items:flex-end;gap:12px;max-width:500px;">
+          <div class="cast-pair" style="margin:0;gap:12px;justify-content:flex-end;">
+            <img class="face-sm" src="assets/avatars/todoroki.webp" alt="轰">
+            <img class="face-sm" src="assets/avatars/naganohara.webp" alt="长野原大介">
+            <img class="face-sm" src="assets/avatars/tatewaku.webp" alt="真壁立涌">
+            <img class="face-sm" src="assets/avatars/mimineko.webp" alt="大耳猫">
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;">
+            <div class="vs-badge" style="background:#D7EED0;color:#141419;border:3px solid #141419;">★ 《日常》联动</div>
+            <div class="vs-badge" style="background:#FFF;color:#0A64A4;border:3px solid #141419;">双阵营 #28</div>
+          </div>
+          <h2 class="panel-head" style="margin:0;font-size:38px;">周刊编辑部 &amp; 大耳猫</h2>
+          <div class="panel-stamp">04 · 《周刊CITY》 &amp; 全员星图</div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Top Brand Strip -->
+    <div id="hook-top-pill-wrap">
+      <div id="hook-top-pill" style="opacity:0;" data-layout-allow-occlusion="true">
+        <svg viewBox="0 0 264 84" height="36" width="114">
+          <path d="M54 22 C49 12 37 8 26 11 C12 15 6 29 7 44 C8 60 18 72 34 73 C45 74 54 68 59 58 L44 49 C41 55 37 57 32 56 C25 55 22 49 22 42 C22 33 26 27 33 26 C38 25 42 28 44 32 Z" fill="#F7B647" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+          <rect x="74" y="12" width="25" height="60" rx="6" fill="#F09CB4" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+          <path d="M113 12 L173 12 Q177 12 177 16 L177 29 Q177 33 173 33 L155 33 L155 68 Q155 72 151 72 L135 72 Q131 72 131 68 L131 33 L113 33 Q109 33 109 29 L109 16 Q109 12 113 12 Z" fill="#99CB77" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+          <path d="M188 12 L211 12 L222 34 L234 12 L257 12 L234 50 L234 68 Q234 72 230 72 L214 72 Q210 72 210 68 L210 50 Z" fill="#EE847D" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        </svg>
+        <span style="font-size:21px;font-weight:900;">小城日常 · 互动人物关系图鉴</span>
+      </div>
+    </div>
+
+    <!-- Center Comic Hook Card (Breaking panels!) -->
+    <div id="hook-center-wrap" data-layout-allow-occlusion="true">
+      <div id="hook-card" data-om-id="hook-card" data-layout-allow-occlusion="true">
+        <div class="hook-card-inner">
+          <div class="hook-kicker-badge" data-var-text="hookKicker">京都动画《小城日常 CITY》互动人物关系图谱</div>
+          <h1 class="hook-main-title" data-var-text="hookTitle">65 位小城怪人，怎么全都扯上了关系？！</h1>
+          <div class="hook-main-sub">
+            <span><b>65</b> 位居民头像</span><span>·</span><span><b>58</b> 位声优考据</span><span>·</span><span>全城可点可搜</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCENE 2: INTERACTIVE EGO RADAR & CONIC DOSSIER (NAGUMO -> WAKO)
+       ====================================================================== -->
+  <section id="s-radar" class="scene scene-hidden">
+    <div class="brand-pill ink-box" id="radar-brand" data-om-id="radar-brand">
+      <svg viewBox="0 0 264 84" height="44" width="138">
+        <path d="M54 22 C49 12 37 8 26 11 C12 15 6 29 7 44 C8 60 18 72 34 73 C45 74 54 68 59 58 L44 49 C41 55 37 57 32 56 C25 55 22 49 22 42 C22 33 26 27 33 26 C38 25 42 28 44 32 Z" fill="#F7B647" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        <rect x="74" y="12" width="25" height="60" rx="6" fill="#F09CB4" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        <path d="M113 12 L173 12 Q177 12 177 16 L177 29 Q177 33 173 33 L155 33 L155 68 Q155 72 151 72 L135 72 Q131 72 131 68 L131 33 L113 33 Q109 33 109 29 L109 16 Q109 12 113 12 Z" fill="#99CB77" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        <path d="M188 12 L211 12 L222 34 L234 12 L257 12 L234 50 L234 68 Q234 72 230 72 L214 72 Q210 72 210 68 L210 50 Z" fill="#EE847D" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <span style="font-size:15px;font-weight:900;letter-spacing:2px;">SOCIAL MAP</span>
+        <span class="city-dots"><i style="background:#F7B647"></i><i style="background:#F09CB4"></i><i style="background:#99CB77"></i><i style="background:#EE847D"></i></span>
+      </div>
+    </div>
+
+    <div class="top-shelf">
+      <div class="nav-pills">
+        <div class="nav-pill">全景图谱</div>
+        <div class="nav-pill active">人物星图</div>
+        <div class="nav-pill">居民名鉴</div>
+        <div class="nav-pill">关系路径</div>
+      </div>
+      <div style="padding:7px 14px;border-radius:999px;border:2.5px solid #141419;background:#F09CB4;font-size:15px;font-weight:900;">中 / EN / 日</div>
+    </div>
+
+    <div class="radar-bar ink-box" id="radar-bar">
+      <div class="seg-group">
+        <div class="seg-item active">◎ 中心星图</div>
+        <div class="seg-item">全城网络</div>
+      </div>
+      <div class="pill-btn">二度 &amp; 同阵营 +13</div>
+      <div class="pill-btn" style="background:#F7B647;">关系分类 6/6</div>
+    </div>
+
+    <svg id="radar-svg" data-om-id="radar-stage" width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;z-index:10;transform-origin:640px 552px;">
+      <defs>
+        <clipPath id="r-clip" clipPathUnits="objectBoundingBox"><circle cx="0.5" cy="0.5" r="0.5"/></clipPath>
+        <marker id="arr-red" viewBox="0 0 14 14" refX="10.5" refY="7" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+          <path d="M 1.5 2 L 11.8 7 L 1.5 12 Z" fill="#B82E22"/>
+        </marker>
+        <marker id="arr-pink" viewBox="0 0 14 14" refX="10.5" refY="7" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+          <path d="M 1.5 2 L 11.8 7 L 1.5 12 Z" fill="#A91D52"/>
+        </marker>
+      </defs>
+
+      <g transform="translate(0, 32)">
+        <!-- Guide Rings -->
+        <g id="radar-rings">
+          <circle cx="640" cy="520" r="355" fill="none" stroke="#141419" stroke-opacity="0.14" stroke-width="2.5" stroke-dasharray="6 10"/>
+          <circle cx="640" cy="520" r="245" fill="rgba(255,253,249,0.82)" stroke="#141419" stroke-opacity="0.22" stroke-width="3" stroke-dasharray="10 8"/>
+          <circle cx="640" cy="520" r="132" fill="none" stroke="#F7B647" stroke-opacity="0.55" stroke-width="2.5" stroke-dasharray="4 8"/>
+        </g>
+
+        <!-- ======= STATE A: NAGUMO AS CENTER HERO ======= -->
+        <g id="radar-nagumo">
+          <g stroke="#141419" stroke-opacity="0.24" stroke-width="2.6" stroke-dasharray="7 6" fill="none">
+            <path d="M 640 275 Q 505 220 432 186"/>
+            <path d="M 640 275 Q 775 220 858 186"/>
+            <path d="M 885 520 Q 985 450 1028 365"/>
+            <path d="M 395 520 Q 285 430 272 340"/>
+            <path d="M 395 520 Q 320 620 272 688"/>
+          </g>
+          <g class="nagumo-links">
+            <path class="edge-draw" d="M 640 420 Q 618 350 640 315" fill="none" stroke="#0A64A4" stroke-width="5" stroke-dasharray="220" stroke-dashoffset="0" stroke-linecap="round"/>
+            <path class="edge-draw" d="M 736 520 Q 798 498 844 520" fill="none" stroke="#0A64A4" stroke-width="5" stroke-dasharray="220" stroke-dashoffset="0" stroke-linecap="round"/>
+            <path class="edge-draw" d="M 544 498 Q 470 468 438 498" fill="none" stroke="#B82E22" stroke-width="4.5" stroke-dasharray="220" stroke-dashoffset="0" marker-end="url(#arr-red)" marker-start="url(#arr-red)"/>
+            <path class="edge-draw" d="M 544 542 Q 470 572 438 542" fill="none" stroke="#B82E22" stroke-width="4.5" stroke-dasharray="220" stroke-dashoffset="0" marker-end="url(#arr-red)"/>
+            <path class="edge-draw" d="M 640 722 Q 664 660 640 618" fill="none" stroke="#B82E22" stroke-width="4.5" stroke-dasharray="220" stroke-dashoffset="0" marker-end="url(#arr-red)"/>
+          </g>
+          <g class="nagumo-labels">
+            <g transform="translate(626, 366)"><rect x="-48" y="-15" width="96" height="30" rx="15" fill="#FFF" stroke="#141419" stroke-width="2.4"/><text x="0" y="6" text-anchor="middle" font-size="14" font-weight="900" fill="#0A64A4">友情 / 好友</text></g>
+            <g transform="translate(790, 498)"><rect x="-48" y="-15" width="96" height="30" rx="15" fill="#FFF" stroke="#141419" stroke-width="2.4"/><text x="0" y="6" text-anchor="middle" font-size="14" font-weight="900" fill="#0A64A4">友情 / 好友</text></g>
+            <g transform="translate(490, 466)"><rect x="-32" y="-14" width="64" height="28" rx="14" fill="#FFF" stroke="#141419" stroke-width="2.4"/><text x="0" y="5" text-anchor="middle" font-size="14" font-weight="900" fill="#B82E22">宿敌</text></g>
+            <g transform="translate(490, 566)"><rect x="-44" y="-14" width="88" height="28" rx="14" fill="#141419" stroke="#B82E22" stroke-width="2.4"/><text x="0" y="5" text-anchor="middle" font-size="14" font-weight="900" fill="#F7B647">拖欠房租</text></g>
+            <g transform="translate(652, 668)"><rect x="-58" y="-15" width="116" height="30" rx="15" fill="#FFF" stroke="#141419" stroke-width="2.4"/><text x="0" y="6" text-anchor="middle" font-size="14" font-weight="900" fill="#B82E22">强行绑架表彰</text></g>
+          </g>
+          <g class="nagumo-r2">
+            <g transform="translate(432, 186)"><circle r="27" fill="#FFF" stroke="#0A64A4" stroke-width="3"/><image href="assets/avatars/honkan.webp" x="-24" y="-24" width="48" height="48" clip-path="url(#r-clip)"/><rect x="-30" y="28" width="60" height="22" rx="11" fill="#FFF" stroke="#141419" stroke-width="2"/><text x="0" y="44" text-anchor="middle" font-size="13" font-weight="800">本官</text></g>
+            <g transform="translate(858, 186)"><circle r="27" fill="#FFF" stroke="#F09CB4" stroke-width="3"/><image href="assets/avatars/shia.webp" x="-24" y="-24" width="48" height="48" clip-path="url(#r-clip)"/><rect x="-30" y="28" width="60" height="22" rx="11" fill="#FFF" stroke="#141419" stroke-width="2"/><text x="0" y="44" text-anchor="middle" font-size="13" font-weight="800">诗亚</text></g>
+            <g transform="translate(1028, 365)"><circle r="27" fill="#FFF" stroke="#B82E22" stroke-width="3"/><image href="assets/avatars/riko-izumi.webp" x="-24" y="-24" width="48" height="48" clip-path="url(#r-clip)"/><rect x="-36" y="28" width="72" height="22" rx="11" fill="#FFF" stroke="#141419" stroke-width="2"/><text x="0" y="44" text-anchor="middle" font-size="13" font-weight="800">泉莉子</text></g>
+            <g transform="translate(272, 340)"><circle r="29" fill="#FFF" stroke="#B45309" stroke-width="3"/><image href="assets/avatars/tatewaku.webp" x="-25" y="-25" width="50" height="50" clip-path="url(#r-clip)"/><rect x="-46" y="30" width="92" height="22" rx="11" fill="#FFF" stroke="#141419" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-size="13" font-weight="800">真壁立涌</text></g>
+            <g transform="translate(272, 688)"><circle r="27" fill="#FFF" stroke="#0A64A4" stroke-width="3"/><image href="assets/avatars/mimineko.webp" x="-24" y="-24" width="48" height="48" clip-path="url(#r-clip)"/><rect x="-36" y="28" width="72" height="22" rx="11" fill="#FFF" stroke="#141419" stroke-width="2"/><text x="0" y="44" text-anchor="middle" font-size="13" font-weight="800">大耳猫</text></g>
+          </g>
+          <g class="nagumo-r1">
+            <g transform="translate(640, 275)" id="wako-ring-node">
+              <circle cx="0" cy="0" r="52" fill="none" stroke="#0A64A4" stroke-width="4" stroke-dasharray="6 4"/>
+              <circle cx="4" cy="4" r="44" fill="#141419"/><circle cx="0" cy="0" r="44" fill="#FFFDF9" stroke="#F09CB4" stroke-width="5"/><circle cx="0" cy="0" r="46.5" fill="none" stroke="#141419" stroke-width="2.5"/>
+              <image href="assets/avatars/wako.webp" x="-40" y="-40" width="80" height="80" clip-path="url(#r-clip)"/>
+              <rect x="-48" y="42" width="96" height="28" rx="14" fill="#FFFDF9" stroke="#141419" stroke-width="2.5"/><text x="0" y="61" text-anchor="middle" font-size="16" font-weight="900">泉和子</text>
+            </g>
+            <g transform="translate(885, 520)">
+              <circle cx="4" cy="4" r="42" fill="#141419"/><circle cx="0" cy="0" r="42" fill="#FFFDF9" stroke="#F09CB4" stroke-width="5"/><circle cx="0" cy="0" r="44.5" fill="none" stroke="#141419" stroke-width="2.5"/>
+              <image href="assets/avatars/niikura.webp" x="-38" y="-38" width="76" height="76" clip-path="url(#r-clip)"/>
+              <rect x="-40" y="40" width="80" height="28" rx="14" fill="#FFFDF9" stroke="#141419" stroke-width="2.5"/><text x="0" y="59" text-anchor="middle" font-size="16" font-weight="900">新仓</text>
+            </g>
+            <g transform="translate(395, 520)">
+              <circle cx="4" cy="4" r="42" fill="#141419"/><circle cx="0" cy="0" r="42" fill="#FFFDF9" stroke="#B45309" stroke-width="5"/><circle cx="0" cy="0" r="44.5" fill="none" stroke="#141419" stroke-width="2.5"/>
+              <image href="assets/avatars/obaba.webp" x="-38" y="-38" width="76" height="76" clip-path="url(#r-clip)"/>
+              <rect x="-44" y="40" width="88" height="28" rx="14" fill="#FFFDF9" stroke="#141419" stroke-width="2.5"/><text x="0" y="59" text-anchor="middle" font-size="16" font-weight="900">老太婆</text>
+            </g>
+            <g transform="translate(640, 765)">
+              <circle cx="4" cy="4" r="42" fill="#141419"/><circle cx="0" cy="0" r="42" fill="#FFFDF9" stroke="#D19A1B" stroke-width="5"/><circle cx="0" cy="0" r="44.5" fill="none" stroke="#141419" stroke-width="2.5"/>
+              <image href="assets/avatars/tanabe.webp" x="-38" y="-38" width="76" height="76" clip-path="url(#r-clip)"/>
+              <rect x="-40" y="40" width="80" height="28" rx="14" fill="#FFFDF9" stroke="#141419" stroke-width="2.5"/><text x="0" y="59" text-anchor="middle" font-size="16" font-weight="900">田边</text>
+            </g>
+          </g>
+          <g transform="translate(640, 520)" id="nagumo-hero-node">
+            <circle cx="6" cy="6" r="88" fill="#141419" opacity="0.9"/>
+            <circle cx="0" cy="0" r="88" fill="#FFFDF9" stroke="#141419" stroke-width="3.5"/>
+            <g id="nagumo-aura-ring">
+              <path d="M 0 -81 A 81 81 0 0 1 81 0" fill="none" stroke="#F7B647" stroke-width="8" stroke-linecap="round"/>
+              <path d="M 81 0 A 81 81 0 0 1 0 81" fill="none" stroke="#F09CB4" stroke-width="8" stroke-linecap="round"/>
+              <path d="M 0 81 A 81 81 0 0 1 -81 0" fill="none" stroke="#99CB77" stroke-width="8" stroke-linecap="round"/>
+              <path d="M -81 0 A 81 81 0 0 1 0 -81" fill="none" stroke="#EE847D" stroke-width="8" stroke-linecap="round"/>
+            </g>
+            <image href="assets/avatars/nagumo.webp" x="-72" y="-72" width="144" height="144" clip-path="url(#r-clip)"/>
+            <rect x="-64" y="70" width="128" height="36" rx="18" fill="#141419" stroke="#FFFDF9" stroke-width="2.5"/>
+            <text x="0" y="94" text-anchor="middle" font-size="20" font-weight="900" fill="#F7B647">南云美鸟</text>
+          </g>
+        </g>
+
+        <!-- ======= STATE B: WAKO IZUMI RE-CENTERED AFTER CLICK! ======= -->
+        <g id="radar-wako" opacity="0">
+          <path d="M 640 420 Q 618 350 640 315" fill="none" stroke="#0A64A4" stroke-width="5" stroke-dasharray="10 7" stroke-linecap="round"/>
+          <path d="M 736 520 Q 798 498 844 520" fill="none" stroke="#0A64A4" stroke-width="5" stroke-dasharray="10 7" stroke-linecap="round"/>
+          <path d="M 544 520 Q 478 498 438 520" fill="none" stroke="#0A64A4" stroke-width="5" stroke-dasharray="10 7" stroke-linecap="round"/>
+          <path d="M 640 618 Q 664 676 640 722" fill="none" stroke="#6B28C4" stroke-width="5" stroke-linecap="round"/>
+          <path d="M 568 450 Q 492 385 452 346" fill="none" stroke="#A91D52" stroke-width="4.5" marker-end="url(#arr-pink)"/>
+
+          <g transform="translate(626, 366)"><rect x="-44" y="-15" width="88" height="30" rx="15" fill="#FFF" stroke="#141419" stroke-width="2.4"/><text x="0" y="6" text-anchor="middle" font-size="14" font-weight="900" fill="#0A64A4">友情/好友</text></g>
+          <g transform="translate(790, 498)"><rect x="-44" y="-15" width="88" height="30" rx="15" fill="#FFF" stroke="#141419" stroke-width="2.4"/><text x="0" y="6" text-anchor="middle" font-size="14" font-weight="900" fill="#0A64A4">友情/好友</text></g>
+          <g transform="translate(490, 496)"><rect x="-44" y="-15" width="88" height="30" rx="15" fill="#FFF" stroke="#141419" stroke-width="2.4"/><text x="0" y="6" text-anchor="middle" font-size="14" font-weight="900" fill="#0A64A4">友情/好友</text></g>
+          <g transform="translate(652, 668)"><rect x="-40" y="-15" width="80" height="30" rx="15" fill="#FFF" stroke="#141419" stroke-width="2.4"/><text x="0" y="6" text-anchor="middle" font-size="14" font-weight="900" fill="#6B28C4">亲属/姐姐</text></g>
+          <g transform="translate(508, 392)"><rect x="-44" y="-15" width="88" height="30" rx="15" fill="#FAD4DF" stroke="#141419" stroke-width="2.4"/><text x="0" y="6" text-anchor="middle" font-size="14" font-weight="900" fill="#A91D52">♡ 纯情暗恋</text></g>
+
+          <g class="wako-orbit">
+            <g transform="translate(640, 275)"><circle cx="4" cy="4" r="42" fill="#141419"/><circle r="42" fill="#FFFDF9" stroke="#F7B647" stroke-width="5"/><image href="assets/avatars/nagumo.webp" x="-38" y="-38" width="76" height="76" clip-path="url(#r-clip)"/><rect x="-48" y="40" width="96" height="28" rx="14" fill="#FFFDF9" stroke="#141419" stroke-width="2.5"/><text x="0" y="59" text-anchor="middle" font-size="16" font-weight="900">南云美鸟</text></g>
+            <g transform="translate(885, 520)"><circle cx="4" cy="4" r="42" fill="#141419"/><circle r="42" fill="#FFFDF9" stroke="#F09CB4" stroke-width="5"/><image href="assets/avatars/niikura.webp" x="-38" y="-38" width="76" height="76" clip-path="url(#r-clip)"/><rect x="-40" y="40" width="80" height="28" rx="14" fill="#FFFDF9" stroke="#141419" stroke-width="2.5"/><text x="0" y="59" text-anchor="middle" font-size="16" font-weight="900">新仓</text></g>
+            <g transform="translate(395, 520)"><circle cx="4" cy="4" r="42" fill="#141419"/><circle r="42" fill="#FFFDF9" stroke="#F7B647" stroke-width="5"/><image href="assets/avatars/shia.webp" x="-38" y="-38" width="76" height="76" clip-path="url(#r-clip)"/><rect x="-40" y="40" width="80" height="28" rx="14" fill="#FFFDF9" stroke="#141419" stroke-width="2.5"/><text x="0" y="59" text-anchor="middle" font-size="16" font-weight="900">诗亚</text></g>
+            <g transform="translate(640, 765)"><circle cx="4" cy="4" r="42" fill="#141419"/><circle r="42" fill="#FFFDF9" stroke="#99CB77" stroke-width="5"/><image href="assets/avatars/riko-izumi.webp" x="-38" y="-38" width="76" height="76" clip-path="url(#r-clip)"/><rect x="-44" y="40" width="88" height="28" rx="14" fill="#FFFDF9" stroke="#141419" stroke-width="2.5"/><text x="0" y="59" text-anchor="middle" font-size="16" font-weight="900">泉莉子</text></g>
+            <g transform="translate(435, 326)"><circle cx="4" cy="4" r="40" fill="#141419"/><circle r="40" fill="#FFFDF9" stroke="#0A64A4" stroke-width="5"/><image href="assets/avatars/honkan.webp" x="-36" y="-36" width="72" height="72" clip-path="url(#r-clip)"/><rect x="-38" y="38" width="76" height="26" rx="13" fill="#FFFDF9" stroke="#141419" stroke-width="2.5"/><text x="0" y="56" text-anchor="middle" font-size="15" font-weight="900">本官</text></g>
+          </g>
+
+          <g transform="translate(640, 520)">
+            <circle cx="6" cy="6" r="88" fill="#141419" opacity="0.9"/>
+            <circle cx="0" cy="0" r="88" fill="#FFFDF9" stroke="#141419" stroke-width="3.5"/>
+            <g id="wako-aura-ring">
+              <path d="M 0 -81 A 81 81 0 0 1 81 0" fill="none" stroke="#F09CB4" stroke-width="8" stroke-linecap="round"/>
+              <path d="M 81 0 A 81 81 0 0 1 0 81" fill="none" stroke="#F7B647" stroke-width="8" stroke-linecap="round"/>
+              <path d="M 0 81 A 81 81 0 0 1 -81 0" fill="none" stroke="#99CB77" stroke-width="8" stroke-linecap="round"/>
+              <path d="M -81 0 A 81 81 0 0 1 0 -81" fill="none" stroke="#EE847D" stroke-width="8" stroke-linecap="round"/>
+            </g>
+            <image href="assets/avatars/wako.webp" x="-72" y="-72" width="144" height="144" clip-path="url(#r-clip)"/>
+            <rect x="-58" y="70" width="116" height="36" rx="18" fill="#141419" stroke="#FFFDF9" stroke-width="2.5"/>
+            <text x="0" y="94" text-anchor="middle" font-size="20" font-weight="900" fill="#F09CB4">泉和子</text>
+          </g>
+        </g>
+
+        <g id="radar-cursor" data-layout-allow-occlusion="true" transform="translate(810, 390)" opacity="0">
+          <circle id="click-ripple" cx="0" cy="0" r="24" fill="none" stroke="#B82E22" stroke-width="4" opacity="0"/>
+          <path d="M 2 2 L 26 15 L 15 21 L 21 34 L 14 37 L 8 24 L 2 30 Z" fill="#FFFFFF" stroke="#141419" stroke-width="3.2" stroke-linejoin="round"/>
+        </g>
+      </g>
+    </svg>
+
+    <div class="radar-caption" id="radar-caption">
+      <div class="radar-kicker">◎ 实时切换中心人物 · 不止看清每条联系</div>
+      <h2 class="radar-title" data-var-text="radarCaption">点一下角色 · 全城关系网立刻围绕 TA 展开</h2>
+    </div>
+
+    <div class="dossier-frame" id="dossier-card" data-om-id="dossier-card">
+      <div class="dossier-inner">
+        <!-- Page 1: Nagumo -->
+        <div class="dossier-page" id="dossier-nagumo">
+          <div class="dossier-head">
+            <div class="dossier-badge">蒙布朗三人组</div>
+            <div class="dossier-profile">
+              <img class="dossier-avatar" src="assets/avatars/nagumo.webp" alt="南云美鸟">
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <div style="font-size:14px;font-weight:800;color:#444;line-height:1.2;">なぐも みどり</div>
+                <div style="font-size:30px;font-weight:900;line-height:1.2;">南云 美鸟</div>
+                <div style="font-size:14px;font-weight:700;color:#555;">南雲 美鳥 · Midori Nagumo</div>
+              </div>
+            </div>
+          </div>
+          <div class="dossier-body">
+            <div class="info-row">📍 本作主角 / 蒙布朗大学 2 年级 / 木目生庄 201 室</div>
+            <div class="cv-row">🎙 声优 (CV)：小松未可子</div>
+            <div class="commentary-box">
+              <div style="color:#F7B647;font-weight:900;margin-bottom:5px;">★「心灵纯净」的爽快无赖少女</div>
+              沉迷赛马、常年身无分文，因拖欠房租与房东老太婆上演史诗级对决，还被田边强行绑架去参加表彰宴！
+            </div>
+            <div class="cta-radar">◎ 以 TA 为中心展开星图</div>
+            <div style="font-size:15px;font-weight:900;display:flex;justify-content:space-between;align-items:center;">
+              <span>人物关系（按类别分组）<span style="background:#141419;color:#FFF;padding:2px 9px;border-radius:99px;font-size:13px;margin-left:6px;">5</span></span>
+              <span class="city-dots"><i style="background:#F7B647"></i><i style="background:#F09CB4"></i><i style="background:#99CB77"></i><i style="background:#EE847D"></i></span>
+            </div>
+            <div class="rel-item"><img src="assets/avatars/niikura.webp" alt="新仓"><div><div style="font-size:16px;font-weight:900;color:#0A64A4;">↔ 新仓（にーくら）</div><div style="font-size:13px;color:#5A5A6A;">嘴上吐槽南云，永远心软借钱给她。</div></div><span class="rel-tag" style="background:#D8EFFC;">友情/好友</span></div>
+            <div class="rel-item"><img src="assets/avatars/obaba.webp" alt="老太婆"><div><div style="font-size:16px;font-weight:900;color:#B82E22;">→ 老太婆（真壁外婆）</div><div style="font-size:13px;color:#5A5A6A;">围绕木目生庄房租的史诗追杀！</div></div><span class="rel-tag" style="background:#FCDCD8;">拖欠房租</span></div>
+          </div>
+        </div>
+
+        <!-- Page 2: Wako Izumi -->
+        <div class="dossier-page" id="dossier-wako" style="opacity:0;">
+          <div class="dossier-head" style="background:#FFE6ED;">
+            <div class="dossier-badge">蒙布朗三人组 · 现已选中</div>
+            <div class="dossier-profile">
+              <img class="dossier-avatar" src="assets/avatars/wako.webp" alt="泉和子">
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <div style="font-size:14px;font-weight:800;color:#444;line-height:1.2;">いずみ わこ</div>
+                <div style="font-size:28px;font-weight:900;line-height:1.2;">泉 和子（泉わこ）</div>
+                <div style="font-size:14px;font-weight:700;color:#555;">Wako Izumi</div>
+              </div>
+            </div>
+          </div>
+          <div class="dossier-body">
+            <div class="info-row">📍 蒙布朗大学 2 年级 / 木目生庄 204 室</div>
+            <div class="cv-row">🎙 声优 (CV)：石川由依</div>
+            <div class="commentary-box">
+              <div style="color:#F09CB4;font-weight:900;margin-bottom:5px;">★「啊哈哈哈哈哈哈哈！」</div>
+              热爱摄影与「有趣的事」，甚至住进新仓房间壁橱里的奇才少女；不知不觉把新任警官迷得神魂颠倒。
+            </div>
+            <div class="cta-radar" style="background:#B81E56;color:#FFFDF9;box-shadow:4px 4px 0 #141419;">★ 当前中心星图：泉和子 (5 条羁绊)</div>
+            <div class="rel-item wako-rel"><img src="assets/avatars/riko-izumi.webp" alt="泉莉子"><div><div style="font-size:16px;font-weight:900;color:#6B28C4;">→ 泉 莉子（妹妹）</div><div style="font-size:13px;color:#5A5A6A;">南高中全校坐拥后援会的女神妹妹。</div></div><span class="rel-tag" style="background:#EFE2FF;">亲属/姐姐</span></div>
+            <div class="rel-item wako-rel"><img src="assets/avatars/honkan.webp" alt="本官"><div><div style="font-size:16px;font-weight:900;color:#A91D52;">← 本官（派出所巡警）</div><div style="font-size:13px;color:#5A5A6A;">一看到和子就紧张结巴！纯情单恋。</div></div><span class="rel-tag" style="background:#FAD4DF;">恋爱/暗恋</span></div>
+            <div class="rel-item wako-rel"><img src="assets/avatars/shia.webp" alt="诗亚"><div><div style="font-size:16px;font-weight:900;color:#0A64A4;">↔ 东屋 诗亚</div><div style="font-size:13px;color:#5A5A6A;">高中挚友！「爆炸先生」画师本尊！</div></div><span class="rel-tag" style="background:#D8EFFC;">友情/好友</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCENE 3: ACCELERATING MONTAGE BURST (PATH FINDER -> EGGS -> FACTIONS -> STATS)
+       ====================================================================== -->
+  <section id="s-burst" class="scene scene-hidden">
+    <div id="shot-path" class="burst-shot" data-om-id="path-bar">
+      <div class="burst-top-bar">
+        <div class="burst-kicker">🔎 六度分隔 · 任意两人最短关系路径</div>
+        <div class="burst-tag">真实图谱实测：4 跳直达！</div>
+      </div>
+      <div class="path-chain-wrap">
+        <div class="path-node p-node-1"><img class="path-avatar" src="assets/avatars/good-person.webp" alt="好人" style="border-color:#99CB77;"><div class="path-name">好人</div><div class="path-role">路人团 (THE MOB)</div></div>
+        <div class="path-hop p-hop-1"><div class="path-rel-badge" style="background:#FCDCD8;color:#B82E22;">群殴 →</div><div class="path-arrow-line"></div></div>
+        <div class="path-node p-node-2"><img class="path-avatar" src="assets/avatars/honkan.webp" alt="本官" style="border-color:#0A64A4;"><div class="path-name">本官</div><div class="path-role">商店街派出所巡警</div></div>
+        <div class="path-hop p-hop-2"><div class="path-rel-badge" style="background:#FAD4DF;color:#A91D52;">♡ 暗恋 →</div><div class="path-arrow-line"></div></div>
+        <div class="path-node p-node-3"><img class="path-avatar" src="assets/avatars/wako.webp" alt="泉和子" style="border-color:#F09CB4;"><div class="path-name">泉和子</div><div class="path-role">蒙布朗大学摄影奇才</div></div>
+        <div class="path-hop p-hop-3"><div class="path-rel-badge" style="background:#EFE2FF;color:#6B28C4;">姐姐 →</div><div class="path-arrow-line"></div></div>
+        <div class="path-node p-node-4"><img class="path-avatar" src="assets/avatars/riko-izumi.webp" alt="泉莉子" style="border-color:#99CB77;"><div class="path-name">泉莉子</div><div class="path-role">CITY 南高中女神</div></div>
+        <div class="path-hop p-hop-4"><div class="path-rel-badge" style="background:#FAD4DF;color:#A91D52;">← ♡ 暗恋</div><div class="path-arrow-line"></div></div>
+        <div class="path-node p-node-5"><img class="path-avatar" src="assets/avatars/tatewaku.webp" alt="真壁立涌" style="border-color:#F7B647;"><div class="path-name">真壁立涌 #28</div><div class="path-role">真壁家 × 南高中足球部</div></div>
+      </div>
+      <div class="burst-bottom-banner">路人「好人」暴打本官 → 巡警暗恋和子 → 和子的妹妹被立涌暗恋！</div>
+    </div>
+
+    <div id="shot-eggs" class="burst-shot" data-om-id="egg-cards">
+      <div class="burst-top-bar">
+        <div class="burst-kicker">★ 原著梗与阵营交叠 · 细节拉满</div>
+        <div class="burst-tag">不止连线，更有角色小传</div>
+      </div>
+      <div class="dual-cards">
+        <div class="feat-card" style="background:#FFF6DF;">
+          <div>
+            <span class="feat-pill" style="background:#F7B647;">双阵营交叠 · #28 青春Boy</span>
+            <div class="feat-hero-row">
+              <img class="feat-avatar" src="assets/avatars/tatewaku.webp" alt="真壁立涌">
+              <div>
+                <div style="font-size:44px;font-weight:900;line-height:1.1;">真壁 立涌</div>
+                <div style="font-size:21px;font-weight:800;color:#B45309;margin-top:8px;">🎙 入野自由 · 替补中场 #28</div>
+                <div style="font-size:20px;font-weight:700;color:#444;margin-top:10px;">同时横跨「真壁家」与「CITY南高中足球部」，暗恋泉莉子的纯情少爷！</div>
+              </div>
+            </div>
+          </div>
+          <div class="feat-mini-row">
+            <img src="assets/avatars/chef-makabe.webp" alt="真壁鹤菱"><img src="assets/avatars/obaba.webp" alt="老太婆"><img src="assets/avatars/dr-adatara.webp" alt="安达太良博士">
+            <div style="font-size:19px;font-weight:900;">父子 · 租界外婆 · 宿敌整蛊一线贯通</div>
+          </div>
+        </div>
+
+        <div class="feat-card" style="background:#EFF9E8;">
+          <div>
+            <span class="feat-pill" style="background:#99CB77;">★ 新井圭一《日常》粉丝泪目联动</span>
+            <div class="feat-hero-row">
+              <img class="feat-avatar" src="assets/avatars/naganohara.webp" alt="长野原大介">
+              <div>
+                <div style="font-size:42px;font-weight:900;line-height:1.1;">长野原 大介</div>
+                <div style="font-size:21px;font-weight:800;color:#2E8B57;margin-top:8px;">🎙 相泽舞 · 原名《日常》长野原美绪！</div>
+                <div style="font-size:20px;font-weight:700;color:#444;margin-top:10px;">「唇泥棒工作室」人气漫画家，也是新人编辑轰的头号偶像！</div>
+              </div>
+            </div>
+          </div>
+          <div class="feat-mini-row">
+            <img src="assets/avatars/todoroki.webp" alt="轰"><img src="assets/avatars/kamaboko.webp" alt="鬼鱼板"><img src="assets/avatars/editor-in-chief.webp" alt="总编">
+            <div style="font-size:19px;font-weight:900;">《周刊CITY》编辑部 × 鬼鱼板师徒全收录</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="shot-factions" class="burst-shot" data-om-id="faction-grid">
+      <div class="burst-top-bar">
+        <div class="burst-kicker">🏷 8 大阵营地域 · 一眼分清全城势力</div>
+        <div class="burst-tag">支持阵营筛选 · 关系隔离聚焦</div>
+      </div>
+      <div class="faction-grid">
+        <div class="fac-card" style="background:#FFF8E6;"><span class="fac-tag" style="background:#F7B647;">蒙布朗三人组</span><div class="fac-faces"><img src="assets/avatars/nagumo.webp" alt=""><img src="assets/avatars/niikura.webp" alt=""><img src="assets/avatars/wako.webp" alt=""></div><div style="font-size:18px;font-weight:900;">主角团的喧闹日常</div></div>
+        <div class="fac-card" style="background:#FDEAE8;"><span class="fac-tag" style="background:#EE847D;">真壁家（洋食マカベ）</span><div class="fac-faces"><img src="assets/avatars/chef-makabe.webp" alt=""><img src="assets/avatars/obaba.webp" alt=""><img src="assets/avatars/tatewaku.webp" alt=""></div><div style="font-size:18px;font-weight:900;">大厨 · 房东与少爷</div></div>
+        <div class="fac-card" style="background:#EEF8E8;"><span class="fac-tag" style="background:#99CB77;">《周刊CITY》编辑部</span><div class="fac-faces"><img src="assets/avatars/todoroki.webp" alt=""><img src="assets/avatars/naganohara.webp" alt=""><img src="assets/avatars/kamaboko.webp" alt=""></div><div style="font-size:18px;font-weight:900;">赶稿地狱与跨作惊喜</div></div>
+        <div class="fac-card" style="background:#FCE9EF;"><span class="fac-tag" style="background:#F09CB4;">田边豪宅（田边家）</span><div class="fac-faces"><img src="assets/avatars/tanabe.webp" alt=""><img src="assets/avatars/matsuri.webp" alt=""><img src="assets/avatars/good-person.webp" alt=""></div><div style="font-size:18px;font-weight:900;">强行表彰黑衣人军团</div></div>
+        <div class="fac-card" style="background:#EBF7FE;"><span class="fac-tag" style="background:#7CC5F8;">安达太良家</span><div class="fac-faces"><img src="assets/avatars/dr-adatara.webp" alt=""><img src="assets/avatars/kamome.webp" alt=""></div><div style="font-size:18px;font-weight:900;">日本酒铺整蛊一家</div></div>
+        <div class="fac-card" style="background:#F4ECFF;"><span class="fac-tag" style="background:#C5B4F0;">光岳剧团</span><div class="fac-faces"><img src="assets/avatars/toudou.webp" alt=""><img src="assets/avatars/mimineko.webp" alt=""></div><div style="font-size:18px;font-weight:900;">动物奇人与街头看板</div></div>
+        <div class="fac-card" style="background:#FFF8E6;"><span class="fac-tag" style="background:#F7B647;">CITY 南高中足球部</span><div class="fac-faces"><img src="assets/avatars/tatewaku.webp" alt=""><img src="assets/avatars/riko-izumi.webp" alt=""><img src="assets/avatars/amagi.webp" alt=""></div><div style="font-size:18px;font-weight:900;">笨蛋青春踢球日常</div></div>
+        <div class="fac-card" style="background:#EEF8E8;"><span class="fac-tag" style="background:#99CB77;">路人团 THE MOB</span><div class="fac-faces"><img src="assets/avatars/good-person.webp" alt=""><img src="assets/avatars/t-shirt-guy.webp" alt=""><img src="assets/avatars/dress-girl.webp" alt=""></div><div style="font-size:18px;font-weight:900;">存在感爆棚的无名街坊</div></div>
+      </div>
+    </div>
+
+    <div id="shot-flash-65" class="burst-shot">
+      <div class="flash-card-bg" style="background:#F7B647;">
+        <div class="flash-big-num">65</div>
+        <div class="flash-title">全城 65 位居民高清裁脸头像</div>
+        <div class="flash-avatar-strip">
+          <img src="assets/avatars/nagumo.webp" alt=""><img src="assets/avatars/wako.webp" alt=""><img src="assets/avatars/niikura.webp" alt=""><img src="assets/avatars/obaba.webp" alt=""><img src="assets/avatars/honkan.webp" alt=""><img src="assets/avatars/tatewaku.webp" alt=""><img src="assets/avatars/tanabe.webp" alt=""><img src="assets/avatars/mimineko.webp" alt="">
+        </div>
+      </div>
+    </div>
+    <div id="shot-flash-58" class="burst-shot">
+      <div class="flash-card-bg" style="background:#F09CB4;">
+        <div class="flash-big-num">58</div>
+        <div class="flash-title">2025 动画全阵容声优完整标注</div>
+        <div class="flash-avatar-strip">
+          <img src="assets/avatars/naganohara.webp" alt=""><img src="assets/avatars/todoroki.webp" alt=""><img src="assets/avatars/riko-izumi.webp" alt=""><img src="assets/avatars/shia.webp" alt=""><img src="assets/avatars/good-person.webp" alt=""><img src="assets/avatars/chef-makabe.webp" alt="">
+        </div>
+      </div>
+    </div>
+    <div id="shot-flash-lang" class="burst-shot">
+      <div class="flash-card-bg" style="background:#99CB77;">
+        <div class="flash-big-num" style="font-size:168px;letter-spacing:-4px;">中 / EN / 日</div>
+        <div class="flash-title">三语译名考据一键切换 · 权威人名绝不错译</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCENE 4: JOHN LENNON DEADPAN STOP (BAR 10)
+       ====================================================================== -->
+  <section id="s-stop" class="scene scene-hidden" data-om-id="lennon-card">
+    <div class="lennon-ring" id="lennon-ring">
+      <img class="lennon-avatar" src="assets/avatars/john-lennon.webp" alt="约翰·列侬">
+    </div>
+    <div class="lennon-zero-pill">约翰·列侬（泥瓦匠） · 全城关系数：<b>0</b></div>
+    <div id="lennon-quote-box" style="opacity:0;">
+      <div style="font-size:56px;font-weight:900;color:#F7B647;line-height:1.1;" data-var-text="stopLine">「死了。」</div>
+      <div id="lennon-sub-line" style="font-size:24px;font-weight:800;margin-top:14px;color:#FFFDF9;">—— 就连全城唯一 0 连线的神秘路人，也认真为你收录！</div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCENE 5: FULL PANORAMA DROP (REAL APP SCREENSHOTS IN ACTION)
+       ====================================================================== -->
+  <section id="s-drop" class="scene scene-hidden">
+    <div class="drop-ray-bg" id="drop-rays"></div>
+    <div class="drop-banner-wrap">
+      <div id="drop-banner" data-om-id="drop-banner" data-var-text="dropBanner">全景图谱 × 人物星图 · 65 位居民一网打尽</div>
+    </div>
+
+    <div class="drop-frame drop-frame-left" id="drop-map-card" data-om-id="drop-map-card" data-layout-allow-occlusion="true">
+      <div class="drop-screen-inner">
+        <div class="drop-chip">🗺 模式 1 · 经典全景阵营地图</div>
+        <img id="drop-map-img" src="materials/ui-classic-map.png" alt="全景阵营地图">
+      </div>
+    </div>
+
+    <div class="drop-frame drop-frame-right" id="drop-net-card" data-om-id="drop-net-card" data-layout-allow-occlusion="true">
+      <div class="drop-screen-inner">
+        <div class="drop-chip" style="background:#F7B647;">◎ 模式 2 · 65 人全城关系星图</div>
+        <img id="drop-net-img" src="materials/ui-full-network.png" alt="全城关系星图">
+      </div>
+    </div>
+
+    <div class="drop-float-badge" id="dfb-1" style="left:64px;bottom:52px;"><img src="assets/avatars/nagumo.webp" alt="">拖拽 · 缩放 · 实时搜人</div>
+    <div class="drop-float-badge" id="dfb-2" style="right:64px;bottom:52px;background:#F7B647;"><img src="assets/avatars/mimineko.webp" alt="">桌面大屏 × 手机端全适配</div>
+    <div style="position:absolute;left:50%;bottom:52px;transform:translateX(-50%);z-index:28;">
+      <div class="drop-float-badge" id="dfb-3" style="position:relative;left:auto;bottom:auto;background:#99CB77;"><img src="assets/avatars/wako.webp" alt="">点击任意人物直达完整档案</div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCENE 6: CLEAN KYOANI END CARD (BOTTOM-RIGHT CORNER CLEAR FOR SIGNATURE!)
+       ====================================================================== -->
+  <section id="s-end" class="scene scene-hidden">
+    <div class="end-orbit" id="end-orbit">
+      <img src="assets/avatars/nagumo.webp" alt=""><img src="assets/avatars/wako.webp" alt=""><img src="assets/avatars/niikura.webp" alt=""><img src="assets/avatars/honkan.webp" alt=""><img src="assets/avatars/obaba.webp" alt=""><img src="assets/avatars/tatewaku.webp" alt=""><img src="assets/avatars/riko-izumi.webp" alt=""><img src="assets/avatars/naganohara.webp" alt="">
+    </div>
+
+    <div class="end-hero-lockup" id="end-logo" data-om-id="end-logo">
+      <svg viewBox="0 0 264 84" height="148" width="465">
+        <path d="M54 22 C49 12 37 8 26 11 C12 15 6 29 7 44 C8 60 18 72 34 73 C45 74 54 68 59 58 L44 49 C41 55 37 57 32 56 C25 55 22 49 22 42 C22 33 26 27 33 26 C38 25 42 28 44 32 Z" fill="#F7B647" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        <rect x="74" y="12" width="25" height="60" rx="6" fill="#F09CB4" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        <path d="M113 12 L173 12 Q177 12 177 16 L177 29 Q177 33 173 33 L155 33 L155 68 Q155 72 151 72 L135 72 Q131 72 131 68 L131 33 L113 33 Q109 33 109 29 L109 16 Q109 12 113 12 Z" fill="#99CB77" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+        <path d="M188 12 L211 12 L222 34 L234 12 L257 12 L234 50 L234 68 Q234 72 230 72 L214 72 Q210 72 210 68 L210 50 Z" fill="#EE847D" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:38px;font-weight:900;letter-spacing:3px;line-height:1;">SOCIAL MAP</div>
+        <div style="font-size:24px;font-weight:900;color:#B82E22;">《小城日常 CITY》全人物关系图鉴</div>
+        <span class="city-dots"><i style="background:#F7B647"></i><i style="background:#F09CB4"></i><i style="background:#99CB77"></i><i style="background:#EE847D"></i></span>
+      </div>
+      <svg id="end-mimineko" viewBox="0 0 120 112" width="136" height="128">
+        <path d="M78 58 C95 52 108 32 110 15 C111 9 104 9 100 15 C95 23 89 35 76 42" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M28 56 C24 44 40 34 60 36 C78 38 88 50 86 68 L83 84 C82 88 74 88 74 83 L74 73 L55 74 L51 87 C49 92 40 91 41 85 L43 72 C33 70 29 63 28 56 Z" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linejoin="round"/>
+        <path d="M32 45 C26 24 31 10 38 11 C45 12 45 27 42 42" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linecap="round"/>
+        <path d="M46 43 C47 22 55 12 61 15 C67 18 62 33 56 45" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linecap="round"/>
+        <path d="M17 61 C18 47 32 39 48 41 C61 43 66 54 61 65 C56 75 40 78 27 74 C20 71 16 66 17 61 Z" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linejoin="round"/>
+        <ellipse cx="30" cy="57" rx="5.5" ry="6.2" fill="#FFF" stroke="#141419" stroke-width="3"/>
+        <circle cx="29" cy="58" r="3.4" fill="#0A64A4"/><circle cx="28" cy="56.5" r="1.2" fill="#FFF"/>
+        <ellipse cx="46" cy="58" rx="6" ry="6.5" fill="#FFF" stroke="#141419" stroke-width="3"/>
+        <circle cx="44.5" cy="59" r="3.6" fill="#0A64A4"/><circle cx="43.5" cy="57.5" r="1.2" fill="#FFF"/>
+        <path d="M23 50 L36 54 M53 51 L40 54.5" stroke="#141419" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M27 72 Q44 80 59 71" fill="none" stroke="#DD5549" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="41" cy="83" r="10.5" fill="#F7B647" stroke="#141419" stroke-width="3.6"/>
+        <path d="M31 83 Q41 87 51 83" fill="none" stroke="#141419" stroke-width="2.5"/>
+        <circle cx="41" cy="87" r="2.2" fill="#141419"/>
+      </svg>
+    </div>
+
+    <div class="end-url-btn" id="end-url" data-om-id="end-url" data-var-text="siteUrl">social.city.chius.dev</div>
+    <div class="end-sub-pill" id="end-sub" data-var-text="ctaSub">65 位居民 · 65 条原著羁绊 · 中 / EN / 日 三语免费逛</div>
+  </section>
+</div>
+
+<!-- ==========================================================================
+     ORIGINAL STREET-BRASS FUNK / KYOANI COMEDY SCORE (118 BPM · F -> G LIFT)
+     14 Bars exact bar-by-bar parity (~28.5s matching film duration!)
+     ========================================================================== -->
+<script type="text/vnd.abc" id="om-score">
+X:1
+T:CITY Social Map · Sunny Street Brass Funk
+M:4/4
+L:1/8
+Q:1/4=118
+K:F
+V:MEL inst=marimba role=melody gain=0.85
+!mark:hook! !mf! c'2 a f c'2 a f | d'2 b g e2 g2 | c'd' c' a f g a c' |
+!mark:radar! !mp! a f c' a z f g a | b g d' b z g a b | c' a e' c' d' c' b g |
+!mark:burst! !f! !crescendo(! f g a c' d' c' a f | g a b d' e' d' b g | a b c' d' !stop(! e' d' !stop)! z2 !crescendo)! |
+!mark:stop! z8 |
+!mark:drop! [K:G] !ff! d'2 b g d'2 b g | e'2 c' a f'2 e' d' | g' e' d' b c' d' e' f' |
+!mark:end! !f! !fermata!g'8 |
+V:BRS inst=brass gain=0.72
+!mf! [FAc]2 z2 z4 | [GBd]2 z2 z4 | [FAc]2 [CEG]2 [FAc]4 |
+!mp! z8 | [DGB]4 z4 | [CEG]4 [CEG]4 |
+!f! !crescendo(! [FAc]3 [FAc] z2 [FAc]2 | [GBd]3 [GBd] z2 [GBd]2 | [Ace]2 [GBd]2 !stop(! [FAc]2 !stop)! z2 !crescendo)! |
+z8 |
+[K:G] !ff! [GBd]3 [GBd] z2 [GBd]2 | [Ace]3 [Ace] z2 [DFAd]2 | [GBd]2 [Ace]2 [Bdf]2 [DFAc]2 |
+!f! !fermata![GBdg]8 |
+V:CLV inst=clav gain=0.58
+!mf! z [FAc] z [FAc] z [FAc] z [FAc] | z [GBd] z [GBd] z [CEG] z [CEG] | z [FAc] z [FAc] z [DFB] z [CEG] |
+!mp! z [FAc] z [FAc] z [FAc] z [FAc] | z [GBd] z [GBd] z [GBd] z [GBd] | z [EGB] z [EGB] z [CEG] z [CEG] |
+!f! z [FAc] z [FAc] z [FAc] z [FAc] | z [GBd] z [GBd] z [GBd] z [GBd] | z [Ace] z [Ace] z4 |
+z8 |
+[K:G] !ff! z [GBd] z [GBd] z [GBd] z [GBd] | z [Ace] z [Ace] z [DFAd] z [DFAd] | z [GBd] z [GBd] z [DFAd] z [DFAd] |
+!f! !fermata![GBd]8 |
+V:PIZ inst=pizz gain=0.68
+z8 | z8 | z8 |
+!mf! f c a c f c a c | g d b d g d b d | e c g c d B g B |
+z8 | z8 | z8 |
+z8 |
+[K:G] z8 | z8 | z8 |
+!f! g d b d !fermata!g4 |
+V:BAS inst=bass gain=0.88
+!mf! F,, F, z F,, F, z C,, D,, | G,, G, z G,, C,, C, z G,, | F,, F, C,, C, B,,, B,, C,, C, |
+!mp! F,,3 C, F,,2 C,2 | G,,3 D, G,,2 D,2 | C,,3 G,, C,,2 G,,2 |
+!f! F,, F, F,, F, F,, F, C, F,, | G,, G, G,, G, G,, G, D, G,, | A,, A, G,, G, !stop(! F,,2 !stop)! z2 |
+z8 |
+[K:G] !ff! G,, G, G,, G, G,, G, D, G,, | A,, A, A,, A, D,, D, A,, D,, | G,, G, E,, E, C,, C, D,, D, |
+!f! G,, B,, D, G, !fermata!G,,4 |
+V:DRM inst=drums kit=acoustic gain=0.88
+!mf! [^C,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,][C,,^F,,] [D,,^F,,]^F,, | [C,,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,][C,,^F,,] [D,,^F,,]^A,, | [C,,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,][C,,^F,,] [D,,^F,,] A,, |
+!mp! [C,,^F,,]^F,, ^C,,^F,, C,,^F,, ^C,,^F,, | [C,,^F,,]^F,, [D,,^F,,]^F,, C,,^F,, [D,,^F,,]^A,, | [C,,^F,,]^F,, [D,,^F,,]^F,, D,,/D,,/ A,,/A,,/ z2 |
+!f! [^C,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,][C,,^F,,] [D,,^F,,]^F,, | [C,,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,][C,,^F,,] [D,,^F,,]^A,, | !crescendo(! [C,,^F,,]^F,, [D,,^F,,]^F,, D,,/D,,/ z3 !crescendo)! |
+z6 !rise(! z2 |
+[K:G] !rise)! !hit! !ff! [^C,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,][C,,^F,,] [D,,^F,,]^F,, | [C,,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,][C,,^F,,] [D,,^F,,]^A,, | [C,,^F,,]^F,, [D,,^F,,]^F,, [D,,^F,,] A,,/A,,/ D,,/D,,/D,,/D,,/ |
+!f! !fermata![^C,D,,]8 |
+</script>
+
+<script>
+  const V = OM.vars();
+  OM.music({ bpm: 118 });
+  const B = (n) => OM.beat(n);
+  const FPS = 60;
+  const cut = (t) => (Math.floor(t * FPS) + 0.5) / FPS;
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+
+  // Continuous gentle ambient C-I-T-Y confetti drift across the whole film
+  tl.fromTo('#confetti-layer', { x: 0, y: 0 }, { x: 75, y: 48, duration: B(52) + V.endHold + 0.6, ease: 'none', immediateRender: false }, 0);
+
+  // =========================================================================
+  // SCENE 1: HOOK (0.00s -> 6.10s, Bars 1-3, Beats 0..12)
+  // High-energy manga panel camera whip (zero flat opening, zero Frame-1 jump!)
+  // =========================================================================
+  tl.addLabel('scene:hook', 0);
+  gsap.set('#hook-cam', { scale: 1.46, x: 430, y: 238 });
+
+  // Camera starts zoomed onto Top-Left Panel C right at 0s (zero Frame-4 pop, zero edge clip!), then whips I -> T -> Y -> Full Grid Pullback!
+  tl.fromTo('#hook-cam', { scale: 1.46, x: 430, y: 238 }, { scale: 1.46, x: -430, y: 238, duration: B(0.95), ease: 'expo.inOut', immediateRender: false }, 0);
+  tl.fromTo('#hook-cam', { scale: 1.46, x: -430, y: 238 }, { scale: 1.46, x: 430, y: -238, duration: B(0.9), ease: 'expo.inOut', immediateRender: false }, B(1.02));
+  tl.fromTo('#hook-cam', { scale: 1.46, x: 430, y: -238 }, { scale: 1.46, x: -430, y: -238, duration: B(0.9), ease: 'expo.inOut', immediateRender: false }, B(2.0));
+  tl.fromTo('#hook-cam', { scale: 1.46, x: -430, y: -238 }, { scale: 1.0, x: 0, y: 0, duration: B(0.95), ease: 'expo.out', immediateRender: false }, B(3.0));
+  tl.fromTo('#hook-top-pill', { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.42, ease: OM.spring(0.2), immediateRender: false }, B(3.1));
+
+  // Inner panel casts punch in as the camera lands on each quadrant
+  tl.fromTo('#pi-c', { scale: 1.1, x: -18 }, { scale: 1, x: 0, duration: 0.36, ease: OM.spring(0.22), immediateRender: false }, 0);
+  tl.fromTo('#pi-i', { opacity: 0, x: 70, scale: 0.9 }, { opacity: 1, x: 0, scale: 1, duration: 0.36, ease: OM.spring(0.2), immediateRender: false }, OM.sfx('stamp', B(0.85)) - 0.14);
+  tl.fromTo('#pi-t', { opacity: 0, y: 70, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.36, ease: OM.spring(0.2), immediateRender: false }, OM.sfx('thud', B(1.8)) - 0.14);
+  tl.fromTo('#pi-y', { opacity: 0, x: 70, y: 50, scale: 0.9 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.36, ease: OM.spring(0.2), immediateRender: false }, OM.sfx('stamp', B(2.75)) - 0.14);
+
+  // Beat 3.95 (~2.0s): Giant center comic hook card slams over gutters!
+  tl.fromTo('#hook-card', { opacity: 0, scale: 0.45, rotation: -7 }, { opacity: 1, scale: 1, rotation: -1.4, duration: 0.52, ease: OM.spring(0.25), immediateRender: false }, OM.sfx('hit', B(3.95)) - 0.1);
+
+  // Beats 5..10.5: Pronounced beat-locked comic pushes so corner titles stay framed cleanly & motion stays active!
+  tl.fromTo('#hook-cam', { scale: 1.0, x: 0, y: 0 }, { scale: 1.028, x: 0, y: 0, duration: B(1.6), ease: 'power2.out', immediateRender: false }, B(5.2));
+  tl.fromTo('#hook-cam', { scale: 1.028 }, { scale: 1.046, duration: B(1.8), ease: 'power2.inOut', immediateRender: false }, B(7.2));
+  tl.fromTo('#hook-cam', { scale: 1.046 }, { scale: 1.0, duration: B(1.4), ease: 'power2.in', immediateRender: false }, B(9.2));
+  tl.fromTo('#hook-card', { rotation: -1.4, scale: 1.0, y: 0 }, { rotation: 1.8, scale: 1.1, y: -14, duration: B(2.4), ease: 'power2.out', immediateRender: false }, B(5.0));
+  tl.fromTo('#hook-card', { rotation: 1.8, scale: 1.1, y: -14 }, { rotation: -1.0, scale: 1.05, y: 0, duration: B(2.8), ease: 'sine.inOut', immediateRender: false }, B(7.6));
+  tl.fromTo('.hook-main-sub', { scale: 0.85, y: 12 }, { scale: 1.08, y: 0, duration: 0.42, ease: OM.spring(0.24), immediateRender: false }, B(6.8));
+  tl.fromTo('.hook-main-sub', { scale: 1.08 }, { scale: 1.0, duration: 0.36, ease: 'power2.out', immediateRender: false }, B(8.5));
+
+  // Beats 10.6..12.2: Clear dark gutter BEFORE spinning 4 C-I-T-Y panels straight into Nagumo's aura ring over bright white paper!
+  tl.fromTo('#hook-card', { opacity: 1, scale: 1.05, y: 0 }, { opacity: 0, scale: 1.24, y: -70, duration: 0.32, ease: 'power3.in', immediateRender: false }, B(10.6));
+  tl.fromTo('#hook-top-pill', { opacity: 1, y: 0 }, { opacity: 0, y: -75, duration: 0.3, ease: 'power2.in', immediateRender: false }, B(10.6));
+  tl.fromTo('#hook-gutter-bg', { opacity: 1 }, { opacity: 0, duration: 0.35, ease: 'power2.out', immediateRender: false }, B(11.1));
+  tl.fromTo('#hook-grid', { scale: 1, rotation: 0, opacity: 1 }, { scale: 0.14, rotation: 110, opacity: 0, duration: B(1.4), ease: 'expo.inOut', immediateRender: false }, OM.sfx('whoosh', B(11.0)));
+  tl.fromTo('#s-hook', { opacity: 1 }, { opacity: 0, duration: 0.15, ease: 'power2.in', immediateRender: false }, B(12.35));
+
+  // =========================================================================
+  // SCENE 2: EGO RADAR + CONIC DOSSIER (Beats 12..24, 6.10s -> 12.20s)
+  // =========================================================================
+  tl.addLabel('scene:radar', B(12));
+  tl.fromTo('#s-radar', { opacity: 0 }, { opacity: 1, duration: 0.45, ease: 'power2.out', immediateRender: false }, B(11.6));
+  tl.fromTo('#radar-brand', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, ease: 'expo.out', immediateRender: false }, B(12.0));
+  tl.fromTo('.top-shelf', { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out', immediateRender: false }, B(12.1));
+  tl.fromTo('#radar-bar', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out', immediateRender: false }, B(12.2));
+  tl.fromTo('#dossier-card', { opacity: 0, x: 140 }, { opacity: 1, x: 0, duration: 0.65, ease: OM.spring(0.14), immediateRender: false }, B(12.3));
+  tl.fromTo('#radar-caption', { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.55, ease: 'expo.out', immediateRender: false }, B(12.5));
+
+  // Continuous living aura ring rotation & smooth zoom into Wako before click!
+  tl.fromTo('#nagumo-hero-node', { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: OM.spring(0.2), immediateRender: false }, B(12.1));
+  tl.fromTo('#nagumo-aura-ring', { rotation: 0 }, { rotation: 160, duration: B(7.2), ease: 'none', svgOrigin: '0 0', immediateRender: false }, B(12.2));
+  tl.fromTo('.edge-draw', { strokeDashoffset: 220 }, { strokeDashoffset: 0, duration: 0.85, stagger: 0.18, ease: 'expo.out', immediateRender: false }, B(12.9));
+  tl.fromTo('.nagumo-labels g', { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.4, stagger: 0.22, ease: OM.spring(0.18), immediateRender: false }, B(13.5));
+  tl.fromTo('.nagumo-r1 > g', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.45, stagger: 0.28, ease: OM.spring(0.22), immediateRender: false }, OM.sfx('pop', B(13.5), { note: 1 }));
+  OM.sfx('pop', B(14.5), { note: 3 });
+  tl.fromTo('.nagumo-r2 > g', { opacity: 0, scale: 0.6 }, { opacity: 0.88, scale: 1, duration: 0.42, stagger: 0.22, ease: OM.spring(0.18), immediateRender: false }, OM.sfx('pop', B(15.5), { note: 5 }));
+
+  tl.fromTo('#dossier-nagumo .rel-item', { opacity: 0, x: 26 }, { opacity: 1, x: 0, duration: 0.45, stagger: 0.45, ease: 'expo.out', immediateRender: false }, B(15.4));
+  tl.fromTo('#radar-svg', { scale: 1, x: 0, y: 0 }, { scale: 1.15, x: 20, y: 120, duration: B(3.4), ease: 'power1.inOut', immediateRender: false }, B(15.4));
+
+  // Cursor glides cleanly to Wako, clicks -> Radar & Dossier switch live to Wako Izumi!
+  tl.fromTo('#radar-cursor', { opacity: 0, x: 860, y: 450 }, { opacity: 1, x: 672, y: 294, duration: 0.85, ease: 'expo.inOut', immediateRender: false }, B(17.2));
+  tl.fromTo('#click-ripple', { opacity: 0, scale: 0.4 }, { opacity: 0.95, scale: 1.6, duration: 0.26, ease: 'power2.out', immediateRender: false }, OM.sfx('click', B(18.9)));
+  tl.fromTo('#click-ripple', { opacity: 0.95, scale: 1.6 }, { opacity: 0, scale: 2.2, duration: 0.22, ease: 'power2.in', immediateRender: false }, B(19.16));
+  tl.fromTo('#radar-nagumo', { opacity: 1, scale: 1 }, { opacity: 0, scale: 0.9, duration: 0.32, ease: 'power2.in', immediateRender: false }, B(19.1));
+  tl.fromTo('#radar-wako', { opacity: 0, scale: 0.88 }, { opacity: 1, scale: 1, duration: 0.55, ease: OM.spring(0.18), immediateRender: false }, OM.sfx('pop', B(19.35), { note: 8 }));
+  tl.fromTo('#wako-aura-ring', { rotation: 0 }, { rotation: 110, duration: B(4.8), ease: 'none', svgOrigin: '0 0', immediateRender: false }, B(19.35));
+  tl.fromTo('#radar-svg', { scale: 1.15, x: 20, y: 120 }, { scale: 1.0, x: 0, y: 0, duration: B(4.2), ease: 'power2.inOut', immediateRender: false }, B(19.4));
+  tl.fromTo('#radar-cursor', { opacity: 1, x: 672, y: 294 }, { opacity: 0, x: 715, y: 315, duration: 0.35, ease: 'power2.in', immediateRender: false }, B(20.1));
+  tl.fromTo('#dossier-nagumo', { opacity: 1, y: 0 }, { opacity: 0, y: -35, duration: 0.28, ease: 'power2.in', immediateRender: false }, B(19.1));
+  tl.fromTo('#dossier-wako', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out', immediateRender: false }, B(19.35));
+  tl.fromTo('#dossier-wako .wako-rel', { opacity: 0, x: 38 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.72, ease: 'expo.out', immediateRender: false }, B(20.1));
+
+  tl.fromTo('#s-radar', { opacity: 1 }, { opacity: 0, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(24)));
+
+  // =========================================================================
+  // SCENE 3: BURST MONTAGE (Beats 24..36, 12.20s -> 18.31s)
+  // =========================================================================
+  tl.addLabel('scene:burst', cut(B(24)));
+  tl.fromTo('#s-burst', { opacity: 0 }, { opacity: 1, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(24)));
+
+  // 3A: Path Finder 4-hop chain (Beats 24..28)
+  tl.fromTo('#shot-path', { opacity: 0 }, { opacity: 1, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(24)));
+  tl.fromTo('.p-node-1', { opacity: 0, scale: 0.75 }, { opacity: 1, scale: 1, duration: 0.35, ease: OM.spring(0.2), immediateRender: false }, B(24.05));
+  tl.fromTo('.p-hop-1', { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.26, ease: 'expo.out', immediateRender: false }, B(24.35));
+  tl.fromTo('.p-node-2', { opacity: 0, scale: 0.75 }, { opacity: 1, scale: 1, duration: 0.35, ease: OM.spring(0.2), immediateRender: false }, OM.sfx('pop', B(24.6), { note: 2 }));
+  tl.fromTo('.p-hop-2', { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.26, ease: 'expo.out', immediateRender: false }, B(25.0));
+  tl.fromTo('.p-node-3', { opacity: 0, scale: 0.75 }, { opacity: 1, scale: 1, duration: 0.35, ease: OM.spring(0.2), immediateRender: false }, OM.sfx('pop', B(25.25), { note: 4 }));
+  tl.fromTo('.p-hop-3', { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.26, ease: 'expo.out', immediateRender: false }, B(25.65));
+  tl.fromTo('.p-node-4', { opacity: 0, scale: 0.75 }, { opacity: 1, scale: 1, duration: 0.35, ease: OM.spring(0.2), immediateRender: false }, OM.sfx('pop', B(25.9), { note: 6 }));
+  tl.fromTo('.p-hop-4', { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.26, ease: 'expo.out', immediateRender: false }, B(26.3));
+  tl.fromTo('.p-node-5', { opacity: 0, scale: 0.75 }, { opacity: 1, scale: 1, duration: 0.38, ease: OM.spring(0.24), immediateRender: false }, OM.sfx('pop', B(26.55), { note: 8 }));
+  tl.fromTo('#shot-path .burst-bottom-banner', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.38, ease: 'expo.out', immediateRender: false }, B(26.85));
+  tl.fromTo('#shot-path', { opacity: 1 }, { opacity: 0, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(28)));
+
+  // 3B: Dual Easter Eggs (Beats 28..31)
+  tl.fromTo('#shot-eggs', { opacity: 0 }, { opacity: 1, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(28)));
+  tl.fromTo('#shot-eggs .feat-card:first-child', { opacity: 0, x: -90 }, { opacity: 1, x: 0, duration: 0.42, ease: OM.spring(0.18), immediateRender: false }, OM.sfx('stamp', cut(B(28.05))));
+  tl.fromTo('#shot-eggs .feat-card:last-child', { opacity: 0, x: 90 }, { opacity: 1, x: 0, duration: 0.42, ease: OM.spring(0.18), immediateRender: false }, B(28.7));
+  tl.fromTo('#shot-eggs .feat-avatar', { scale: 1 }, { scale: 1.07, duration: 0.6, yoyo: true, repeat: 1, ease: 'sine.inOut', immediateRender: false }, B(29.3));
+  tl.fromTo('#shot-eggs', { opacity: 1 }, { opacity: 0, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(31)));
+
+  // 3C: 8 Major Factions Grid (Beats 31..33)
+  tl.fromTo('#shot-factions', { opacity: 0 }, { opacity: 1, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(31)));
+  tl.fromTo('#shot-factions .fac-card', { opacity: 0, scale: 0.85, y: 26 }, { opacity: 1, scale: 1, y: 0, duration: 0.35, stagger: 0.055, ease: OM.spring(0.18), immediateRender: false }, OM.sfx('pop', B(31.1), { note: 5 }));
+  tl.fromTo('#shot-factions', { opacity: 1 }, { opacity: 0, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(33)));
+
+  // 3D / 3E / 3F: 3 Rapid 1-Beat Flash Cards (Beats 33, 34, 35)
+  tl.fromTo('#shot-flash-65', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.28, ease: 'expo.out', immediateRender: false }, OM.sfx('hit', cut(B(33))));
+  tl.fromTo('#shot-flash-65', { opacity: 1 }, { opacity: 0, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(34)));
+
+  tl.fromTo('#shot-flash-58', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.28, ease: 'expo.out', immediateRender: false }, OM.sfx('pop', cut(B(34)), { note: 7 }));
+  tl.fromTo('#shot-flash-58', { opacity: 1 }, { opacity: 0, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(35)));
+
+  tl.fromTo('#shot-flash-lang', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.28, ease: 'expo.out', immediateRender: false }, OM.sfx('pop', cut(B(35)), { note: 9 }));
+  tl.fromTo('#shot-flash-lang', { opacity: 1 }, { opacity: 0, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(36)));
+  tl.fromTo('#s-burst', { opacity: 1 }, { opacity: 0, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(36)));
+
+  // =========================================================================
+  // SCENE 4: JOHN LENNON DEADPAN STOP (Bar 10, Beats 36..40, 18.31s -> 20.34s)
+  // =========================================================================
+  tl.addLabel('scene:stop', cut(B(36)));
+  tl.fromTo('#s-stop', { opacity: 0 }, { opacity: 1, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(36)));
+  tl.fromTo('#lennon-ring', { scale: 0.85, rotation: 0 }, { scale: 1.03, rotation: 16, duration: B(3.8), ease: 'power1.inOut', immediateRender: false }, B(36.05));
+  tl.fromTo('#lennon-quote-box', { opacity: 0, y: 24, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: OM.spring(0.14), immediateRender: false }, OM.sfx('tick', B(37.4)));
+  tl.fromTo('#lennon-sub-line', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, ease: 'expo.out', immediateRender: false }, B(38.6));
+  OM.sfx('whoosh', B(39.65));
+  tl.fromTo('#s-stop', { opacity: 1 }, { opacity: 0, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(40)));
+
+  // =========================================================================
+  // SCENE 5: HERO PANORAMA DROP (Bars 11-13, Beats 40..52, 20.34s -> 26.44s)
+  // =========================================================================
+  tl.addLabel('scene:drop', cut(B(40)));
+  tl.fromTo('#s-drop', { opacity: 0 }, { opacity: 1, duration: 0.01, ease: 'none', immediateRender: false }, cut(B(40)));
+  OM.sfx('impact', cut(B(40)));
+
+  tl.fromTo('#drop-rays', { rotation: 0 }, { rotation: 22, duration: B(11.6), ease: 'none', immediateRender: false }, B(40.05));
+  tl.fromTo('#drop-banner', { opacity: 0, y: -44, scale: 0.88 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: OM.spring(0.22), immediateRender: false }, B(40.1));
+  tl.fromTo('#drop-map-card', { opacity: 0, x: -160, rotation: -6, scale: 0.95 }, { opacity: 1, x: 0, rotation: -1.8, scale: 1, duration: 0.55, ease: OM.spring(0.16), immediateRender: false }, B(40.2));
+  tl.fromTo('#drop-net-card', { opacity: 0, x: 180, rotation: 6, scale: 0.95 }, { opacity: 1, x: 0, rotation: 1.6, scale: 1, duration: 0.55, ease: OM.spring(0.16), immediateRender: false }, B(40.6));
+
+  // Continuous parallax & focus swap inside Drop so every second moves crisply!
+  tl.fromTo('#drop-map-img', { scale: 1.0, x: 0, y: 0 }, { scale: 1.24, x: -46, y: 18, duration: B(11.4), ease: 'none', immediateRender: false }, B(40.2));
+  tl.fromTo('#drop-net-img', { scale: 1.0, x: 0, y: 0 }, { scale: 1.25, x: 42, y: -18, duration: B(11.4), ease: 'none', immediateRender: false }, B(40.6));
+  tl.fromTo('#drop-map-card', { x: 0, rotation: -1.8, scale: 1 }, { x: -75, rotation: -3.0, scale: 0.94, duration: B(6.2), ease: 'power1.inOut', immediateRender: false }, B(45.2));
+  tl.fromTo('#drop-net-card', { y: 0, x: 0, scale: 1, rotation: 1.6 }, { y: -32, x: -38, scale: 1.08, rotation: -0.3, duration: B(6.0), ease: 'power1.inOut', immediateRender: false }, B(45.3));
+
+  tl.fromTo('#dfb-1', { opacity: 0, y: 36, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: OM.spring(0.22), immediateRender: false }, OM.sfx('pop', B(42.5), { note: 4 }));
+  tl.fromTo('#dfb-2', { opacity: 0, y: 36, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: OM.spring(0.22), immediateRender: false }, OM.sfx('pop', B(45.2), { note: 7 }));
+  tl.fromTo('#dfb-3', { opacity: 0, y: 36, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: OM.spring(0.22), immediateRender: false }, OM.sfx('pop', B(48.6), { note: 9 }));
+
+  tl.fromTo('#s-drop', { opacity: 1, scale: 1 }, { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in', immediateRender: false }, B(51.4));
+
+  // =========================================================================
+  // SCENE 6: BRAND POSTER END CARD (Bars 14+, 26.44s -> ~28.5s total!)
+  // Bottom-right corner remains 100% open for "Made with huashu-motion"
+  // =========================================================================
+  tl.addLabel('scene:end', B(52));
+  tl.fromTo('#s-end', { opacity: 0 }, { opacity: 1, duration: 0.36, ease: 'power2.out', immediateRender: false }, B(51.85));
+  tl.fromTo('#end-orbit img', { opacity: 0, y: -26, scale: 0.7 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, stagger: 0.045, ease: OM.spring(0.2), immediateRender: false }, B(52.0));
+  tl.fromTo('#end-logo', { opacity: 0, scale: 0.84, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: OM.spring(0.18), immediateRender: false }, OM.sfx('chime', B(52.2), { note: 8 }));
+  tl.fromTo('#end-mimineko', { rotation: -7, y: 5 }, { rotation: 6, y: -7, duration: 0.55, yoyo: true, repeat: 3, ease: 'sine.inOut', immediateRender: false }, B(52.4));
+  tl.fromTo('#end-url', { opacity: 0, scale: 0.85, y: 22 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: OM.spring(0.22), immediateRender: false }, OM.sfx('pop', B(53.0), { note: 10 }));
+  tl.fromTo('#end-sub', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, ease: 'expo.out', immediateRender: false }, B(53.5));
+
+  // Hold ends cleanly right around ~28.5s (V.endHold = 1.6s starting at ~26.9s)
+  tl.to({}, { duration: V.endHold }, B(53.5) + 0.4);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['film'] = tl;
+</script>
+</body>
+</html>

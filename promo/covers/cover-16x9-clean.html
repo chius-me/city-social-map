@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh-CN" data-om-signature="off">
+<head>
+<meta charset="utf-8">
+<title>CITY Social Map — 16:9 &amp; 4:3 网站实拍底 × 巨字海报版封面</title>
+<style>
+  @font-face { font-family: "M PLUS Rounded 1c"; src: url("../assets/fonts/MPlusRounded1c-800.ttf") format("truetype"); font-weight: 800; font-style: normal; }
+  @font-face { font-family: "M PLUS Rounded 1c"; src: url("../assets/fonts/MPlusRounded1c-900.ttf") format("truetype"); font-weight: 900; font-style: normal; }
+  @font-face { font-family: "Noto Sans SC"; src: url("../assets/fonts/NotoSansSC-900.woff") format("woff"); font-weight: 900; font-style: normal; }
+  @font-face { font-family: "Poppins"; src: url("../assets/fonts/Poppins-800.woff") format("woff"); font-weight: 800; font-style: normal; }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: #FFFDF9;
+    color: #141419;
+    font-family: "M PLUS Rounded 1c", "Noto Sans SC", "Poppins", sans-serif;
+  }
+
+  #film {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: #FFFDF9;
+  }
+
+  /* Full-bleed crisp Real App Screenshots Backdrop */
+  .bg-ui-map {
+    position: absolute;
+    left: -120px;
+    top: -60px;
+    width: 1320px;
+    height: 820px;
+    transform: rotate(-3deg);
+    opacity: 0.85;
+    border: 6px solid #141419;
+    border-radius: 30px;
+    overflow: hidden;
+  }
+  .bg-ui-map img, .bg-ui-net img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .bg-ui-net {
+    position: absolute;
+    right: -120px;
+    top: -40px;
+    width: 1320px;
+    height: 820px;
+    transform: rotate(2.5deg);
+    opacity: 0.92;
+    border: 6px solid #141419;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(20,20,25,0.2);
+  }
+  .bg-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,253,249,0.12) 0%, rgba(255,253,249,0.72) 48%, rgba(255,253,249,0.95) 82%, #FFFDF9 100%);
+    z-index: 4;
+  }
+
+  /* Top-Left Brand Lockup strictly inside 4:3 safe margin (x: 286..) */
+  .brand-badge {
+    position: absolute;
+    left: 286px;
+    top: 44px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #FFFFFF;
+    border: 6px solid #141419;
+    box-shadow: 10px 10px 0 #141419;
+    border-radius: 30px;
+    padding: 14px 32px;
+  }
+  .brand-sub-tag {
+    font-size: 46px;
+    font-weight: 900;
+    color: #141419;
+    white-space: nowrap;
+  }
+
+  /* Top-Right Trio of Huge Expressive Character Stickers inside 4:3 safe box (x <= 1645) */
+  .sticker-face {
+    position: absolute;
+    border-radius: 999px;
+    border: 7px solid #141419;
+    box-shadow: 10px 10px 0 #141419;
+    padding: 6px;
+    background: #FFFDF9;
+  }
+  .sticker-face img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 999px;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(1.06);
+  }
+  .gag-bubble {
+    position: absolute;
+    z-index: 25;
+    background: #33333F;
+    color: #F7B647;
+    border: 5px solid #141419;
+    box-shadow: 7px 7px 0 #141419;
+    border-radius: 999px;
+    padding: 7px 24px;
+    font-size: 42px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  /* Lower Giant Dual-Ratio Typography Block (x: 280..1640) */
+  .line1-svg {
+    position: absolute;
+    left: 280px;
+    top: 468px;
+    width: 1360px;
+    height: 250px;
+    z-index: 26;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .line2-ribbon {
+    position: absolute;
+    left: 295px;
+    top: 745px;
+    z-index: 28;
+    background: #141419;
+    border: 7px solid #141419;
+    box-shadow: 14px 14px 0 #DD5549;
+    border-radius: 34px;
+    padding: 18px 46px;
+    font-size: 112px;
+    line-height: 1.08;
+    font-weight: 900;
+    color: #FFFDF9;
+    white-space: nowrap;
+    letter-spacing: -1px;
+  }
+  .line2-ribbon em { font-style: normal; color: #F7B647; }
+  .line2-ribbon b { color: #F09CB4; font-weight: 900; }
+</style>
+</head>
+<body>
+<div id="film" data-composition-id="cover-clean" data-width="1920" data-height="1080" data-om-signature="off">
+  <div class="bg-ui-map"><img src="../materials/ui-classic-map.png" alt="全景手绘地图"></div>
+  <div class="bg-ui-net"><img src="../materials/ui-full-network.png" alt="全城关系星图"></div>
+  <div class="bg-scrim"></div>
+
+  <!-- Top-Left Huge Brand Lockup (inside x=240..1680) -->
+  <div class="brand-badge">
+    <svg viewBox="0 0 264 84" height="74" width="232">
+      <path d="M54 22 C49 12 37 8 26 11 C12 15 6 29 7 44 C8 60 18 72 34 73 C45 74 54 68 59 58 L44 49 C41 55 37 57 32 56 C25 55 22 49 22 42 C22 33 26 27 33 26 C38 25 42 28 44 32 Z" fill="#F7B647" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+      <rect x="74" y="12" width="25" height="60" rx="6" fill="#F09CB4" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+      <path d="M113 12 L173 12 Q177 12 177 16 L177 29 Q177 33 173 33 L155 33 L155 68 Q155 72 151 72 L135 72 Q131 72 131 68 L131 33 L113 33 Q109 33 109 29 L109 16 Q109 12 113 12 Z" fill="#99CB77" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+      <path d="M188 12 L211 12 L222 34 L234 12 L257 12 L234 50 L234 68 Q234 72 230 72 L214 72 Q210 72 210 68 L210 50 Z" fill="#EE847D" stroke="#141419" stroke-width="5.5" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-sub-tag">互动星图</span>
+    <svg viewBox="0 0 120 112" width="80" height="74">
+      <path d="M78 58 C95 52 108 32 110 15 C111 9 104 9 100 15 C95 23 89 35 76 42" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M28 56 C24 44 40 34 60 36 C78 38 88 50 86 68 L83 84 C82 88 74 88 74 83 L74 73 L55 74 L51 87 C49 92 40 91 41 85 L43 72 C33 70 29 63 28 56 Z" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linejoin="round"/>
+      <path d="M32 45 C26 24 31 10 38 11 C45 12 45 27 42 42" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linecap="round"/>
+      <path d="M46 43 C47 22 55 12 61 15 C67 18 62 33 56 45" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linecap="round"/>
+      <path d="M17 61 C18 47 32 39 48 41 C61 43 66 54 61 65 C56 75 40 78 27 74 C20 71 16 66 17 61 Z" fill="#FFF" stroke="#141419" stroke-width="4.2" stroke-linejoin="round"/>
+      <ellipse cx="30" cy="57" rx="5.5" ry="6.2" fill="#FFF" stroke="#141419" stroke-width="3"/>
+      <circle cx="29" cy="58" r="3.4" fill="#0A64A4"/><circle cx="28" cy="56.5" r="1.2" fill="#FFF"/>
+      <ellipse cx="46" cy="58" rx="6" ry="6.5" fill="#FFF" stroke="#141419" stroke-width="3"/>
+      <circle cx="44.5" cy="59" r="3.6" fill="#0A64A4"/><circle cx="43.5" cy="57.5" r="1.2" fill="#FFF"/>
+      <path d="M23 50 L36 54 M53 51 L40 54.5" stroke="#141419" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M27 72 Q44 80 59 71" fill="none" stroke="#DD5549" stroke-width="4.5" stroke-linecap="round"/>
+      <circle cx="41" cy="83" r="10.5" fill="#F7B647" stroke="#141419" stroke-width="3.6"/>
+      <path d="M31 83 Q41 87 51 83" fill="none" stroke="#141419" stroke-width="2.5"/>
+      <circle cx="41" cy="87" r="2.2" fill="#141419"/>
+    </svg>
+  </div>
+
+  <!-- Top-Right Expressive Trio inside 4:3 Safe Zone (x: 1030..1635) -->
+  <div class="sticker-face" style="left:1055px;top:46px;width:250px;height:250px;background:#F7B647;z-index:18;">
+    <img src="../assets/avatars/nagumo.webp" alt="南云美鸟">
+  </div>
+  <div class="sticker-face" style="left:1265px;top:38px;width:230px;height:230px;background:#F09CB4;z-index:16;">
+    <img src="../assets/avatars/wako.webp" alt="泉和子">
+  </div>
+  <div class="sticker-face" style="left:1430px;top:175px;width:205px;height:205px;background:#FFFDF9;z-index:20;">
+    <img src="../assets/avatars/john-lennon.webp" alt="约翰·列侬">
+  </div>
+  <div class="gag-bubble" style="left:1185px;top:358px;transform:rotate(-3deg);">「死了。」0连线</div>
+
+  <!-- Left Mid Yellow Comic Callout Stamp inside 4:3 -->
+  <div class="gag-bubble" style="left:295px;top:248px;background:#F7B647;color:#141419;font-size:46px;">⚡ 动画全员 · 拖曳看关系！</div>
+
+  <!-- Lower Massive Dual-Stroke SVG Headline -->
+  <svg class="line1-svg" viewBox="0 0 1360 240">
+    <text x="680" y="186" text-anchor="middle" font-family="'M PLUS Rounded 1c', 'Noto Sans SC', sans-serif" font-weight="900" font-size="166" fill="#141419" stroke="#141419" stroke-width="34" stroke-linejoin="round" paint-order="stroke fill" transform="translate(12, 12)">点一下看全城！</text>
+    <text x="680" y="186" text-anchor="middle" font-family="'M PLUS Rounded 1c', 'Noto Sans SC', sans-serif" font-weight="900" font-size="166" fill="#FFFDF9" stroke="#FFFDF9" stroke-width="44" stroke-linejoin="round" paint-order="stroke fill">点一下看全城！</text>
+    <text x="680" y="186" text-anchor="middle" font-family="'M PLUS Rounded 1c', 'Noto Sans SC', sans-serif" font-weight="900" font-size="166" fill="#141419" stroke="#141419" stroke-width="2" paint-order="stroke fill">点一下看<tspan fill="#C22119">全城！</tspan></text>
+  </svg>
+
+  <!-- Chunky Dark Ribbon ending safely left of x=1550 (bottom-right 00:29 duration corner totally free) -->
+  <div class="line2-ribbon"><em>《小城日常》</em><b>65人</b>关系网</div>
+</div>
+</body>
+</html>
