@@ -4,7 +4,7 @@
   "compatibility_date": "2026-11-19",
   "routes": [
     {
-      "pattern": "social-map.city.chius.dev",
+      "pattern": "social.city.chius.dev",
       "custom_domain": true
     }
   ],

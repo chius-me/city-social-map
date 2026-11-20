@@ -14,7 +14,7 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?logo=typescript&logoColor=white)
 
-[在线体验](https://social-map.city.chius.dev) · [人物星图](https://social-map.city.chius.dev/#mode=network&char=nagumo) · [问题反馈](https://github.com/chius-me/city-social-map/issues) · [Awesome CITY](https://github.com/chius-me/awesome-citytheanimation)
+[在线体验](https://social.city.chius.dev) · [人物星图](https://social.city.chius.dev/#mode=network&char=nagumo) · [问题反馈](https://github.com/chius-me/city-social-map/issues) · [Awesome CITY](https://github.com/chius-me/awesome-citytheanimation)
 
 </div>
 
@@ -41,10 +41,10 @@
 
 | 视图 / 目标 | URL | 说明 |
 | --- | --- | --- |
-| 全景图谱 | [`/`](https://social-map.city.chius.dev/) | 查看 65 位居民完整关系拓扑与关系图层开关 |
-| 角色档案卡片 | [`/#char=wako`](https://social-map.city.chius.dev/#char=wako) | 自动定位至「泉和子」并打开右侧人物档案 |
-| 人物星图（Ego Radar） | [`/#mode=network&char=nagumo`](https://social-map.city.chius.dev/#mode=network&char=nagumo) | 以「南云美鸟」为中心展开辐射星图 |
-| 全城网络 | [`/#mode=network&sub=full`](https://social-map.city.chius.dev/#mode=network&sub=full) | 按关联度缩放节点并按阵营聚类的全城关系网 |
+| 全景图谱 | [`/`](https://social.city.chius.dev/) | 查看 65 位居民完整关系拓扑与关系图层开关 |
+| 角色档案卡片 | [`/#char=wako`](https://social.city.chius.dev/#char=wako) | 自动定位至「泉和子」并打开右侧人物档案 |
+| 人物星图（Ego Radar） | [`/#mode=network&char=nagumo`](https://social.city.chius.dev/#mode=network&char=nagumo) | 以「南云美鸟」为中心展开辐射星图 |
+| 全城网络 | [`/#mode=network&sub=full`](https://social.city.chius.dev/#mode=network&sub=full) | 按关联度缩放节点并按阵营聚类的全城关系网 |
 
 ## 项目结构
 
@@ -83,7 +83,7 @@ npm run preview  # 本地预览生产构建产物
 
 ## 部署
 
-站点托管于 **Cloudflare Workers Static Assets**，已绑定自定义域名 [social-map.city.chius.dev](https://social-map.city.chius.dev)（`wrangler.jsonc` 启用 `not_found_handling: "single-page-application"`）。
+站点托管于 **Cloudflare Workers Static Assets**，已绑定自定义域名 [social.city.chius.dev](https://social.city.chius.dev)（`wrangler.jsonc` 启用 `not_found_handling: "single-page-application"`）。
 
 推送至 `main` 分支将触发 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) 自动构建并上线；Pull Request 会运行 `npm run build` 与 `npx wrangler deploy --dry-run` 校验。
 

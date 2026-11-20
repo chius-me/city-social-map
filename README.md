@@ -14,7 +14,7 @@ Interactive character relationship map & ego-network explorer for ***CITY THE AN
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?logo=typescript&logoColor=white)
 
-[Live Demo](https://social-map.city.chius.dev) · [Ego Radar](https://social-map.city.chius.dev/#mode=network&char=nagumo) · [Issues](https://github.com/chius-me/city-social-map/issues) · [Awesome CITY](https://github.com/chius-me/awesome-citytheanimation)
+[Live Demo](https://social.city.chius.dev) · [Ego Radar](https://social.city.chius.dev/#mode=network&char=nagumo) · [Issues](https://github.com/chius-me/city-social-map/issues) · [Awesome CITY](https://github.com/chius-me/awesome-citytheanimation)
 
 </div>
 
@@ -41,10 +41,10 @@ Interactive character relationship map & ego-network explorer for ***CITY THE AN
 
 | View / Target | URL | Description |
 | --- | --- | --- |
-| Classic Social Map | [`/`](https://social-map.city.chius.dev/) | Full 65-resident topology overview with relationship layer filters |
-| Character Dossier | [`/#char=wako`](https://social-map.city.chius.dev/#char=wako) | Flies directly to Wako Izumi and opens her portrait dossier |
-| Ego Radar | [`/#mode=network&char=nagumo`](https://social-map.city.chius.dev/#mode=network&char=nagumo) | Centers the interactive star radar on Midori Nagumo |
-| Full Network | [`/#mode=network&sub=full`](https://social-map.city.chius.dev/#mode=network&sub=full) | Displays all 65 residents in a degree-sized, faction-clustered network |
+| Classic Social Map | [`/`](https://social.city.chius.dev/) | Full 65-resident topology overview with relationship layer filters |
+| Character Dossier | [`/#char=wako`](https://social.city.chius.dev/#char=wako) | Flies directly to Wako Izumi and opens her portrait dossier |
+| Ego Radar | [`/#mode=network&char=nagumo`](https://social.city.chius.dev/#mode=network&char=nagumo) | Centers the interactive star radar on Midori Nagumo |
+| Full Network | [`/#mode=network&sub=full`](https://social.city.chius.dev/#mode=network&sub=full) | Displays all 65 residents in a degree-sized, faction-clustered network |
 
 ## Project Structure
 
@@ -83,7 +83,7 @@ npm run preview  # Preview the production bundle locally
 
 ## Deploy
 
-Hosted on **Cloudflare Workers Static Assets** at [social-map.city.chius.dev](https://social-map.city.chius.dev) (`wrangler.jsonc` with `not_found_handling: "single-page-application"`).
+Hosted on **Cloudflare Workers Static Assets** at [social.city.chius.dev](https://social.city.chius.dev) (`wrangler.jsonc` with `not_found_handling: "single-page-application"`).
 
 Pushes to `main` automatically build and deploy via [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). Pull requests run `npm run build` and `npx wrangler deploy --dry-run` checks.
 
