@@ -32,8 +32,8 @@ export const CITY_SITES: Record<CitySiteId, CitySiteEntry> = {
     subtitle: 'SOCIAL MAP',
     url: 'https://social.city.chius.dev',
     domain: 'social.city.chius.dev',
-    repoUrl: 'https://github.com/chius-me/city-social-map',
-    repoSlug: 'chius-me/city-social-map',
+    repoUrl: 'https://github.com/chius-n/city-social-map',
+    repoSlug: 'chius-n/city-social-map',
     accent: '#f7b647',
     name: {
       zh: 'CITY 人物关系图',
@@ -61,8 +61,8 @@ export const CITY_SITES: Record<CitySiteId, CitySiteEntry> = {
     subtitle: 'AVATAR',
     url: 'https://avatar.city.chius.dev',
     domain: 'avatar.city.chius.dev',
-    repoUrl: 'https://github.com/chius-me/city-avatar',
-    repoSlug: 'chius-me/city-avatar',
+    repoUrl: 'https://github.com/chius-n/city-avatar',
+    repoSlug: 'chius-n/city-avatar',
     accent: '#f09cb4',
     name: {
       zh: 'CITY 风格头像工坊',
@@ -99,7 +99,7 @@ export function getSisterSite(siteId: CitySiteId): CitySiteEntry {
 export const CITY_EXTERNAL_LINKS = {
   officialSite: 'https://city-the-animation.com/',
   officialCharacters: 'https://city-the-animation.com/character/',
-  awesomeRepo: 'https://github.com/chius-me/awesome-citytheanimation',
+  awesomeRepo: 'https://github.com/chius-n/awesome-citytheanimation',
 } as const;
 
 export const SHELL_TEXT: Record<

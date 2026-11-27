@@ -2,7 +2,7 @@ import type { ResourceCategory } from "../types";
 
 /**
  * Curated CITY THE ANIMATION resources adapted from:
- * https://github.com/chius-me/awesome-citytheanimation
+ * https://github.com/chius-n/awesome-citytheanimation
  */
 export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   {
@@ -106,7 +106,7 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
           en: "Bilingual curated catalog of official links, music, sakuga essays, and communities.",
           ja: "公式・音楽・作画考察・インタビューを網羅した厳選リソース集。",
         },
-        url: "https://github.com/chius-me/awesome-citytheanimation",
+        url: "https://github.com/chius-n/awesome-citytheanimation",
         tag: "AWESOME",
       },
       {
