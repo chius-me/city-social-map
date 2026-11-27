@@ -9,12 +9,12 @@
 Interactive character relationship map and ego-network explorer for ***CITY THE ANIMATION*** (*Kyoto Animation*, 2025) & Keiichi Arawi's ***CITY***.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Deploy](https://github.com/chius-n/city-social-map/actions/workflows/deploy.yml/badge.svg)](https://github.com/chius-n/city-social-map/actions/workflows/deploy.yml)
+[![Deploy](https://github.com/chius-cc/city-social-map/actions/workflows/deploy.yml/badge.svg)](https://github.com/chius-cc/city-social-map/actions/workflows/deploy.yml)
 ![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-f38020?logo=cloudflare&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?logo=typescript&logoColor=white)
 
-[Live Demo](https://social.city.chius.dev) · [Ego Radar](https://social.city.chius.dev/#mode=network&char=nagumo) · [CITY Avatar](https://avatar.city.chius.dev) · [Issues](https://github.com/chius-n/city-social-map/issues) · [Awesome CITY](https://github.com/chius-n/awesome-citytheanimation)
+[Live Demo](https://social.city.chius.dev) · [Ego Radar](https://social.city.chius.dev/#mode=network&char=nagumo) · [CITY Avatar](https://avatar.city.chius.dev) · [Issues](https://github.com/chius-cc/city-social-map/issues) · [Awesome CITY](https://github.com/chius-cc/awesome-citytheanimation)
 
 </div>
 
@@ -60,8 +60,8 @@ npm run build    # Type-check & build for production
 ## Credits & Sources
 
 - **Original Social Map**: [File:CITY Social Map by VayItsHere.jpeg](https://city.wiki.gg/wiki/File:CITY_Social_Map_by_VayItsHere.jpeg) by **VayItsHere / Mokkachino (Discord)** (June 28, 2025) on [CITY Wiki](https://city.wiki.gg/).
-- **Curated Resources**: [`chius-n/awesome-citytheanimation`](https://github.com/chius-n/awesome-citytheanimation).
-- **Sister Project**: [`chius-n/city-avatar`](https://github.com/chius-n/city-avatar) ([`avatar.city.chius.dev`](https://avatar.city.chius.dev)).
+- **Curated Resources**: [`chius-cc/awesome-citytheanimation`](https://github.com/chius-cc/awesome-citytheanimation).
+- **Sister Project**: [`chius-cc/city-avatar`](https://github.com/chius-cc/city-avatar) ([`avatar.city.chius.dev`](https://avatar.city.chius.dev)).
 - **Visual Style Reference**: [*CITY THE ANIMATION* Official Website](https://city-the-animation.com/).
 - **Cast & Localization References**: Official anime credits, [Bangumi](https://bgm.tv/subject/514358), [AniList](https://anilist.co/anime/181841/CITY-THE-ANIMATION), and [Moegirlpedia](https://zh.moegirl.org.cn/CITY).
 
